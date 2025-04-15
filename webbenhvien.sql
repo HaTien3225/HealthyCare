@@ -51,6 +51,7 @@ create table User (
     email varchar(225) not null,
     created_date date not null,
     cccd varchar(12) not null,
+    phone varchar(10) not null,
     
     khoa_id int,
     foreign key (khoa_id) references Khoa(id) on delete restrict,
