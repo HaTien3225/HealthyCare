@@ -9,12 +9,6 @@ create table Role(
     role varchar(255) not null
 );
 
-create table Giayphephanhnghe(
-	id int not null auto_increment primary key,
-    created_date date not null,
-    image varchar(2083)  CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
-    is_valid boolean not null default false
-);
 
 create table Benhvien(
 	id int not null auto_increment primary key,
@@ -57,10 +51,17 @@ create table User (
     
     khoa_id int,
     foreign key (khoa_id) references Khoa(id) on delete restrict,
-    giayphep_id int unique,
-    foreign key (giayphep_id) references Giayphephanhnghe(id) on delete restrict,
     role_id int not null,
     foreign key (role_id) references Role(id) on delete restrict
+);
+
+create table Giayphephanhnghe(
+	id int not null auto_increment primary key,
+    created_date date not null,
+    image varchar(2083)  CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
+    is_valid boolean not null default false,
+    bac_si_id int not null,
+    foreign key (bac_si_id) references User(id)
 );
 
 create table HoSoSucKhoe(
