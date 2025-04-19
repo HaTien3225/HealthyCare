@@ -13,9 +13,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  *
@@ -24,9 +26,10 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "User")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(nullable = false, length = 225, columnDefinition = "varchar(225) CHARACTER SET utf8 COLLATE utf8_unicode_ci")
     private String ho;
@@ -64,27 +67,44 @@ public class User {
     private Khoa khoaId;
 
     // Quan hệ 1-1 với GiayPhepHanhNghe
-    @OneToOne(mappedBy = "userId",cascade = CascadeType.ALL)
-    private GiayPhepHanhNghe giayPhepHanhNghe;
+    @OneToOne(mappedBy = "bacSiId", cascade = CascadeType.ALL)
+    private GiayPhepHanhNghe giayPhepHanhNgheId;
     // Quan hệ với Role (nhiều User cùng 1 Role)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "role_id", referencedColumnName = "id" )
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
-    
-    @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL)
-    private HoSoSucKhoe hoSoSucKhoe;
 
+    @OneToOne(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
+    private HoSoSucKhoe hoSoSucKhoeId;
+
+    @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
+    private Set<DonKham> donKhams;
+
+    @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
+    private Set<LichKham> lichKhams;
+
+    @OneToMany(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
+    private Set<DanhGia> danhGiasCuaBenhNhans;
+
+    @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
+    private Set<DanhGia> danhGiasCuaBacSis;
+
+    @OneToMany(mappedBy = "senderId",cascade = CascadeType.ALL)
+    private Set<TinNhan> tinNhanGuis;
+    
+    @OneToMany(mappedBy = "receiverId",cascade = CascadeType.ALL)
+    private Set<TinNhan> tinNhanNhans;
     /**
      * @return the id
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -245,15 +265,15 @@ public class User {
     /**
      * @return the giayPhepHanhNghe
      */
-    public GiayPhepHanhNghe getGiayPhepHanhNghe() {
-        return giayPhepHanhNghe;
+    public GiayPhepHanhNghe getGiayPhepHanhNgheId() {
+        return giayPhepHanhNgheId;
     }
 
     /**
      * @param giayPhepHanhNghe the giayPhepHanhNghe to set
      */
-    public void setGiayPhepHanhNghe(GiayPhepHanhNghe giayPhepHanhNghe) {
-        this.giayPhepHanhNghe = giayPhepHanhNghe;
+    public void setGiayPhepHanhNgheId(GiayPhepHanhNghe giayPhepHanhNgheId) {
+        this.giayPhepHanhNgheId = giayPhepHanhNgheId;
     }
 
     /**
@@ -268,5 +288,103 @@ public class User {
      */
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    /**
+     * @return the hoSoSucKhoeId
+     */
+    public HoSoSucKhoe getHoSoSucKhoeId() {
+        return hoSoSucKhoeId;
+    }
+
+    /**
+     * @param hoSoSucKhoeId the hoSoSucKhoeId to set
+     */
+    public void setHoSoSucKhoeId(HoSoSucKhoe hoSoSucKhoeId) {
+        this.hoSoSucKhoeId = hoSoSucKhoeId;
+    }
+
+    /**
+     * @return the donKhams
+     */
+    public Set<DonKham> getDonKhams() {
+        return donKhams;
+    }
+
+    /**
+     * @param donKhams the donKhams to set
+     */
+    public void setDonKhams(Set<DonKham> donKhams) {
+        this.donKhams = donKhams;
+    }
+
+    /**
+     * @return the lichKhams
+     */
+    public Set<LichKham> getLichKhams() {
+        return lichKhams;
+    }
+
+    /**
+     * @param lichKhams the lichKhams to set
+     */
+    public void setLichKhams(Set<LichKham> lichKhams) {
+        this.lichKhams = lichKhams;
+    }
+
+    /**
+     * @return the danhGiasCuaBenhNhans
+     */
+    public Set<DanhGia> getDanhGiasCuaBenhNhans() {
+        return danhGiasCuaBenhNhans;
+    }
+
+    /**
+     * @param danhGiasCuaBenhNhans the danhGiasCuaBenhNhans to set
+     */
+    public void setDanhGiasCuaBenhNhans(Set<DanhGia> danhGiasCuaBenhNhans) {
+        this.danhGiasCuaBenhNhans = danhGiasCuaBenhNhans;
+    }
+
+    /**
+     * @return the danhGiasCuaBacSis
+     */
+    public Set<DanhGia> getDanhGiasCuaBacSis() {
+        return danhGiasCuaBacSis;
+    }
+
+    /**
+     * @param danhGiasCuaBacSis the danhGiasCuaBacSis to set
+     */
+    public void setDanhGiasCuaBacSis(Set<DanhGia> danhGiasCuaBacSis) {
+        this.danhGiasCuaBacSis = danhGiasCuaBacSis;
+    }
+
+    /**
+     * @return the tinNhanGuis
+     */
+    public Set<TinNhan> getTinNhanGuis() {
+        return tinNhanGuis;
+    }
+
+    /**
+     * @param tinNhanGuis the tinNhanGuis to set
+     */
+    public void setTinNhanGuis(Set<TinNhan> tinNhanGuis) {
+        this.tinNhanGuis = tinNhanGuis;
+    }
+
+    /**
+     * @return the tinNhanNhans
+     */
+    public Set<TinNhan> getTinNhanNhans() {
+        return tinNhanNhans;
+    }
+
+    /**
+     * @param tinNhanNhans the tinNhanNhans to set
+     */
+    public void setTinNhanNhans(Set<TinNhan> tinNhanNhans) {
+        this.tinNhanNhans = tinNhanNhans;
     }
 }

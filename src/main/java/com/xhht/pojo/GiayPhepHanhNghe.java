@@ -26,7 +26,7 @@ import java.util.Set;
 public class GiayPhepHanhNghe implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(name = "created_date")
     private LocalDate created_date;
     @Column(name = "image")
@@ -35,19 +35,19 @@ public class GiayPhepHanhNghe implements Serializable{
     private boolean isValid;
     @OneToOne
     @JoinColumn(name = "bac_si_id",unique = true,referencedColumnName = "id")
-    private User userId;
+    private User bacSiId;
 
     /**
      * @return the id
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -94,16 +94,18 @@ public class GiayPhepHanhNghe implements Serializable{
     }
 
     /**
-     * @return the users
+     * @return the bacSiId
      */
-    public User getUserId() {
-        return userId;
+    public User getBacSiId() {
+        return bacSiId;
     }
 
     /**
-     * @param users the users to set
+     * @param bacSiId the bacSiId to set
      */
-    public void setUserId(User users) {
-        this.userId = users;
+    public void setBacSiId(User bacSiId) {
+        this.bacSiId = bacSiId;
     }
+
+  
 }

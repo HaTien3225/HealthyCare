@@ -25,7 +25,7 @@ public class Role implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @Column(name = "role")
     private String role;
     @OneToMany(mappedBy = "roleId",cascade = CascadeType.ALL)
@@ -34,14 +34,14 @@ public class Role implements Serializable{
     /**
      * @return the id
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

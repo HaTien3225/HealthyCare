@@ -142,7 +142,7 @@ create table Danhgia(
     binh_luan varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
     phan_hoi varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
     
-    benh_nhan_id int not null unique,
+    benh_nhan_id int not null ,
     foreign key (benh_nhan_id) references User(id) on delete restrict,
     bac_si_id int not null,
     foreign key (bac_si_id) references User(id) on delete restrict
