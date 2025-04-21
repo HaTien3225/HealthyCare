@@ -147,3 +147,22 @@ create table Danhgia(
     bac_si_id int not null,
     foreign key (bac_si_id) references User(id) on delete restrict
 );
+
+INSERT INTO Role(role) VALUES ('ROLE_ADMIN'), ('ROLE_USER'), ('ROLE_DOCTOR');
+
+-- admin123
+INSERT INTO User (
+    id, ho, ten, username, password, email, created_date, 
+    cccd, phone, is_active, avatar, khoa_id, role_id
+) VALUES (
+    1, 'Nguyen Van', 'Admin', 'admin', 
+    '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
+    'admin@example.com', 
+    CURDATE(), 
+    '012345678901', 
+    '0987654321', 
+    true, 
+    NULL, 
+    NULL, 
+    1 -- role_id = 1 (ROLE_ADMIN)
+);

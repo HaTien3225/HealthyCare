@@ -25,11 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service("userDetailService")
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-    @Autowired  
+    @Autowired
     private UserRepository userRepo;
-    
+
     @Override
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
@@ -38,17 +38,39 @@ public class UserServiceImpl implements UserService{
     @Override
     public User addUser(Map<String, String> params, MultipartFile avatar) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }    
+    }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User u = this.userRepo.getUserByUsername(username);
+//        if (u == null) {
+//            throw new UsernameNotFoundException("Invalid username!");
+//        }
+//
+//        Set<GrantedAuthority> authorities = new HashSet<>();
+//        authorities.add(new SimpleGrantedAuthority(u.getRole().getRole()));
+//
+//        return new org.springframework.security.core.userdetails.User(
+//                u.getUsername(), u.getPassword(), authorities);
+//    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("[DEBUG] Bắt đầu load user: " + username);
+
         User u = this.userRepo.getUserByUsername(username);
+
         if (u == null) {
+            System.out.println("[ERROR] Không tìm thấy user: " + username);
             throw new UsernameNotFoundException("Invalid username!");
         }
 
+        System.out.println("[DEBUG] User tìm thấy: " + u.getUsername());
+        System.out.println("[DEBUG] Password từ DB: " + u.getPassword());
+        System.out.println("[DEBUG] Vai trò: " + u.getRole().getRole());
+
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole().getRole()));
-        
+
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
     }

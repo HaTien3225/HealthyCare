@@ -6,8 +6,10 @@ package com.xhht.repositories.impl;
 
 import com.xhht.pojo.User;
 import com.xhht.repositories.UserRepository;
+import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -18,29 +20,34 @@ import org.springframework.transaction.annotation.Transactional;
  * @author lehuy
  */
 @Repository
-@Transactional 
-public class UserRepositoryImpl implements UserRepository{
+@Transactional
+public class UserRepositoryImpl implements UserRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
 
     @Override
     public User getUserByUsername(String username) {
-        Session session = this.factory.getObject().getCurrentSession();
+        Session session = this.factory.getObject().openSession();
         try {
-            String hql = "FROM User WHERE username = :username";
-            return session.createQuery(hql, User.class)
-                          .setParameter("username", username)
-                          .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
+            Query<User> q = session.createQuery(
+                    "SELECT u FROM User u LEFT JOIN FETCH u.roleId WHERE u.username = :username",
+                    User.class
+            );
+            q.setParameter("username", username);
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
             return null;
+        } finally {
+            session.close();
         }
     }
+
     @Override
     public User addUser(User u) {
         Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-        
+
         return u;
     }
 }
