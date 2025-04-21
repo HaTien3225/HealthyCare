@@ -39,7 +39,7 @@ public class LichKham implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "khunggio_id", referencedColumnName = "id")
-    private KhungGio khungGio;
+    private KhungGio khungGioId;
     /**
      * @return the id
      */
@@ -97,16 +97,16 @@ public class LichKham implements Serializable {
     }
 
     /**
-     * @return the khungGio
+     * @return the khungGioId
      */
     public KhungGio getKhungGio() {
-        return khungGio;
+        return khungGioId;
     }
 
     /**
-     * @param khungGio the khungGio to set
+     * @param khungGioId the khungGio to set
      */
-    public void setKhungGio(KhungGio khungGio) {
-        this.khungGio = khungGio;
+    public void setKhungGio(KhungGio khungGioId) {
+        this.khungGioId = khungGioId;
     }
 }

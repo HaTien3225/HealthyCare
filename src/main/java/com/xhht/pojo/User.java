@@ -72,7 +72,7 @@ public class User {
     // Quan hệ với Role (nhiều User cùng 1 Role)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role role;
+    private Role roleId;
 
     @OneToOne(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
     private HoSoSucKhoe hoSoSucKhoeId;
@@ -280,14 +280,14 @@ public class User {
      * @return the role
      */
     public Role getRole() {
-        return role;
+        return roleId;
     }
 
     /**
      * @param role the role to set
      */
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRole(Role roleId) {
+        this.roleId = roleId;
     }
 
     /**

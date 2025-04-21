@@ -3,10 +3,14 @@
     <head>
         <title>Trang chủ</title>
     <th:block th:replace="base :: styles"></th:block>
-    </head>
-    <body>
-        <div th:replace="base :: header"></div>
-        <h1>Trang chủ</h1>
-        <div th:replace="base :: footer"></div>
-    </body>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <h1>Trang chủ</h1>
+<!--    <ul th:each="b : ${benhviens}">
+        <li th:text="${b.tenBenhVien}"></li>
+    </ul>-->
+
+    <div th:replace="base :: footer"></div>
+</body>
 </html>

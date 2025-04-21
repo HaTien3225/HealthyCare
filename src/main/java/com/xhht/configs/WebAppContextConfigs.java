@@ -20,7 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
     "com.xhht.controllers",
-    "com.xhht.repositories"
+    "com.xhht.repositories",
+    "com.xhht.services"
 })
 public class WebAppContextConfigs implements WebMvcConfigurer{
 

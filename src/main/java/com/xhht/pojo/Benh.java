@@ -42,7 +42,7 @@ public class Benh implements Serializable{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "khoa_id", referencedColumnName = "id")
-    private Khoa khoa;
+    private Khoa khoaId;
     
     @OneToMany(mappedBy = "benhId",cascade = CascadeType.ALL)
     private Set<DonKham> donKhams;
@@ -104,17 +104,17 @@ public class Benh implements Serializable{
     }
 
     /**
-     * @return the khoa
+     * @return the khoaId
      */
     public Khoa getKhoa() {
-        return khoa;
+        return khoaId;
     }
 
     /**
-     * @param khoa the khoa to set
+     * @param khoaId the khoa to set
      */
-    public void setKhoa(Khoa khoa) {
-        this.khoa = khoa;
+    public void setKhoa(Khoa khoaId) {
+        this.khoaId = khoaId;
     }
 
     /**

@@ -40,9 +40,9 @@ public class Khoa implements Serializable{
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "benh_vien_id",referencedColumnName = "id")
-    private BenhVien benhvien;
+    private BenhVien benhVienId;
     
-    @OneToMany(mappedBy = "benhId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "khoaId", cascade = CascadeType.ALL)
     private Set<Benh> benhs;
 
     /**
@@ -102,16 +102,16 @@ public class Khoa implements Serializable{
     }
 
     /**
-     * @return the benhvien
+     * @return the benhVienId
      */
     public BenhVien getBenhvien() {
-        return benhvien;
+        return benhVienId;
     }
 
     /**
-     * @param benhvien the benhvien to set
+     * @param benhvien the benhVienId to set
      */
-    public void setBenhvien(BenhVien benhvien) {
-        this.benhvien = benhvien;
+    public void setBenhvien(BenhVien benhVienId) {
+        this.benhVienId = benhVienId;
     }
 }

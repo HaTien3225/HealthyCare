@@ -38,7 +38,7 @@ public class BenhVien implements Serializable{
 
     @Column(name = "dia_chi", nullable = false)
     private String diaChi;
-    @OneToMany(mappedBy = "khoaId",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "benhVienId",cascade = CascadeType.ALL)
     private Set<Khoa> khoas;
 
     /**
