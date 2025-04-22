@@ -1,0 +1,20 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <title>Profile</title>
+    <th:block th:replace="base :: styles"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div class="container" style="background-color: #e6e6e6; box-shadow: 0px 0px 10px 2px black; border-radius: 25px; margin-top: 100px">
+        <p class="h1">PROFILE</p>
+        <img th:src="${currentUser.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" class="rounded" alt="profile">
+        <p class="h2" th:inline="text">Họ tên: [[${currentUserFullName}]]</p>
+        <p class="h3" th:inline="text">Khoa: [[${currentUser.khoaId}]]</p>
+        <p class="h3" th:inline="text">Email: [[${currentUser.email}]]</p>
+        <p class="h3" th:inline="text">Phone: [[${currentUser.phone}]]</p>
+        <p class="h3" th:inline="text">CCCD: [[${currentUser.cccd}]]</p>
+
+    </div>
+</body>
+</html>

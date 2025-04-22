@@ -3,14 +3,27 @@
     <head>
         <title>Trang chủ</title>
     <th:block th:replace="base :: styles"></th:block>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div th:replace="base :: header"></div>
-    <h1>Trang chủ</h1>
-<!--    <ul th:each="b : ${benhviens}">
-        <li th:text="${b.tenBenhVien}"></li>
-    </ul>-->
+    <div class="container">
+        <p class="h1" th:inline="text">Xin chào [[${currentUserFullName}]]</p>
+    </div>
 
-    <div th:replace="base :: footer"></div>
+    <!--    <div th:replace="base :: footer"></div>-->
 </body>
 </html>
