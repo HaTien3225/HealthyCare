@@ -62,4 +62,8 @@ public class IndexController {
         }
         return "profile";
     }
+    @GetMapping("/admin/workspace")
+    public String workspace_admin(){
+        return "workspace_admin";
+    }
 }

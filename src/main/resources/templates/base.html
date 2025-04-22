@@ -21,7 +21,7 @@
                         <a class="nav-link active" th:href="@{/profile}" th:text="${currentUserFullName}" sec:authorize="isAuthenticated()"> </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" sec:authorize="hasRole('ADMIN')">Công việc</a>
+                        <a class="nav-link" th:href="@{/admin/workspace}" sec:authorize="hasRole('ADMIN')">Công việc</a>
                     </li>
                      <li class="nav-item">
                         <a class="nav-link" href="#" sec:authorize="hasRole('DOCTOR')">Công việc</a>

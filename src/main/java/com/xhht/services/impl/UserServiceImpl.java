@@ -55,24 +55,26 @@ public class UserServiceImpl implements UserService {
 //    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("[DEBUG] Bắt đầu load user: " + username);
+        System.out.println("[DEBUG] load user: " + username);
 
         User u = this.userRepo.getUserByUsername(username);
 
         if (u == null) {
-            System.out.println("[ERROR] Không tìm thấy user: " + username);
+            System.out.println("[ERROR] can't find any user: " + username);
             throw new UsernameNotFoundException("Invalid username!");
         }
 
-        System.out.println("[DEBUG] User tìm thấy: " + u.getUsername());
-        System.out.println("[DEBUG] Password từ DB: " + u.getPassword());
-        System.out.println("[DEBUG] Vai trò: " + u.getRole().getRole());
+        System.out.println("[DEBUG] User found: " + u.getUsername());
+        System.out.println("[DEBUG] Password from DB: " + u.getPassword());
+        System.out.println("[DEBUG] Role: " + u.getRole().getRole());
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole().getRole()));
 
+        System.out.println("[DEBUG] Authorities: " + authorities);
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
+        
     }
 
 }
