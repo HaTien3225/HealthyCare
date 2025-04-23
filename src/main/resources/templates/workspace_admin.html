@@ -10,8 +10,10 @@
             background-color: #e6e6e6;
             box-shadow: 0px 0px 10px 2px black;
             border-radius: 25px;
-            margin-top: 100px;
+            margin-top: 65px;
             padding: 50px;
+            height: 70vh; 
+            overflow: scroll;
         }
         
         .list-group{
@@ -24,7 +26,7 @@
     <div th:replace="base :: header"></div>
     <div class="container menuws">
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action h3">Quản lý bệnh viện</a>
+            <a th:href="@{/admin/benhviens}" class="list-group-item list-group-item-action h3">Quản lý bệnh viện</a>
             <a href="#" class="list-group-item list-group-item-action h3" >#</a>
             <a href="#" class="list-group-item list-group-item-action h3">#</a>
         </div>

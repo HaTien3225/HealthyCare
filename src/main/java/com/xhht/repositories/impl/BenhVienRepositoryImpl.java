@@ -20,16 +20,33 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class BenhVienRepositoryImpl implements BenhVienRepository{
+public class BenhVienRepositoryImpl implements BenhVienRepository {
 
     @Autowired
-    private LocalSessionFactoryBean factory;  
-    
+    private LocalSessionFactoryBean factory;
+
     @Override
-    public List<BenhVien> getBenhViens() {
+    public List<BenhVien> getBenhViens(String kw) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query query = s.createQuery("FROM BenhVien", BenhVien.class);
-        return query.getResultList();
+        if (kw != null && !kw.isEmpty()) {
+            Query query = s.createQuery("FROM BenhVien WHERE tenBenhVien LIKE :kw", BenhVien.class);
+            query.setParameter("kw", "%" + kw + "%");
+            return query.getResultList();
+        } else {
+            Query query = s.createQuery("FROM BenhVien", BenhVien.class);
+            return query.getResultList();
+        }       
     }
-    
+
+    @Override
+    public BenhVien createOrUpdate(BenhVien bv) {
+       Session s = this.factory.getObject().getCurrentSession();
+       if (bv.getId() != null){
+           s.persist(bv);
+       }else{
+           s.merge(bv);
+       }
+       return bv;
+    }
+
 }

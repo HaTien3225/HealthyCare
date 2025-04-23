@@ -12,5 +12,6 @@ import java.util.List;
  * @author lehuy
  */
 public interface BenhVienRepository {
-    List<BenhVien> getBenhViens();
+    List<BenhVien> getBenhViens(String kw);
+    BenhVien createOrUpdate(BenhVien bv);
 }

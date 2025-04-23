@@ -6,24 +6,29 @@ package com.xhht.services.impl;
 
 import com.xhht.pojo.BenhVien;
 import com.xhht.repositories.BenhVienRepository;
-import com.xhht.services.BenhVIenService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.xhht.services.BenhVienService;
 
 /**
  *
  * @author lehuy
  */
 @Service
-public class BenhVienServiceImpl implements BenhVIenService{
+public class BenhVienServiceImpl implements BenhVienService{
 
     @Autowired
     private BenhVienRepository benhVienRepo;
     
     @Override
-    public List<BenhVien> getBenhViens() {
-        return this.benhVienRepo.getBenhViens();
+    public List<BenhVien> getBenhViens(String kw) {
+        return this.benhVienRepo.getBenhViens(kw);
+    }
+
+    @Override
+    public BenhVien createOrUpdate(BenhVien bv) {
+        return this.benhVienRepo.createOrUpdate(bv);
     }
     
 }
