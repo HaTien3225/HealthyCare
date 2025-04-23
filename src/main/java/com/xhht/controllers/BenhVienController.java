@@ -5,7 +5,6 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.BenhVien;
-import com.xhht.services.BenhVienService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.xhht.services.BenhVlenService;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class BenhVienController {
 
     @Autowired
-    private BenhVienService benhVienService;
+    private BenhVlenService benhVienService;
 
     @GetMapping("/admin/benhviens")
     public String benhVienView(@RequestParam(name = "kw", required = false) String keyword, Model model) {

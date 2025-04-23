@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author lehuy
  */
-public interface BenhVienService{
+public interface BenhVlenService{
     List<BenhVien> getBenhViens(String kw);
     BenhVien createOrUpdate(BenhVien bv);
     BenhVien getBenhVienById(int id);

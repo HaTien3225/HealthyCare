@@ -9,14 +9,14 @@ import com.xhht.repositories.BenhVienRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.xhht.services.BenhVienService;
+import com.xhht.services.BenhVlenService;
 
 /**
  *
  * @author lehuy
  */
 @Service
-public class BenhVienServiceImpl implements BenhVienService{
+public class BenhVienServiceImpl implements BenhVlenService{
 
     @Autowired
     private BenhVienRepository benhVienRepo;
