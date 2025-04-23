@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -29,6 +29,11 @@ public class BenhVienServiceImpl implements BenhVienService{
     @Override
     public BenhVien createOrUpdate(BenhVien bv) {
         return this.benhVienRepo.createOrUpdate(bv);
+    }
+
+    @Override
+    public BenhVien getBenhVienById(int id) {
+        return this.benhVienRepo.getBenhVienById(id);
     }
     
 }

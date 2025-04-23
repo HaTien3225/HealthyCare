@@ -1,0 +1,43 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <title>Trang chủ</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <div class="container" style="background-color: #e6e6e6; box-shadow: 0px 0px 10px 2px black; border-radius: 25px; margin-top: 65px ;padding: 30px">   
+        <form th:action="@{/admin/benhvien/update}" th:object="${benhvien}" method="post">
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">ID :</label>
+                <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="" class="form-label">Tên bệnh viện :</label>
+                <input type="text" class="form-control" id="tenBenhVien" placeholder="Tên bệnh viện" name="tenBenhVien"   th:field="*{tenBenhVien}" required>
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label">Giới thiệu :</label>
+                <input type="text" class="form-control" id="gioiThieu" placeholder="Giới thiệu" name="gioiThieu"  th:field="*{gioiThieu}" required>
+            </div>    
+            <div class="mb-3">
+                <label for="" class="form-label">Địa chỉ :</label>
+                <input type="text" class="form-control" id="diaChi" placeholder="Địa chỉ" name="diaChi" th:field="*{diaChi}" required>
+            </div>           
+            <div class="mb-3">
+                <label for="ngayThanhLap" class="form-label">Ngày thành lập :</label>
+                <label for="ngayThanhLap" class="form-label" th:text="*{ngayThanhLap}"></label>     
+                <input type="date" class="form-control" id="ngayThanhLap" name="ngayThanhLap"  max="{{ 'now' | date('yyyy-MM-dd') }}" th:field="*{ngayThanhLap}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Cập nhật</button>           
+        </form>
+            <button type="button" class="btn btn-danger">Xóa</button>
+    </div>
+
+</body>
+</html>
+

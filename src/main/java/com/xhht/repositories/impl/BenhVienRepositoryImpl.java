@@ -35,18 +35,26 @@ public class BenhVienRepositoryImpl implements BenhVienRepository {
         } else {
             Query query = s.createQuery("FROM BenhVien", BenhVien.class);
             return query.getResultList();
-        }       
+        }
     }
 
     @Override
     public BenhVien createOrUpdate(BenhVien bv) {
-       Session s = this.factory.getObject().getCurrentSession();
-       if (bv.getId() != null){
-           s.persist(bv);
-       }else{
-           s.merge(bv);
-       }
-       return bv;
+        Session s = this.factory.getObject().getCurrentSession();
+        if (bv.getId() == null) {
+            s.persist(bv);
+        } else {
+            s.merge(bv);
+        }
+        return bv;
+    }
+
+    @Override
+    public BenhVien getBenhVienById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM BenhVien WHERE id = :id", BenhVien.class);
+        q.setParameter("id", id);
+        return (BenhVien) q.getSingleResult();
     }
 
 }
