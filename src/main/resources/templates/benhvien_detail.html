@@ -9,7 +9,7 @@
 
     </style>
 </head>
-<body>
+<body onload="loadKhoas([[${benhvien.id}]])">
     <div th:replace="base :: header"></div>
 
     <div class="container mf" >   
@@ -35,8 +35,23 @@
             <button type="submit" class="btn btn-primary">Cập nhật</button>           
         </form>
         <button type="submit" class="btn btn-danger" th:onclick="'deleteBenhVien(\'' + @{/admin/api/benhvien} + '\', ' + ${benhvien.id} + ', \'' + @{/admin/benhviens} + '\')'"  style="margin-top: 20px;">Xóa</button>
+        
+        <p class="h3">Khoa :</p>
+        <div class="container-fluid">
+            <button type="button" class="btn btn-info" th:onclick="'loadKhoa(' + ${benhvien.id} + ')'" >Xem khoa</button>
+        </div>
+        <div class="list-group mt-3" id="khoaList">
+                     
+        </div>
+        <div class="container-fluid mt-3" style="justify-content: center;display: flex;align-items: center" >
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link"  th:onclick="'changePage(1, ' + ${benhvien.id} + ')'"><</a></li>
+                
+                <li class="page-item"><a class="page-link" id="next-page-button" th:onclick="'changePage(2, ' + ${benhvien.id} + ')'">></a></li>
+            </ul>
+        </div>
     </div>
-    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/benhvien_detail.js}"></script>
 </body>
 </html>
 

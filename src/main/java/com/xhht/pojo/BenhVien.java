@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +39,7 @@ public class BenhVien implements Serializable{
 
     @Column(name = "dia_chi", nullable = false)
     private String diaChi;
+    @JsonIgnore
     @OneToMany(mappedBy = "benhVienId",cascade = CascadeType.ALL)
     private Set<Khoa> khoas;
 
