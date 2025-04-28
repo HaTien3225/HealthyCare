@@ -35,5 +35,10 @@ public class BenhVienServiceImpl implements BenhVienService{
     public BenhVien getBenhVienById(int id) {
         return this.benhVienRepo.getBenhVienById(id);
     }
+
+    @Override
+    public void deleteBenhVien(int id) {
+       this.benhVienRepo.deleteBenhVien(id);
+    }
     
 }

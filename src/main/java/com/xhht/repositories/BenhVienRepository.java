@@ -15,4 +15,5 @@ public interface BenhVienRepository {
     List<BenhVien> getBenhViens(String kw);
     BenhVien createOrUpdate(BenhVien bv);
     BenhVien getBenhVienById(int id);
+    void deleteBenhVien(int id);
 }

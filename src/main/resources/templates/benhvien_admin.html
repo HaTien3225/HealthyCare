@@ -3,6 +3,7 @@
     <head>
         <title>Profile</title>
     <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <style>
         p{
             margin: 10px
@@ -20,7 +21,7 @@
         <span th:text="${errorMessage}"></span>
     </div>
     
-    <div class="container" style="background-color: #e6e6e6; box-shadow: 0px 0px 10px 2px black; border-radius: 25px; margin-top: 65px ; padding: 30px;">   
+    <div class="container mf" >   
         <form th:action="@{/admin/benhviens}" method="get">
             <div class="container d-flex" style="padding: 30px">
                 <input type="text" class="form-control form-control-lg" placeholder="Tìm kiếm (tên bệnh viện)" name="kw" >

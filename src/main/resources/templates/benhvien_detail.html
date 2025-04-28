@@ -3,6 +3,8 @@
     <head>
         <title>Trang chủ</title>
     <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
     <style>
 
     </style>
@@ -10,12 +12,9 @@
 <body>
     <div th:replace="base :: header"></div>
 
-    <div class="container" style="background-color: #e6e6e6; box-shadow: 0px 0px 10px 2px black; border-radius: 25px; margin-top: 65px ;padding: 30px">   
-        <form th:action="@{/admin/benhvien/update}" th:object="${benhvien}" method="post">
-            <div class="mb-3 mt-3">
-                <label for="" class="form-label">ID :</label>
-                <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >
-            </div>
+    <div class="container mf" >   
+        <form th:action="@{/admin/benhvien/update}" th:object="${benhvien}" method="post">           
+            <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >        
             <div class="mb-3 mt-3">
                 <label for="" class="form-label">Tên bệnh viện :</label>
                 <input type="text" class="form-control" id="tenBenhVien" placeholder="Tên bệnh viện" name="tenBenhVien"   th:field="*{tenBenhVien}" required>
@@ -35,9 +34,9 @@
             </div>
             <button type="submit" class="btn btn-primary">Cập nhật</button>           
         </form>
-            <button type="button" class="btn btn-danger">Xóa</button>
+        <button type="submit" class="btn btn-danger" th:onclick="'deleteBenhVien(\'' + @{/admin/api/benhvien} + '\', ' + ${benhvien.id} + ', \'' + @{/admin/benhviens} + '\')'"  style="margin-top: 20px;">Xóa</button>
     </div>
-
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
 

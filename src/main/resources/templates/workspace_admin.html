@@ -4,18 +4,9 @@
         <title>Work space admin</title>
     <th:block th:replace="base :: styles"></th:block>
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
-
     <style>
-        .container.menuws{
-            background-color: #e6e6e6;
-            box-shadow: 0px 0px 10px 2px black;
-            border-radius: 25px;
-            margin-top: 65px;
-            padding: 50px;
-            height: 70vh; 
-            overflow: scroll;
-        }
-        
+       
+
         .list-group{
             margin: 50px;
         }
@@ -24,7 +15,7 @@
 </head>
 <body>
     <div th:replace="base :: header"></div>
-    <div class="container menuws">
+    <div class="container mf">
         <div class="list-group">
             <a th:href="@{/admin/benhviens}" class="list-group-item list-group-item-action h3">Quản lý bệnh viện</a>
             <a href="#" class="list-group-item list-group-item-action h3" >#</a>

@@ -57,4 +57,11 @@ public class BenhVienRepositoryImpl implements BenhVienRepository {
         return (BenhVien) q.getSingleResult();
     }
 
+    @Override
+    public void deleteBenhVien(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        BenhVien bv = this.getBenhVienById(id);
+        s.remove(bv);
+    }
+
 }
