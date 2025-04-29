@@ -41,7 +41,21 @@ public class KhoaRepositoryImpl implements KhoaRepository {
 
     @Override
     public Khoa getKhoaByKhoaId(int KhoaId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("From Khoa k WHERE k.id = :KhoaId",Khoa.class);
+        q.setParameter("KhoaId", KhoaId);
+        return (Khoa) q.getSingleResult();
+    }
+
+    @Override
+    public Khoa createOrUpdate(Khoa khoa) {
+        Session s = this.factory.getObject().getCurrentSession();
+        if (khoa.getId() == null) {
+            s.persist(khoa);
+        } else {
+            s.merge(khoa);
+        }
+        return khoa;
     }
 
 }

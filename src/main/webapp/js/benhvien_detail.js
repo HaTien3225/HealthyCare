@@ -38,7 +38,7 @@ function displayKhoaList(khoaList) {
     // Lặp qua các khoa và hiển thị
     khoaList.forEach(khoa => {
         const khoaItem = document.createElement('a');
-        khoaItem.href = '#';
+        khoaItem.href = `/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/admin/khoas/${khoa.id}`;
         khoaItem.classList.add('list-group-item', 'list-group-item-action');
         khoaItem.innerHTML = `${khoa.id} - ${khoa.tenKhoa}`;
 

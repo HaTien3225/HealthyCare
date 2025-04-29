@@ -31,10 +31,10 @@
         <p class='h3' th:text="${'Tìm kiếm : '+ keyword}"></p>
         <div class="container" style="height: 60vh; overflow: scroll;">
             <div class="list-group" th:each="bv : ${benhViens}">
-                <a <a th:href="@{/admin/benhvien/{id}(id=${bv.id})}" class="list-group-item list-group-item-action" th:text="${bv.id + '-' + bv.tenBenhVien }"></a>               
+                <a <a th:href="@{/admin/benhviens/{id}(id=${bv.id})}" class="list-group-item list-group-item-action" th:text="${bv.id + '-' + bv.tenBenhVien }"></a>               
             </div> 
         </div>
-        <button type="button" th:attr="onclick=|window.location.href='@{/admin/benhvien/create-form}'|"class="btn btn-success">Thêm bệnh viện</button>
+        <button type="button" th:attr="onclick=|window.location.href='@{/admin/benhviens/create-form}'|"class="btn btn-success">Thêm bệnh viện</button>
     </div>
 
 </body>

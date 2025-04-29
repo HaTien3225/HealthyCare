@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiAdminBenhVienController {
     @Autowired
     private BenhVienService benhVienService;
-    @DeleteMapping("/admin/api/benhvien/{benhvienId}")
+    @DeleteMapping("/admin/api/benhviens/{benhvienId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable(value = "benhvienId") int id) {
         this.benhVienService.deleteBenhVien(id);

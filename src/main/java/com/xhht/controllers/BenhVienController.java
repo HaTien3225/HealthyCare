@@ -36,13 +36,13 @@ public class BenhVienController {
         return "benhvien_admin";
     }
 
-    @GetMapping("/admin/benhvien/create-form")
+    @GetMapping("/admin/benhviens/create-form")
     public String createBenhVienForm(Model model) {
         model.addAttribute("benhvien", new BenhVien());
         return "benhvien_admin_create";
     }
 
-    @PostMapping("/admin/benhvien/create")
+    @PostMapping("/admin/benhviens/create")
     public String benhVienCreate(@ModelAttribute(value = "benhvien") BenhVien bv, RedirectAttributes redirectAttributes  ) {
         try {
             this.benhVienService.createOrUpdate(bv);
@@ -52,13 +52,13 @@ public class BenhVienController {
         }
         return "redirect:/admin/benhviens";
     }
-    @GetMapping("/admin/benhvien/{benhVienId}")
+    @GetMapping("/admin/benhviens/{benhVienId}")
     public String benhVienDetail(Model model, @PathVariable(value = "benhVienId") int id){
         BenhVien benhVien = this.benhVienService.getBenhVienById(id);
         model.addAttribute("benhvien",benhVien);
         return "benhvien_detail";
     }
-    @PostMapping("/admin/benhvien/update")
+    @PostMapping("/admin/benhviens/update")
     public String benhVienUpdate(@ModelAttribute(value = "benhvien") BenhVien bv){
         this.benhVienService.createOrUpdate(bv);      
         return "redirect:/admin/benhviens";

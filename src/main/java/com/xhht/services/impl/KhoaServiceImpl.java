@@ -28,7 +28,12 @@ public class KhoaServiceImpl implements KhoaService{
 
     @Override
     public Khoa getKhoaByKhoaId(int KhoaId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.khoaRepo.getKhoaByKhoaId(KhoaId);
+    }
+
+    @Override
+    public Khoa createOrUpdate(Khoa khoa) {
+        return this.khoaRepo.createOrUpdate(khoa);
     }
     
 }

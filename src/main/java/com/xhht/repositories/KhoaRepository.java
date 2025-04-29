@@ -14,4 +14,5 @@ import java.util.List;
 public interface KhoaRepository {
     List<Khoa> getAllKhoaByBenhVienId(int benhVienId, int page, int pageSize);
     Khoa getKhoaByKhoaId(int KhoaId);
+    Khoa createOrUpdate(Khoa khoa);
 }

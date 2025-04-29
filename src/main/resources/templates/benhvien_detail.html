@@ -9,7 +9,7 @@
 
     </style>
 </head>
-<body onload="loadKhoas([[${benhvien.id}]])">
+<body >
     <div th:replace="base :: header"></div>
 
     <div class="container mf" >   
@@ -34,10 +34,10 @@
             </div>
             <button type="submit" class="btn btn-primary">Cập nhật</button>           
         </form>
-        <button type="submit" class="btn btn-danger" th:onclick="'deleteBenhVien(\'' + @{/admin/api/benhvien} + '\', ' + ${benhvien.id} + ', \'' + @{/admin/benhviens} + '\')'"  style="margin-top: 20px;">Xóa</button>
+        <button type="submit" class="btn btn-danger" th:onclick="'deleteBenhVien(\'' + @{/admin/api/benhviens} + '\', ' + ${benhvien.id} + ', \'' + @{/admin/benhviens} + '\')'"  style="margin-top: 20px;">Xóa</button>
         
         <p class="h3">Khoa :</p>
-        <div class="container-fluid">
+        <div class="container-fluid" style="justify-content: center;display: flex;align-items: center">
             <button type="button" class="btn btn-info" th:onclick="'loadKhoa(' + ${benhvien.id} + ')'" >Xem khoa</button>
         </div>
         <div class="list-group mt-3" id="khoaList">
@@ -50,6 +50,7 @@
                 <li class="page-item"><a class="page-link" id="next-page-button" th:onclick="'changePage(2, ' + ${benhvien.id} + ')'">></a></li>
             </ul>
         </div>
+        <button type="submit" class="btn btn-success mt-3" th:onclick="'window.location.href=\'' + @{/admin/khoas/create_form(benhVienId=${benhVienId}, tenBenhVien=${benhvien.tenBenhVien})} + '\''" >Tạo khoa</button> 
     </div>
     <script th:src="@{/js/benhvien_detail.js}"></script>
 </body>
