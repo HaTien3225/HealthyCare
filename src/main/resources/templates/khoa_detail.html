@@ -38,18 +38,19 @@
 
         <p class="h3">Bệnh :</p>
         <div class="container-fluid" style="justify-content: center;display: flex;align-items: center">
-            <button type="button" class="btn btn-info"  >Xem bệnh</button>
+            <button type="button" class="btn btn-info" th:onclick="'loadBenh(' + ${khoa.id} + ')'" >Xem bệnh</button>
         </div>
-        <div class="list-group mt-3" id="benhvienlist">
+        <div class="list-group mt-3" id="benhList">
 
         </div>
         <div class="container-fluid mt-3" style="justify-content: center;display: flex;align-items: center" >
             <ul class="pagination">
-                <li class="page-item"><a class="page-link"  ><</a></li>
+                <li class="page-item"><a class="page-link"  th:onclick="'changePage(1, ' + ${khoa.id} + ')'" ><</a></li>
 
-                <li class="page-item"><a class="page-link" id="next-page-button" >></a></li>
+                <li class="page-item"><a class="page-link" id="next-page-button" th:onclick="'changePage(2, ' + ${khoa.id} + ')'" >></a></li>
             </ul>
         </div>
+        <button type="submit" class="btn btn-success mt-3"  >Tạo bệnh</button> 
     </div>
     <script th:src="@{/js/khoa_detail.js}"></script>
 </body>

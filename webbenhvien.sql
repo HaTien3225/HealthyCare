@@ -170,7 +170,7 @@ INSERT INTO User (
 --------------------------------------------------- 
 
 
-use webbenhvien;
+-- use webbenhvien;
 
 INSERT INTO Benhvien (ngay_thanh_lap, ten_benh_vien, gioi_thieu, dia_chi)
 VALUES 
@@ -198,3 +198,13 @@ VALUES
 ('2025-04-28', 'Khoa Da liễu', 'Khoa chuyên điều trị các bệnh về da', 2),
 ('2025-04-28', 'Khoa Mắt', 'Khoa chuyên điều trị các bệnh về mắt', 2),
 ('2025-04-28', 'Khoa Tai mũi họng', 'Khoa chuyên điều trị các bệnh về tai mũi họng', 2);
+
+INSERT INTO Benh (created_date, ten_benh, mo_ta, khoa_id) VALUES
+('2025-05-05', 'Viêm phổi', 'Bệnh viêm phổi cấp tính', 1),
+('2025-05-05', 'Tiểu đường', 'Bệnh rối loạn chuyển hóa đường', 1),
+('2025-05-05', 'Viêm gan B', 'Bệnh lây qua đường máu và tình dục', 1),
+('2025-05-05', 'Viêm da cơ địa', 'Bệnh viêm da mãn tính gây ngứa', 4),
+('2025-05-05', 'Nấm da', 'Bệnh nhiễm nấm trên bề mặt da', 4),
+('2025-05-05', 'Chàm (eczema)', 'Bệnh da liễu gây nổi mẩn đỏ và ngứa', 4);
+
+

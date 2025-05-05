@@ -44,6 +44,7 @@ public class Khoa implements Serializable{
     @JoinColumn(name = "benh_vien_id",referencedColumnName = "id")
     private BenhVien benhVienId;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "khoaId", cascade = CascadeType.ALL)
     private Set<Benh> benhs;
 

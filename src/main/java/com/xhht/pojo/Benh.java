@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +44,7 @@ public class Benh implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "khoa_id", referencedColumnName = "id")
     private Khoa khoaId;
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "benhId",cascade = CascadeType.ALL)
     private Set<DonKham> donKhams;
 
@@ -106,6 +107,7 @@ public class Benh implements Serializable{
     /**
      * @return the khoaId
      */
+    @JsonIgnore
     public Khoa getKhoa() {
         return khoaId;
     }
