@@ -35,5 +35,10 @@ public class KhoaServiceImpl implements KhoaService{
     public Khoa createOrUpdate(Khoa khoa) {
         return this.khoaRepo.createOrUpdate(khoa);
     }
+
+    @Override
+    public void deleteKhoa(int id) {
+        this.khoaRepo.deleteKhoa(id);
+    }
     
 }

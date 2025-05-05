@@ -58,4 +58,11 @@ public class KhoaRepositoryImpl implements KhoaRepository {
         return khoa;
     }
 
+    @Override
+    public void deleteKhoa(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Khoa k = this.getKhoaByKhoaId(id);
+        s.remove(k);
+    }
+
 }

@@ -18,4 +18,7 @@ public interface KhoaService {
     Khoa getKhoaByKhoaId(int KhoaId);
     
     Khoa createOrUpdate(Khoa khoa);
+    
+    void deleteKhoa(int id);
+    
 }

@@ -13,8 +13,9 @@
     <div th:replace="base :: header"></div>
 
     <div class="container mf" >   
-        <form th:object="${khoa}" method="post">           
-            <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >        
+        <form th:action="@{/admin/khoas/update(benhVienId=${benhvienid})}" th:object="${khoa}" method="post">           
+            <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >   
+                 
             <div class="mb-3 mt-3">
                 <label for="" class="form-label">Tên khoa :</label>
                 <input type="text" class="form-control" id="tenKhoa" placeholder="Tên khoa" name="tenKhoa"   th:field="*{tenKhoa}" required>
@@ -33,24 +34,24 @@
             </div>
             <button type="submit" class="btn btn-primary">Cập nhật</button>           
         </form>
-        <button type="submit" class="btn btn-danger"  style="margin-top: 20px;">Xóa</button>
-        
+        <button type="submit" class="btn btn-danger"  style="margin-top: 20px;" th:onclick="|deleteKhoa('@{/admin/api/khoas}', [[${khoa.id}]], '@{/admin/benhviens/{benhvienid}(benhvienid=${benhvienid})}')|" >Xóa</button>
+
         <p class="h3">Bệnh :</p>
         <div class="container-fluid" style="justify-content: center;display: flex;align-items: center">
             <button type="button" class="btn btn-info"  >Xem bệnh</button>
         </div>
         <div class="list-group mt-3" id="benhvienlist">
-                     
+
         </div>
         <div class="container-fluid mt-3" style="justify-content: center;display: flex;align-items: center" >
             <ul class="pagination">
                 <li class="page-item"><a class="page-link"  ><</a></li>
-                
+
                 <li class="page-item"><a class="page-link" id="next-page-button" >></a></li>
             </ul>
         </div>
     </div>
-    <!--<script th:src="@{/js/benhvien_detail.js}"></script>-->
+    <script th:src="@{/js/khoa_detail.js}"></script>
 </body>
 </html>
 

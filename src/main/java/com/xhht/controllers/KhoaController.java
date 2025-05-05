@@ -25,37 +25,56 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class KhoaController {
+
     @Autowired
     private KhoaService khoaService;
-    
-    @Autowired 
+
+    @Autowired
     private BenhVienService bvService;
-    
+
     @GetMapping("/admin/khoas/{khoaId}")
-    public String getDetailKhoa(Model model,@PathVariable(value = "khoaId",required = true) int id){
+    public String getDetailKhoa(Model model, @PathVariable(value = "khoaId", required = true) int id) {
         Khoa khoa = this.khoaService.getKhoaByKhoaId(id);
-        model.addAttribute("khoa",khoa);
-        model.addAttribute( "tenbenhvien", khoa.getBenhvien().getTenBenhVien());
+        model.addAttribute("khoa", khoa);
+        model.addAttribute("tenbenhvien", khoa.getBenhvien().getTenBenhVien());
+        model.addAttribute("benhvienid", khoa.getBenhvien().getId());
         return "khoa_detail";
     }
+
     @GetMapping("/admin/khoas/create_form")
-    public String khoaCreateView(Model model,@RequestParam(name = "benhVienId",required =  true) int benhVienId,@RequestParam(name = "tenBenhVien",required =  true) String tenBenhVien){
-        model.addAttribute("khoa",new Khoa());
-        model.addAttribute("benhVienId",benhVienId);
-        model.addAttribute("tenBenhVien",tenBenhVien);
+    public String khoaCreateView(Model model, @RequestParam(name = "benhVienId", required = true) int benhVienId, @RequestParam(name = "tenBenhVien", required = true) String tenBenhVien) {
+        model.addAttribute("khoa", new Khoa());
+        model.addAttribute("benhVienId", benhVienId);
+        model.addAttribute("tenBenhVien", tenBenhVien);
         return "khoa_create_form";
     }
+
     @PostMapping("/admin/khoas/create")
-    public String createOrUpdateKhoa(@ModelAttribute(value = "khoa") Khoa khoa, RedirectAttributes redirectAttributes,@RequestParam(name = "benhVienId",required =  true) int benhVienId ){
+    public String createKhoa(@ModelAttribute(value = "khoa") Khoa khoa, RedirectAttributes redirectAttributes, @RequestParam(name = "benhVienId", required = true) int benhVienId) {
         khoa.setCreatedDate(LocalDate.now());
+
         khoa.setBenhvien(bvService.getBenhVienById(benhVienId));
-        try{
+        try {
             this.khoaService.createOrUpdate(khoa);
             redirectAttributes.addFlashAttribute("successMessage", "Tạo khoa thành công!");
-        }catch(Exception e){
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Tạo khoan thất bại: " + e.getMessage());
         }
         return "redirect:/admin/benhviens";
     }
-    
+
+    @PostMapping("/admin/khoas/update")
+    public String updateKhoa(@ModelAttribute(value = "khoa") Khoa khoa, RedirectAttributes redirectAttributes,@RequestParam(name = "benhVienId", required = true) int benhVienId) {
+        khoa.setCreatedDate(LocalDate.now());
+
+        khoa.setBenhvien(bvService.getBenhVienById(benhVienId));
+        try {
+            this.khoaService.createOrUpdate(khoa);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khoa thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật khoan thất bại: " + e.getMessage());
+        }
+        return "redirect:/admin/benhviens"+"/"+this.khoaService.getKhoaByKhoaId(khoa.getId()).getBenhvien().getId();
+    }
+
 }

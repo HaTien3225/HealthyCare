@@ -24,7 +24,7 @@ create table Khoa(
     ten_khoa varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
     mo_ta varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
     benh_vien_id int not null,
-    foreign key (benh_vien_id) references Benhvien(id) on delete cascade
+    foreign key (benh_vien_id) references Benhvien(id) on delete restrict
 );
 
 create table Benh(
@@ -166,3 +166,35 @@ INSERT INTO User (
     NULL, 
     1 -- role_id = 1 (ROLE_ADMIN)
 );
+
+--------------------------------------------------- 
+
+
+use webbenhvien;
+
+INSERT INTO Benhvien (ngay_thanh_lap, ten_benh_vien, gioi_thieu, dia_chi)
+VALUES 
+('1975-01-01', 'Bệnh viện Chợ Rẫy', 'Bệnh viện đa khoa trung ương lớn nhất miền Nam', '201B Nguyễn Chí Thanh, Quận 5, TP.HCM'),
+
+('1956-09-23', 'Bệnh viện Bạch Mai', 'Bệnh viện tuyến cuối về nội khoa', '78 Giải Phóng, Đống Đa, Hà Nội'),
+
+('2000-06-15', 'Bệnh viện Đại học Y Dược TP.HCM', 'Trung tâm y tế chất lượng cao', '215 Hồng Bàng, Quận 5, TP.HCM'),
+
+('1989-04-10', 'Bệnh viện Hữu nghị Việt Đức', 'Chuyên khoa ngoại khoa hàng đầu', '40 Tràng Thi, Hoàn Kiếm, Hà Nội'),
+
+('1990-07-20', 'Bệnh viện 108', 'Bệnh viện quân đội trung ương', '1 Trần Hưng Đạo, Hai Bà Trưng, Hà Nội');
+
+
+-- Insert mẫu vào bảng Khoa cho benh_vien_id = 1
+INSERT INTO Khoa (created_date, ten_khoa, mo_ta, benh_vien_id)
+VALUES 
+('2025-04-28', 'Khoa Nội', 'Khoa chuyên điều trị các bệnh về nội khoa', 1),
+('2025-04-28', 'Khoa Ngoại', 'Khoa chuyên điều trị các bệnh về ngoại khoa', 1),
+('2025-04-28', 'Khoa Nhi', 'Khoa chuyên điều trị các bệnh cho trẻ em', 1);
+
+-- Insert mẫu vào bảng Khoa cho benh_vien_id = 2
+INSERT INTO Khoa (created_date, ten_khoa, mo_ta, benh_vien_id)
+VALUES 
+('2025-04-28', 'Khoa Da liễu', 'Khoa chuyên điều trị các bệnh về da', 2),
+('2025-04-28', 'Khoa Mắt', 'Khoa chuyên điều trị các bệnh về mắt', 2),
+('2025-04-28', 'Khoa Tai mũi họng', 'Khoa chuyên điều trị các bệnh về tai mũi họng', 2);
