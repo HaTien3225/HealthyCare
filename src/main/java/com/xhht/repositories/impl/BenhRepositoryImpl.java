@@ -42,6 +42,9 @@ public class BenhRepositoryImpl implements BenhRepository{
 
     @Override
     public Benh getBenhById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Session s = this.factory.getObject().getCurrentSession();
+        Query<Benh> query = s.createQuery("SELECT b  FROM Benh b WHERE b.id = :id", Benh.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 }

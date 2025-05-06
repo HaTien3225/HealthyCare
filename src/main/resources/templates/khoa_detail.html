@@ -15,7 +15,7 @@
     <div class="container mf" >   
         <form th:action="@{/admin/khoas/update(benhVienId=${benhvienid})}" th:object="${khoa}" method="post">           
             <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >   
-                 
+            <p class="h2">Khoa</p>
             <div class="mb-3 mt-3">
                 <label for="" class="form-label">Tên khoa :</label>
                 <input type="text" class="form-control" id="tenKhoa" placeholder="Tên khoa" name="tenKhoa"   th:field="*{tenKhoa}" required>
@@ -49,8 +49,7 @@
 
                 <li class="page-item"><a class="page-link" id="next-page-button" th:onclick="'changePage(2, ' + ${khoa.id} + ')'" >></a></li>
             </ul>
-        </div>
-        <button type="submit" class="btn btn-success mt-3"  >Tạo bệnh</button> 
+        </div>   
     </div>
     <script th:src="@{/js/khoa_detail.js}"></script>
 </body>

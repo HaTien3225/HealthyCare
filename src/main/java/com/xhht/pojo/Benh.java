@@ -41,7 +41,7 @@ public class Benh implements Serializable{
     @Column(name = "mo_ta", columnDefinition = "varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci")
     private String moTa;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "khoa_id", referencedColumnName = "id")
     private Khoa khoaId;
     @JsonIgnore

@@ -62,7 +62,7 @@ public class User {
     private String avatar;
 
     // Quan hệ với Khoa (nhiều User thuộc về 1 Khoa)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "khoa_id", referencedColumnName = "id")
     private Khoa khoaId;
 
@@ -70,7 +70,7 @@ public class User {
     @OneToOne(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private GiayPhepHanhNghe giayPhepHanhNgheId;
     // Quan hệ với Role (nhiều User cùng 1 Role)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role roleId;
 
