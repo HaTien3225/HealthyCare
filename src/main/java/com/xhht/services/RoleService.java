@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.xhht.repositories;
+package com.xhht.services;
 
-import com.xhht.pojo.User;
+import com.xhht.pojo.Role;
 import java.util.List;
 
 /**
  *
  * @author lehuy
  */
-public interface UserRepository {
-    User getUserByUsername(String username);
-    User createOrUpdate(User u);
+public interface RoleService {
+    List<Role> getAllRole();
+    Role getRoleById(int id);
 }

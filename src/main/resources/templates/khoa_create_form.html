@@ -13,7 +13,8 @@
     <div th:replace="base :: header"></div>
 
     <div class="container mf" >   
-        <form th:action="@{/admin/khoas/create(benhVienId=${benhVienId})}" th:object="${khoa}" method="post">                             
+        <form th:action="@{/admin/khoas/create(benhVienId=${benhVienId})}" th:object="${khoa}" method="post">  
+            <p class="h2">Tạo  khoa</p>
             <div class="mb-3 mt-3">
                 <label for="" class="form-label">Tên khoa :</label>
                 <input type="text" class="form-control" id="tenKhoa" placeholder="Tên khoa" name="tenKhoa" required>

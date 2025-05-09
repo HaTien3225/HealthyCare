@@ -4,14 +4,14 @@
  */
 package com.xhht.repositories;
 
-import com.xhht.pojo.User;
+import com.xhht.pojo.Role;
 import java.util.List;
 
 /**
  *
  * @author lehuy
  */
-public interface UserRepository {
-    User getUserByUsername(String username);
-    User createOrUpdate(User u);
+public interface RoleRepository {
+    List<Role> getAllRole();
+    Role getRoleById(int id);
 }

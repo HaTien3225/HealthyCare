@@ -4,6 +4,8 @@
  */
 package com.xhht.configs;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,6 +59,17 @@ public class SpringSecurityConfigs {
                 .logout(logout -> logout.logoutSuccessUrl("/login").permitAll());
 
         return http.build();
+    }
+    
+    @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary
+                = new Cloudinary(ObjectUtils.asMap(
+                        "cloud_name", "dv1nnzhrq",
+                        "api_key", "389747467135855",
+                        "api_secret", "k0_M2bboaYFSx76BdpYZ9TTZSD4",
+                        "secure", true));
+        return cloudinary;
     }
 
 }

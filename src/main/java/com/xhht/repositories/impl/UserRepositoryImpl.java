@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private LocalSessionFactoryBean factory;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @Override
     public User getUserByUsername(String username) {
         Session session = this.factory.getObject().openSession();
@@ -44,10 +48,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User addUser(User u) {
+    public User createOrUpdate(User u) {
         Session s = this.factory.getObject().getCurrentSession();
-        s.persist(u);
-
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        if (u.getId() == null) {
+            s.persist(u);
+        } else {
+            s.merge(u);
+        }
         return u;
     }
 }

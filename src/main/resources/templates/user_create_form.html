@@ -1,0 +1,70 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <title>User create</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+    <style>
+
+    </style>
+</head>
+<body >
+    <div th:replace="base :: header"></div>
+
+    <div  class="container mf" >   
+        
+        <form th:action="@{/admin/users/create}" th:object="${user}" method="post" enctype="multipart/form-data">
+            <p class="h2">Tạo  user</p>
+            <div class="mb-3 mt-3">
+                <label for="username" class="form-label">Username :</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username" name="username" required >
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required >
+            </div>
+            <div class="mb-3">
+                <label for="ho" class="form-label">Ho :</label>
+                <input type="text" class="form-control" id="ho" placeholder="ten" name="ho" required >
+            </div>
+            <div class="mb-3">
+                <label for="ten" class="form-label">Ten :</label>
+                <input type="text" class="form-control" id="ten" placeholder="Enter ten" name="ten" required >
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required >
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="cccd" class="form-label">CCCD :</label>
+                <input type="text" class="form-control" id="cccd" placeholder="Enter cccd" name="cccd" pattern="\d*" maxlength="12" required >
+            </div>                     
+            <div class="mb-3 mt-3">
+                <label for="phone" class="form-label">Phone :</label>
+                <input type="text" class="form-control" id="phone" placeholder="Enter phone" name="phone" pattern="\d*" maxlength="10" required >
+            </div>
+            <div class="mb-3">
+                <label for="file" class="form-label">Avatar:</label>
+                <input class="form-control" type="file" id="file" name="file">
+            </div>
+            <div class="mb-3">
+                <label for="roleSelect" class="form-label">Role:</label>
+                <select class="form-select" id="roleId" name="roleId"  required>
+                    <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.role}"></option>
+                </select>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="isActive" class="form-label">isActive :</label>
+                <input type="checkbox" class="form-check-input" id="isActive" name="isActive">
+            </div>
+            <button type="submit" class="btn btn-success" >Tạo</button>
+        </form>       
+    </div>
+    <!--<script th:src="@{/js/khoa_detail.js}"></script>-->
+</body>
+</html>
+
+
+
+

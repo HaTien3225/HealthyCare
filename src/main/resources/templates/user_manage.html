@@ -1,0 +1,34 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <title>User management</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+    <style>
+
+    </style>
+</head>
+<body >
+    <div th:replace="base :: header"></div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" style="margin-top: 50px">
+        <span th:text="${successMessage}"></span>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="margin-top: 50px">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    
+    <div class="container mf" >   
+        
+        <div class="container">
+            <button type="button" class="btn btn-success" th:attr="onclick=|window.location.href='@{/admin/users/create-form}'|">Tạo user</button>
+        </div>
+    </div>
+    <!--<script th:src="@{/js/khoa_detail.js}"></script>-->
+</body>
+</html>
+
+
+

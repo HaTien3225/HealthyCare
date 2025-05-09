@@ -4,9 +4,12 @@
  */
 package com.xhht.services.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.xhht.pojo.User;
 import com.xhht.repositories.UserRepository;
 import com.xhht.services.UserService;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +21,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,29 +35,29 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private Cloudinary cloudinary;
+    
+
     @Override
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
     }
 
     @Override
-    public User addUser(Map<String, String> params, MultipartFile avatar) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public User createOrUpdate(User u) {
+        if (!u.getFile().isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(u.getFile().getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return this.userRepo.createOrUpdate(u);
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User u = this.userRepo.getUserByUsername(username);
-//        if (u == null) {
-//            throw new UsernameNotFoundException("Invalid username!");
-//        }
-//
-//        Set<GrantedAuthority> authorities = new HashSet<>();
-//        authorities.add(new SimpleGrantedAuthority(u.getRole().getRole()));
-//
-//        return new org.springframework.security.core.userdetails.User(
-//                u.getUsername(), u.getPassword(), authorities);
-//    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("[DEBUG] load user: " + username);
@@ -74,7 +79,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("[DEBUG] Authorities: " + authorities);
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
-        
+
     }
 
 }

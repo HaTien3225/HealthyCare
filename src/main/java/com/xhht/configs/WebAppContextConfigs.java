@@ -4,9 +4,13 @@
  */
 package com.xhht.configs;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -22,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan(basePackages = {
     "com.xhht.controllers",
     "com.xhht.repositories",
-    "com.xhht.services"
+    "com.xhht.services",
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
@@ -38,4 +42,9 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
     }
 
+    
+     @Bean
+    public StandardServletMultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }
 }

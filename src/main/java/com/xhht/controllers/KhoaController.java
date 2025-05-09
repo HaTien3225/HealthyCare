@@ -58,7 +58,7 @@ public class KhoaController {
             this.khoaService.createOrUpdate(khoa);
             redirectAttributes.addFlashAttribute("successMessage", "Tạo khoa thành công!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tạo khoan thất bại: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Tạo khoa thất bại: " + e.getMessage());
         }
         return "redirect:/admin/benhviens";
     }

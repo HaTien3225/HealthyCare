@@ -16,8 +16,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.Set;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -94,6 +96,9 @@ public class User {
     
     @OneToMany(mappedBy = "receiverId",cascade = CascadeType.ALL)
     private Set<TinNhan> tinNhanNhans;
+    
+    @Transient
+    private MultipartFile file;
     /**
      * @return the id
      */
@@ -386,5 +391,19 @@ public class User {
      */
     public void setTinNhanNhans(Set<TinNhan> tinNhanNhans) {
         this.tinNhanNhans = tinNhanNhans;
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }
