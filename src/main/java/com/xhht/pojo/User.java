@@ -72,7 +72,7 @@ public class User {
     @OneToOne(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private GiayPhepHanhNghe giayPhepHanhNgheId;
     // Quan hệ với Role (nhiều User cùng 1 Role)
-    @ManyToOne( optional = false)
+    @ManyToOne( optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role roleId;
 

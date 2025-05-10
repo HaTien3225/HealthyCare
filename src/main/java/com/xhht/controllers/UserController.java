@@ -4,10 +4,13 @@
  */
 package com.xhht.controllers;
 
+import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
 import com.xhht.services.RoleService;
 import com.xhht.services.UserService;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,10 +38,6 @@ public class UserController {
         return "login";
     }
     
-    @GetMapping("/admin/users")
-    public String userManagementView(){
-        return "user_manage";
-    }
     @PostMapping("/admin/users/create")
     public String createUser(@ModelAttribute(value = "user")User user,RedirectAttributes redirectAttributes,@RequestParam("roleId") int roleId){
         user.setCreatedDate(LocalDate.now());
@@ -59,5 +58,18 @@ public class UserController {
         model.addAttribute("user",u);
         model.addAttribute("roles",this.roleService.getAllRole());
         return "user_create_form";
+    }
+    
+    @GetMapping("/admin/users")
+    public String listUser(Model model,@RequestParam Map<String, String> params){
+        String kw = params.getOrDefault("kw", " "); 
+        String page = params.getOrDefault("page", "1"); 
+        List<User> users = this.userService.getAllUser(params);
+        List<Role> roles = this.roleService.getAllRole();
+        model.addAttribute("kw",kw);
+        model.addAttribute("page",page);
+        model.addAttribute("user",users);
+        model.addAttribute("roles",roles);
+        return "user_manage";
     }
 }

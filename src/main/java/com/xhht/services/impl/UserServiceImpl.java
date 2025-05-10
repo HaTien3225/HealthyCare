@@ -11,6 +11,7 @@ import com.xhht.repositories.UserRepository;
 import com.xhht.services.UserService;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,11 @@ public class UserServiceImpl implements UserService {
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
 
+    }
+
+    @Override
+    public List<User> getAllUser(Map<String, String> params) {
+        return this.userRepo.getAllUser(params);
     }
 
 }

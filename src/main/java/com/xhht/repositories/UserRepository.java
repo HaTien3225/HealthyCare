@@ -6,6 +6,7 @@ package com.xhht.repositories;
 
 import com.xhht.pojo.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,4 +15,5 @@ import java.util.List;
 public interface UserRepository {
     User getUserByUsername(String username);
     User createOrUpdate(User u);
+    List<User> getAllUser(Map<String, String> params);
 }

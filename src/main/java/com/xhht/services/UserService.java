@@ -5,6 +5,7 @@
 package com.xhht.services;
 
 import com.xhht.pojo.User;
+import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,4 +18,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService extends UserDetailsService{
     User getUserByUsername(String username);
     User createOrUpdate(User u);
+    List<User> getAllUser(Map<String, String> params);
 }

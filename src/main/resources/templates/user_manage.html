@@ -19,14 +19,58 @@
     <div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="margin-top: 50px">
         <span th:text="${errorMessage}"></span>
     </div>
-    
+
     <div class="container mf" >   
-        
+
         <div class="container">
-            <button type="button" class="btn btn-success" th:attr="onclick=|window.location.href='@{/admin/users/create-form}'|">Tạo user</button>
+            <form th:action="@{/admin/users}" method="get">
+                <p class="h3">Quản lý user</p>
+                <div class="mb-3 mt-3">
+                    <input type="text" class="form-control" id="kw" placeholder="Tim kiem(ho ten)" name="kw" th:field="${kw}">
+                </div>
+                <div class="form-check">
+                    <p class="h6">isActive ?</p>
+                    <input class="form-check-input" type="radio" name="isActive" id="isActive" value="true" >
+                    <label class="form-check-label" for="radio1">
+                        True
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="isActive" id="isActive" value="false">
+                    <label class="form-check-label" for="radio2">
+                        False
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="isActive" id="isActive" value="null">
+                    <label class="form-check-label" for="radio3">
+                        Khong chon
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <label for="roleSelect" class="form-label">Role:</label>
+                    <select class="form-select" id="roleId" name="roleId"  required>
+                        <option >All role</option>
+                        <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.role}"></option>                       
+                    </select>
+                </div>
+                <input type="hidden" name="page" id="pageInput" th:value="${page}">
+                <button type="submit" class="btn btn-primary mt-3">Search</button>
+                
+                <div class="container d-flex" style="display: flex;justify-content: center;align-items: center;">
+                    <button type="submit" class="btn btn-info" onclick="setPage(-1)">Prev</button>
+                    <button type="submit" class="btn btn-info" onclick="setPage(1)">Next</button>
+                </div>
+            </form>
+            <div class="container mt-3" style="overflow: scroll; height: 70vh;">
+                <div class="list-group" th:each="u : ${user}">
+                    <a th:href="@{/admin/users/{id}(id=${u.id})}" class="list-group-item list-group-item-action" th:text="${u.id + '-' + u.ho + ' ' + u.ten  }"></a>
+                </div>
+            </div>          
+            <button type="button" class="btn btn-success mt-3" th:attr="onclick=|window.location.href='@{/admin/users/create-form}'|">Tạo user</button>
         </div>
     </div>
-    <!--<script th:src="@{/js/khoa_detail.js}"></script>-->
+    <script th:src="@{/js/user_manage_admin.js}"></script>
 </body>
 </html>
 
