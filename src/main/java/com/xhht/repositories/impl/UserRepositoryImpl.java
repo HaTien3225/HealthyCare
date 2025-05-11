@@ -4,11 +4,16 @@
  */
 package com.xhht.repositories.impl;
 
+import com.xhht.pojo.BenhVien;
+import com.xhht.pojo.Khoa;
 import com.xhht.pojo.User;
 import com.xhht.repositories.UserRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
@@ -75,14 +80,14 @@ public class UserRepositoryImpl implements UserRepository {
         Root root = q.from(User.class);
         q.select(root);
 
+        Join<User, Khoa> khoaJoin = root.join("khoaId", JoinType.LEFT);
+        Join<Khoa, BenhVien> benhVienJoin = khoaJoin.join("benhVienId", JoinType.LEFT);
+
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
-            String kw = params.get("kw");
-            if (kw != null && !kw.isEmpty()) {
-                Predicate hoPredicate = b.like(root.get("ho"), String.format("%%%s%%", kw));
-                Predicate tenPredicate = b.like(root.get("ten"), String.format("%%%s%%", kw));
-                predicates.add(b.or(hoPredicate, tenPredicate));
-            }
+
+            
+
             String isActive = params.get("isActive");
             if (isActive != null && !isActive.equals("null")) {
                 boolean active = Boolean.parseBoolean(isActive);
@@ -92,6 +97,25 @@ public class UserRepositoryImpl implements UserRepository {
             if (roleId != null && !roleId.isEmpty() && (roleId.equals("1") || roleId.equals("2") || roleId.equals("3"))) {
                 predicates.add(b.equal(root.get("roleId").get("id").as(Integer.class), Integer.parseInt(roleId)));
             }
+            String khoaid = params.get("khoaid");
+            if (khoaid != null && !khoaid.isEmpty()) {
+                predicates.add(b.equal(root.get("khoaId").get("id"), Integer.parseInt(khoaid)));
+            }
+            String benhvienid = params.get("benhvienid");
+            if (benhvienid != null && !benhvienid.isEmpty()) {
+                predicates.add(b.equal(benhVienJoin.get("id"), Integer.parseInt(benhvienid)));
+            }
+            
+            String kw = params.get("kw");
+            if (kw != null && !kw.trim().isEmpty()) {
+                String pattern = "%" + kw.toLowerCase() + "%";
+                Expression<String> hoExp = b.lower(root.get("ho"));
+                Expression<String> tenExp = b.lower(root.get("ten"));
+                Predicate hoPredicate = b.like(hoExp, pattern);
+                Predicate tenPredicate = b.like(tenExp, pattern);
+                predicates.add(b.or(hoPredicate, tenPredicate));
+            }
+
             q.where(predicates.toArray(Predicate[]::new));
         }
         Query query = s.createQuery(q);
@@ -110,9 +134,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUserById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query<User> q = s.createQuery("FROM User WHERE id = :id",User.class);
+        Query<User> q = s.createQuery("FROM User WHERE id = :id", User.class);
         q.setParameter("id", id);
         return q.getSingleResult();
     }
-    
+
 }

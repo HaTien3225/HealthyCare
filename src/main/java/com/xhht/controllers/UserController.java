@@ -79,14 +79,15 @@ public class UserController {
 
     @GetMapping("/admin/users")
     public String listUser(Model model, @RequestParam Map<String, String> params) {
-        String kw = params.getOrDefault("kw", " ");
+        String kw = params.get("kw");
         String page = params.getOrDefault("page", "1");
         List<User> users = this.userService.getAllUser(params);
         List<Role> roles = this.roleService.getAllRole();       
-        model.addAttribute("kw", kw);
+        model.addAttribute("kwr", kw);
         model.addAttribute("page", page);
         model.addAttribute("user", users);
         model.addAttribute("roles", roles);
+        model.addAttribute("benhviens", this.benhVienService.getBenhViens(null));
         return "user_manage";
     }
 
