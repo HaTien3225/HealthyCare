@@ -40,7 +40,7 @@ create table User (
 	id int not null auto_increment primary key,
     ho varchar(225) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
     ten varchar(225) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
-    username varchar(20) not null,
+    username varchar(20) not null unique,
     password varchar(255) not null,
     email varchar(225) not null,
     created_date date not null,

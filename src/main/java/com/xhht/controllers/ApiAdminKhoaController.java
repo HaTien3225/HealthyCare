@@ -32,8 +32,9 @@ public class ApiAdminKhoaController {
     @GetMapping("/admin/api/khoas")
     public ResponseEntity<List<Khoa>> listKhoaByBenhVienId(
         @RequestParam(name = "benhvienid", required = true) int benhVienId,
-        @RequestParam(name = "page", defaultValue = "1") int page){
-        return new ResponseEntity<>( this.khoaService.getAllKhoaByBenhVienId(benhVienId, page, 10),HttpStatus.OK);
+        @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "pagesize",defaultValue = "10") int pagesize){
+        return new ResponseEntity<>( this.khoaService.getAllKhoaByBenhVienId(benhVienId, page, pagesize),HttpStatus.OK);
     }
     
     @DeleteMapping("/admin/api/khoas/{khoaId}")

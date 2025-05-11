@@ -54,6 +54,19 @@
                     <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.role}"></option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="roleSelect" class="form-label">Benh vien :</label>
+                <select class="form-select" id="benhvien">
+                    <option></option>
+                    <option th:each="b : ${benhviens}" th:value="${b.id}" th:text="${b.tenBenhVien}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="roleSelect" class="form-label">Khoa :</label>
+                <select class="form-select" id="khoaid" name="khoaid"  required>
+                    <option ></option>
+                </select>
+            </div>
             <div class="mb-3 mt-3">
                 <label for="isActive" class="form-label">isActive :</label>
                 <input type="checkbox" class="form-check-input" id="isActive" name="isActive">
@@ -61,7 +74,7 @@
             <button type="submit" class="btn btn-success" >Tạo</button>
         </form>       
     </div>
-    <!--<script th:src="@{/js/khoa_detail.js}"></script>-->
+    <script th:src="@{/js/user_create_form.js}"></script>
 </body>
 </html>
 

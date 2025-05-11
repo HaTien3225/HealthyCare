@@ -39,7 +39,7 @@ public class User {
     @Column(nullable = false, length = 225, columnDefinition = "varchar(225) CHARACTER SET utf8 COLLATE utf8_unicode_ci")
     private String ten;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20,unique = true)
     private String username;
 
     @Column(nullable = false, length = 255)
