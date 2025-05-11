@@ -25,8 +25,9 @@
         <div class="container">
             <form th:action="@{/admin/users}" method="get">
                 <p class="h3">Quản lý user</p>
+                <p class="h6" th:text="${kwr}"></p>
                 <div class="mb-3 mt-3">
-                    <input type="text" class="form-control" id="kw" placeholder="Tim kiem(ho ten)" name="kw" th:field="${kw}">
+                    <input type="text" class="form-control" id="kw" placeholder="Tim kiem(ho ten)" name="kw" >
                 </div>
                 <div class="form-check">
                     <p class="h6">isActive ?</p>
@@ -54,9 +55,22 @@
                         <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.role}"></option>                       
                     </select>
                 </div>
+                <div class="mb-3">
+                    <label for="roleSelect" class="form-label">Benh vien :</label>
+                    <select class="form-select" id="benhvien" name="benhvienid">
+                        <option></option>
+                        <option th:each="b : ${benhviens}" th:value="${b.id}" th:text="${b.tenBenhVien}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="roleSelect" class="form-label">Khoa :</label>
+                    <select class="form-select" id="khoaid" name="khoaid" >
+                        <option ></option>
+                    </select>
+                </div>
                 <input type="hidden" name="page" id="pageInput" th:value="${page}">
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
-                
+
                 <div class="container d-flex" style="display: flex;justify-content: center;align-items: center;">
                     <button type="submit" class="btn btn-info" onclick="setPage(-1)">Prev</button>
                     <button type="submit" class="btn btn-info" onclick="setPage(1)">Next</button>
