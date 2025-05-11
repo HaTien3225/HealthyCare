@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Không gian làm việc của bệnh nhân</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .list-group {
+            margin: 50px auto;
+            max-width: 700px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+
+    <div class="container mf">
+        <h2>Xin chào, bạn đang ở không gian làm việc của bệnh nhân</h2>
+        <div class="list-group">
+            <a th:href="@{/patient/dat-lich}" class="list-group-item list-group-item-action h4">🗓 Đặt lịch khám</a>
+            <a th:href="@{/patient/lich-su-kham}" class="list-group-item list-group-item-action h4">📋 Lịch sử khám</a>
+            <a th:href="@{/patient/hoso}" class="list-group-item list-group-item-action h4">🧾 Hồ sơ sức khỏe</a>
+            <a th:href="@{/patient/tuvan}" class="list-group-item list-group-item-action h4">💬 Tư vấn trực tuyến</a>
+            <a th:href="@{/patient/thongbao}" class="list-group-item list-group-item-action h4">🔔 Thông báo</a>
+        </div>
+    </div>
+</body>
+</html>

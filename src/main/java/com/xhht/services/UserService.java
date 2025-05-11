@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService{
     User createOrUpdate(User u);
     List<User> getAllUser(Map<String, String> params);
     User getUserById(int id);
+    List<User> getDoctorsPendingVerification();
+    void verifyDoctor(int doctorId);
 }

@@ -16,7 +16,7 @@
         <p class="h1">PROFILE</p>
         <img th:src="${currentUser.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" class="rounded" alt="profile">
         <p class="h2" th:inline="text">Họ tên: [[${currentUserFullName}]]</p>
-        <p class="h3" th:inline="text">Khoa: [[${currentUser.khoaId}]]</p>
+        <p class="h3" th:inline="text">Khoa: [[${currentUser.khoaId.getTenKhoa}]]</p>
         <p class="h3" th:inline="text">Email: [[${currentUser.email}]]</p>
         <p class="h3" th:inline="text">Phone: [[${currentUser.phone}]]</p>
         <p class="h3" th:inline="text">CCCD: [[${currentUser.cccd}]]</p>

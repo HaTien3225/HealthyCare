@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trang làm việc của bác sĩ</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .list-group {
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div class="container mf">
+        <h2 class="text-center mt-4">Chào mừng bác sĩ đến với hệ thống</h2>
+        <div class="list-group">
+            <a th:href="@{/doctor/lichkham}" class="list-group-item list-group-item-action h4">Lịch khám của tôi</a>
+            <a th:href="@{/doctor/hosobenhnhan}" class="list-group-item list-group-item-action h4">Hồ sơ bệnh nhân</a>
+            <a th:href="@{/doctor/tuvan}" class="list-group-item list-group-item-action h4">Tư vấn trực tuyến</a>
+            <a th:href="@{/doctor/thongke}" class="list-group-item list-group-item-action h4">Thống kê cá nhân</a>
+        </div>
+    </div>
+</body>
+</html>

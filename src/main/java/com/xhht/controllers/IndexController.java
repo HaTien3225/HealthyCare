@@ -24,10 +24,10 @@ import com.xhht.services.BenhVienService;
  */
 @Controller
 public class IndexController {
-    
+
     @Autowired
     private UserService userService;
-    
+
 //    @ModelAttribute
 //    public void commonResponses(Model model) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,13 +42,13 @@ public class IndexController {
 //            model.addAttribute("currentUserFullName", user.getHo() + " " + user.getTen());
 //        }
 //    }
-
     @RequestMapping("/")
     public String index() {
-        return "index";  
+        return "index";
     }
+
     @GetMapping("/profile")
-    public String profile(Model model){
+    public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Lấy username hiện tại
@@ -62,8 +62,37 @@ public class IndexController {
         }
         return "profile";
     }
+
     @GetMapping("/admin/workspace")
-    public String workspace_admin(){
+    public String workspace_admin() {
         return "workspace_admin";
+    }
+
+    @GetMapping("/doctor/workspace")
+    public String workspace_doctor(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Lấy username hiện tại
+        String username = authentication.getName();
+
+        // Lấy User từ DB
+        User user = userService.getUserByUsername(username);
+
+        if (user != null && user.getRole().getId() == 3) {
+            // Nếu chưa được xác thực (chưa upload thông tin hoặc chưa được active)
+            if (!user.isIsActive()) {
+                return "redirect:/doctor/upload-profile";  // Chuyển hướng đến trang upload file
+            }
+
+            model.addAttribute("currentDoctor", user);
+        }
+
+        return "workspace_doctor";  // Trang làm việc chính của bác sĩ
+    }
+
+    // Trang dành cho bệnh nhân
+    @GetMapping("/patient/workspace")
+    public String workspace_patient(Model model) {
+        return "workspace_patient";
     }
 }

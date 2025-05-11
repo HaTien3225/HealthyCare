@@ -4,6 +4,7 @@
  */
 package com.xhht.repositories.impl;
 
+import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
 import com.xhht.repositories.UserRepository;
 import jakarta.persistence.NoResultException;
@@ -57,12 +58,29 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User createOrUpdate(User u) {
         Session s = this.factory.getObject().getCurrentSession();
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
-        if (u.getId() == null) {
-            s.persist(u);
-        } else {
+
+        if (u.getId() != null) {
+            User existingUser = s.get(User.class, u.getId());
+
+            String newPassword = u.getPassword();
+            if (newPassword == null || newPassword.trim().isEmpty()) {
+                u.setPassword(existingUser.getPassword());
+            } else if (!newPassword.startsWith("$2a$")) {
+                // Nếu không bắt đầu bằng "$2a$" (bcrypt) => là mật khẩu plaintext
+                u.setPassword(passwordEncoder.encode(newPassword));
+            } else {
+                // Nếu đã mã hóa => giữ nguyên
+                u.setPassword(newPassword);
+            }
+
+            u.setRole(existingUser.getRole()); // Giữ nguyên role nếu cần
             s.merge(u);
+        } else {
+            // Tạo mới: luôn băm mật khẩu
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            s.persist(u);
         }
+
         return u;
     }
 
@@ -110,9 +128,24 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUserById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query<User> q = s.createQuery("FROM User WHERE id = :id",User.class);
+        Query<User> q = s.createQuery("FROM User WHERE id = :id", User.class);
         q.setParameter("id", id);
         return q.getSingleResult();
     }
-    
+
+    public List<User> findByRoleAndIsVerified(Role role, boolean isVerified) {
+        // Lấy phiên làm việc của Hibernate
+        Session s = this.factory.getObject().getCurrentSession();
+
+        // Tạo câu truy vấn HQL để tìm kiếm theo role và isVerified
+        Query<User> q = s.createQuery("FROM User u WHERE u.roleId = :role_id AND u.isActive = :is_active", User.class);
+
+        // Gán tham số cho câu truy vấn
+        q.setParameter("role_id", role);
+        q.setParameter("is_active", isVerified);
+
+        // Trả về danh sách người dùng
+        return q.getResultList();
+    }
+
 }

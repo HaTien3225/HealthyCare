@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Upload Hồ sơ Bác sĩ</title>
+    </head>
+    <body>
+        <h2>Upload Hồ sơ</h2>
+
+        <div th:if="${message}">
+            <p style="color:green;" th:text="${message}"></p>
+        </div>
+        <div th:if="${error}">
+            <p style="color:red;" th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/doctor/upload-profile}" 
+              method="post" 
+              enctype="multipart/form-data"
+              class="form-control">
+
+            <div class="mb-3">
+                <label for="giayphep" class="form-label">Bằng cấp chuyên môn:</label>
+                <input type="file" name="giayphephanhnghe" id="giayphep" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Tải lên</button>
+        </form>
+
+
+    </body>
+</html>
+

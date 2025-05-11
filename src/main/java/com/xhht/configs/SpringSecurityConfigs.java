@@ -45,21 +45,32 @@ public class SpringSecurityConfigs {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(c -> c.disable()).authorizeHttpRequests(requests
-                -> requests.requestMatchers("/", "/home","/profile").authenticated()
-                        .requestMatchers("/css/**").permitAll()
-                        .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/js/**").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN"))
-                .formLogin(form -> form.loginPage("/login")
+        http.csrf(c -> c.disable())
+                .authorizeHttpRequests(requests
+                        -> requests
+                        .requestMatchers("/", "/home", "/profile").authenticated()
+                        .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**").permitAll() // Đảm bảo các đường dẫn tĩnh được phép
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers("/user/**").hasRole("USER")
+                     
+                        
+                )
+                .formLogin(form -> form
+                .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error=true").permitAll())
-                .logout(logout -> logout.logoutSuccessUrl("/login").permitAll());
+                .failureUrl("/login?error=true")
+                .permitAll()
+                )
+                .logout(logout -> logout
+                .logoutSuccessUrl("/login")
+                .permitAll()
+                );
 
         return http.build();
     }
+
     
     @Bean
     public Cloudinary cloudinary() {
