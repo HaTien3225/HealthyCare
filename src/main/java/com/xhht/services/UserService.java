@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService{
     User getUserById(int id);
     List<User> getDoctorsPendingVerification();
     void verifyDoctor(int doctorId);
+    void updateUserStatus(int id, Boolean isActive);
+
 }

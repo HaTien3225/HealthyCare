@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.getUserById(id);
     }
 
+
     public List<User> getDoctorsPendingVerification() {
         Role doctorRole = roleRepo.getRoleById(3);
         if (doctorRole != null) {
@@ -119,7 +120,6 @@ public class UserServiceImpl implements UserService {
         return new ArrayList<>();
     }
 
-    // Xác nhận bác sĩ
     public void verifyDoctor(int doctorId) {
         User doctor = userRepo.getUserById(doctorId);
         if (doctor != null && doctor.getRole().getId() == 3) {
@@ -127,4 +127,11 @@ public class UserServiceImpl implements UserService {
             userRepo.createOrUpdate(doctor);  // Lưu thay đổi
         }
     }
+
+    @Override
+    public void updateUserStatus(int id, Boolean isActive) {
+        this.userRepo.updateUserStatus(id, isActive);
+    }
+
+
 }

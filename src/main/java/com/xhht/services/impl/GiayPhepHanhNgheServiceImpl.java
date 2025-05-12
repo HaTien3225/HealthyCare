@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.xhht.services.impl;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.xhht.pojo.GiayPhepHanhNghe;
@@ -15,13 +14,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.xhht.repositories.GiayPhepHanhNgheRepository;
+import com.xhht.services.GiayPhepHanhNgheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author hatie
- */
 @Service
 public class GiayPhepHanhNgheServiceImpl implements GiayPhepHanhNgheService {
 
@@ -41,5 +38,11 @@ public class GiayPhepHanhNgheServiceImpl implements GiayPhepHanhNgheService {
         
         return giayPhepRepo.save(giayPhep);
     }
+    @Override
+    public void updateGiayPhepStatus(int id, Boolean isActive) {
+        giayPhepRepo.updateGiayPhepStatus(id, isActive);
+    }
 }
+
+
 

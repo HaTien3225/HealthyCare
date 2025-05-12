@@ -7,6 +7,7 @@ package com.xhht.controllers;
 import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
 import com.xhht.services.BenhVienService;
+import com.xhht.services.GiayPhepHanhNgheService;
 import com.xhht.services.KhoaService;
 import com.xhht.services.RoleService;
 import com.xhht.services.UserService;
@@ -41,6 +42,9 @@ public class UserController {
     
     @Autowired
     private BenhVienService benhVienService;
+    
+    @Autowired
+    private GiayPhepHanhNgheService giayPhepService;
 
     @GetMapping("/login")
     public String loginView() {
@@ -93,7 +97,42 @@ public class UserController {
 
     @GetMapping("/admin/users/{id}")
     public String userDetailView(Model model, @PathVariable(value = "id", required = true) int id) {
-        model.addAttribute("user", this.userService.getUserById(id));
+        User user = this.userService.getUserById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("role",user.getRole().getRole());
+        model.addAttribute("giayphep",user.getGiayPhepHanhNgheId());
+        if(user.getRole().getRole().equals("ROLE_DOCTOR")){
+            model.addAttribute("tenkhoa",user.getKhoaId().getTenKhoa());
+            model.addAttribute("tenbenhvien",user.getKhoaId().getBenhvien().getTenBenhVien());
+        }
+        else{
+            model.addAttribute("tenkhoa",null);
+            model.addAttribute("tenbenhvien",null);
+        }
         return "user_detail_admin";
+    }
+    @PostMapping("/admin/users/{userid}")
+    public String updateUserStatusandLicenseStatus(@PathVariable(name = "userid",required = true) int userid,
+            @RequestParam Map<String, String> params,
+            RedirectAttributes redirectAttributes){
+        try {
+            Boolean isValid = false;
+            String isValidStr = params.get("isValid");
+            if(isValidStr != null &&isValidStr.equals("true"))
+                isValid = true;
+            
+            String giayPhepId = params.get("giayphepid");            
+            giayPhepService.updateGiayPhepStatus(Integer.parseInt(giayPhepId), isValid);
+            
+            Boolean isActive = false;
+            String isActiveStr = params.get("isActive");
+            if(isActiveStr != null &&isActiveStr.equals("true"))
+                isActive = true;
+            userService.updateUserStatus(userid, isActive);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật user thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật user thất bại: " + e.getMessage());
+        }
+        return "redirect:/admin/users";      
     }
 }

@@ -7,14 +7,14 @@ package com.xhht.repositories;
 import com.xhht.pojo.GiayPhepHanhNghe;
 import java.util.Optional;
 
-/**
- *
- * @author hatie
- */
+
 public interface GiayPhepHanhNgheRepository {
 
     Optional<GiayPhepHanhNghe> findById(Integer id);
 
     GiayPhepHanhNghe save(GiayPhepHanhNghe old);
     
+    void updateGiayPhepStatus(int id ,Boolean isActive);
 }
+
+

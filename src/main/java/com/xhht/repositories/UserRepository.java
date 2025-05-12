@@ -19,4 +19,6 @@ public interface UserRepository  {
     List<User> getAllUser(Map<String, String> params);
     User getUserById(int id);
     List<User> findByRoleAndIsVerified(Role role, boolean isVerified);
+    void updateUserStatus(int id, Boolean isActive);
+
 }

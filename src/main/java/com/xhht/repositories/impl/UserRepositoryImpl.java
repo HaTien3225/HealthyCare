@@ -156,6 +156,7 @@ public class UserRepositoryImpl implements UserRepository {
         return q.getSingleResult();
     }
 
+    @Override
     public List<User> findByRoleAndIsVerified(Role role, boolean isVerified) {
         Session s = this.factory.getObject().getCurrentSession();
         Query<User> q = s.createQuery("FROM User u WHERE u.roleId = :role_id AND u.isActive = :is_active", User.class);
@@ -163,4 +164,15 @@ public class UserRepositoryImpl implements UserRepository {
         q.setParameter("is_active", isVerified);
         return q.getResultList();
     }
+
+    @Override
+    public void updateUserStatus(int id, Boolean isActive) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("UPDATE User u SET u.isActive = :isActive WHERE u.id = :id");
+        q.setParameter("isActive", isActive);
+        q.setParameter("id", id);
+        q.executeUpdate();
+    }
+
+
 }
