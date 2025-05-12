@@ -207,4 +207,20 @@ INSERT INTO Benh (created_date, ten_benh, mo_ta, khoa_id) VALUES
 ('2025-05-05', 'Nấm da', 'Bệnh nhiễm nấm trên bề mặt da', 4),
 ('2025-05-05', 'Chàm (eczema)', 'Bệnh da liễu gây nổi mẩn đỏ và ngứa', 4);
 
+INSERT INTO Khunggio (ten_kg, gio_bat_dau, gio_ket_thuc)
+VALUES 
+('07:00 - 08:00', '07:00:00', '08:00:00'),
+('08:00 - 09:00', '08:00:00', '09:00:00'),
+('09:00 - 10:00', '09:00:00', '10:00:00'),
+('10:00 - 11:00', '10:00:00', '11:00:00'),
+('11:00 - 12:00', '11:00:00', '12:00:00'),
+('13:00 - 14:00', '13:00:00', '14:00:00'),
+('14:00 - 15:00', '14:00:00', '15:00:00'),
+('15:00 - 16:00', '15:00:00', '16:00:00'),
+('16:00 - 17:00', '16:00:00', '17:00:00'),
+('17:00 - 18:00', '17:00:00', '18:00:00');
 
+INSERT INTO Giayphephanhnghe (created_date, image, is_valid, bac_si_id)
+VALUES 
+(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+1', true, 4),
+(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+2', true, 6);

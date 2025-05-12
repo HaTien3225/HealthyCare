@@ -139,4 +139,13 @@ public class UserRepositoryImpl implements UserRepository {
         return q.getSingleResult();
     }
 
+    @Override
+    public void updateUserStatus(int id, Boolean isActive) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("UPDATE User u SET u.isActive = :isActive WHERE u.id = :id");
+        q.setParameter("isActive", isActive);
+        q.setParameter("id", id);
+        q.executeUpdate();
+    }
+
 }

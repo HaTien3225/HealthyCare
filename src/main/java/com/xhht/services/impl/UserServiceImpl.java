@@ -93,4 +93,9 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.getUserById(id);
     }
 
+    @Override
+    public void updateUserStatus(int id, Boolean isActive) {
+        this.userRepo.updateUserStatus(id, isActive);
+    }
+
 }

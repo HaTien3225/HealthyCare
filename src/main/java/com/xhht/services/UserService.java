@@ -20,4 +20,5 @@ public interface UserService extends UserDetailsService{
     User createOrUpdate(User u);
     List<User> getAllUser(Map<String, String> params);
     User getUserById(int id);
+    void updateUserStatus(int id, Boolean isActive);
 }
