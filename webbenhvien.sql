@@ -108,9 +108,11 @@ create table Donkham(
     benh_id int not null,
     hssk_id int not null,
     bac_si_id int not null,
+    lich_kham_id int not null,
     foreign key (benh_id) references Benh(id),
     foreign key (hssk_id) references HoSoSucKhoe(id),
-    foreign key (bac_si_id) references User(id)
+    foreign key (bac_si_id) references User(id),
+    foreign key (lich_kham_id) references Lichkham(id)
 );
 
 create table Chitietdonkham(
@@ -222,5 +224,5 @@ VALUES
 
 INSERT INTO Giayphephanhnghe (created_date, image, is_valid, bac_si_id)
 VALUES 
-(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+1', true, 4),
+(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+1', true, 2),
 (CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+2', true, 6);

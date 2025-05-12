@@ -116,13 +116,15 @@ public class UserController {
             @RequestParam Map<String, String> params,
             RedirectAttributes redirectAttributes){
         try {
-            Boolean isValid = false;
-            String isValidStr = params.get("isValid");
-            if(isValidStr != null &&isValidStr.equals("true"))
-                isValid = true;
-            
-            String giayPhepId = params.get("giayphepid");            
-            giayPhepService.updateGiayPhepStatus(Integer.parseInt(giayPhepId), isValid);
+            if(this.userService.getUserById(userid).getGiayPhepHanhNgheId() != null){
+                Boolean isValid = false;
+                String isValidStr = params.get("isValid");
+                if(isValidStr != null &&isValidStr.equals("true"))
+                    isValid = true;
+
+                String giayPhepId = params.get("giayphepid");            
+                giayPhepService.updateGiayPhepStatus(Integer.parseInt(giayPhepId), isValid);
+            }
             
             Boolean isActive = false;
             String isActiveStr = params.get("isActive");

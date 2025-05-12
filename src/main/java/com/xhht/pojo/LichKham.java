@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,9 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  *
@@ -40,6 +43,10 @@ public class LichKham implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "khunggio_id", referencedColumnName = "id")
     private KhungGio khungGioId;
+    
+    @OneToMany(mappedBy = "lichKhamId",cascade = CascadeType.ALL)
+    private Set<DonKham> donKhams;
+
     /**
      * @return the id
      */

@@ -56,9 +56,19 @@ public class IndexController {
 
         // Lấy User từ DB
         User user = userService.getUserByUsername(username);
+        String role = user.getRole().getRole();
+        
+        
 
         if (user != null) {
             model.addAttribute("currentUser", user);
+            model.addAttribute("userrole", role);
+            if(role.equals("ROLE_DOCTOR"))
+            {   
+                model.addAttribute("giayphep",user.getGiayPhepHanhNgheId());
+            }else{
+                model.addAttribute("giayphep",null);
+            }
         }
         return "profile";
     }

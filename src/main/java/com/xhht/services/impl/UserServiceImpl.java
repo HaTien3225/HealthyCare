@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
         User doctor = userRepo.getUserById(doctorId);
         if (doctor != null && doctor.getRole().getId() == 3) {
             doctor.setIsActive(true); // Đánh dấu bác sĩ đã được xác nhận
+            doctor.getGiayPhepHanhNgheId().setIsValid(true);
             userRepo.createOrUpdate(doctor);  // Lưu thay đổi
         }
     }

@@ -14,13 +14,19 @@
     <div th:replace="base :: header"></div>
     <div class="container mf" >
         <p class="h1">PROFILE</p>
-        <img th:src="${currentUser.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" class="rounded" alt="profile">
+        <img th:src="${currentUser.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" class="rounded" alt="profile" style="max-width: 300px; max-height: 400px;">
         <p class="h2" th:inline="text">Họ tên: [[${currentUserFullName}]]</p>
-        <p class="h3" th:inline="text">Khoa: [[${currentUser.khoaId.getTenKhoa}]]</p>
+        <p class="h3" th:inline="text" th:if="${userrole == 'ROLE_DOCTOR' and giayphep != null}">Khoa: [[${currentUser.khoaId.getTenKhoa}]]</p>
         <p class="h3" th:inline="text">Email: [[${currentUser.email}]]</p>
         <p class="h3" th:inline="text">Phone: [[${currentUser.phone}]]</p>
         <p class="h3" th:inline="text">CCCD: [[${currentUser.cccd}]]</p>
-
+        <p class="h3" th:inline="text">ROLE: [[${userrole}]]</p>
+        <div class="container-fluid d-flex justify-content-center mt-3" th:if="${userrole == 'ROLE_DOCTOR' and giayphep != null}">
+             <img th:src="${giayphep.image}" style="" class="rounded" alt="giayphephanhnghe">
+        </div>
+        <ul class="list-group list-group-flush mt-2" th:if="${userrole == 'ROLE_DOCTOR' and giayphep != null}">
+            <li class="list-group-item" th:inline="text">[[${giayphep.created_date}]]</li>
+        </ul>
     </div>
 </body>
 </html>

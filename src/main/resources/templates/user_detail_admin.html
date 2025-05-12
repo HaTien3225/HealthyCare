@@ -15,7 +15,7 @@
     <div class="container mf" >
         <p class="h1">User Detail :</p>
         <div class="container-fluid d-flex justify-content-center"> 
-            <img th:src="${user.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" style="width: 300;height: 400" class="rounded" alt="avatar">
+            <img th:src="${user.avatar} ?: 'https://t4.ftcdn.net/jpg/02/15/84/43/360_F_215844325_ttX9YiIIyeaR7Ne6EaLLjMAmy4GvPC69.jpg'" style="max-width: 300px; max-height: 400px;" class="rounded" alt="avatar">
         </div>
         <div class="container">
             <ul class="list-group list-group-flush mt-3">
@@ -28,18 +28,19 @@
                 <li class="list-group-item mt-2" th:inline="text" th:if="${role} == 'ROLE_DOCTOR'">Khoa : [[${tenkhoa}]]</li>               
             </ul>           
         </div>
-        <div class="container-fluid d-flex justify-content-center mt-2" th:if="${role} == 'ROLE_DOCTOR'">
+        <div class="container-fluid d-flex justify-content-center mt-2" th:if="${role == 'ROLE_DOCTOR' and giayphep != null}">
             <img th:src="${giayphep.image}" style="" class="rounded" alt="giayphephanhnghe">
         </div>
-        <ul class="list-group list-group-flush mt-2" th:if="${role} == 'ROLE_DOCTOR'">
+        <ul class="list-group list-group-flush mt-2" th:if="${role == 'ROLE_DOCTOR' and giayphep != null}">
             <li class="list-group-item" th:inline="text">[[${giayphep.created_date}]]</li>
         </ul>
         <form th:action="@{/admin/users/{id}(id=${user.id})}" method="post">           
-            <input type="hidden" name="giayphepid" th:value="${giayphep.id}">
-            <p class="h6" th:if="${role} == 'ROLE_DOCTOR'">Trang thai giay phep</p>
-            <label class="form-check-label" th:if="${role} == 'ROLE_DOCTOR'">
+            <input type="hidden" name="giayphepid" th:if="${role == 'ROLE_DOCTOR' and giayphep != null}" th:value="${giayphep.id}">
+            <p class="h6" th:if="${role == 'ROLE_DOCTOR' and giayphep != null}">Trang thai giay phep</p>
+            <label class="form-check-label" th:if="${role == 'ROLE_DOCTOR' and giayphep != null}">
                 <input class="form-check-input ms-2" type="checkbox" name="isValid" value="true" th:checked="${giayphep.isValid}"> isValid 
             </label>
+            <p class="h6" th:if="${role == 'ROLE_DOCTOR' and giayphep == null}"> Chua upload giay phep</p>
             <p class="h6">Trang thai user</p>
             <label class="form-check-label">
                 <input class="form-check-input ms-2" type="checkbox" name="isActive" value="true" th:checked="${user.isActive}"> isActive 

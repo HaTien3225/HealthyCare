@@ -33,15 +33,15 @@ public class DonKham implements Serializable{
     @Column(name = "ghi_chu", columnDefinition = "varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci")
     private String ghiChu;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "benh_id", referencedColumnName = "id")
     private Benh benhId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "hssk_id",referencedColumnName = "id")
     private HoSoSucKhoe hoSoSucKhoeId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "bac_si_id", referencedColumnName = "id")
     private User bacSiId;
     
@@ -50,6 +50,10 @@ public class DonKham implements Serializable{
     
     @OneToMany(mappedBy = "donKhamId",cascade = CascadeType.ALL)
     private Set<XetNghiem> xetNghiems;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "lich_kham_id", referencedColumnName = "id")
+    private LichKham lichKhamId;
     /**
      * @return the id
      */
