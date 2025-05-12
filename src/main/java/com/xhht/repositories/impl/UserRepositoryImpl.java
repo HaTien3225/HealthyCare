@@ -156,7 +156,6 @@ public class UserRepositoryImpl implements UserRepository {
         return q.getSingleResult();
     }
 
-    @Override
     public List<User> findByRoleAndIsVerified(Role role, boolean isVerified) {
         Session s = this.factory.getObject().getCurrentSession();
         Query<User> q = s.createQuery("FROM User u WHERE u.roleId = :role_id AND u.isActive = :is_active", User.class);
