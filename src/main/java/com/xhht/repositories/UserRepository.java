@@ -20,5 +20,5 @@ public interface UserRepository  {
     User getUserById(int id);
     List<User> findByRoleAndIsVerified(Role role, boolean isVerified);
     void updateUserStatus(int id, Boolean isActive);
-
+    boolean authenticate(String username, String password);
 }

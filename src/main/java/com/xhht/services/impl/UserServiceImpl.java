@@ -134,5 +134,8 @@ public class UserServiceImpl implements UserService {
         this.userRepo.updateUserStatus(id, isActive);
     }
 
-
+    @Override
+    public boolean authenticate(String username, String password) {
+        return this.userRepo.authenticate(username, password);
+    }
 }
