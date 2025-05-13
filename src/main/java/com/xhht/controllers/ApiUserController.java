@@ -30,9 +30,9 @@ public class ApiUserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User u) {
+    public ResponseEntity<?> login(@RequestBody(required = false) User u) {
         if (u == null || u.getUsername() == null || u.getPassword() == null) {
-            return ResponseEntity.badRequest().body("Sai thông tin đăng nhập");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
         }
         if (this.userService.authenticate(u.getUsername(), u.getPassword())) {
             try {
