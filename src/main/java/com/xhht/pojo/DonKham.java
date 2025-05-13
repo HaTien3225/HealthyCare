@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -54,6 +55,9 @@ public class DonKham implements Serializable{
     @ManyToOne(optional = false)
     @JoinColumn(name = "lich_kham_id", referencedColumnName = "id")
     private LichKham lichKhamId;
+    
+    @Column(name = "created_date",nullable = false)
+    private LocalDate createdDate;
     /**
      * @return the id
      */
@@ -136,6 +140,20 @@ public class DonKham implements Serializable{
      */
     public void setChiTietDonKhams(Set<ChiTietDonKham> chiTietDonKhams) {
         this.chiTietDonKhams = chiTietDonKhams;
+    }
+
+    /**
+     * @return the createdDate
+     */
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    /**
+     * @param createdDate the createdDate to set
+     */
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 
    

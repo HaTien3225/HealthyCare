@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang làm việc của bác sĩ</title>
+    <th:block th:replace="base :: styles"></th:block>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        .list-group {
+            margin: 50px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <div th:action="@{/admin/statistics}" class="container-fluid" style=" margin: 20px ;margin-top: 30px; ">
+        <form method="get">
+            <div class="container mt-7">
+                <label for="yearSelect" class="form-label">Chọn năm</label>
+                <select id="yearSelect" class="form-select" name="year"></select>
+            </div>
+            <p>
+            <button type="submit" class="btn btn-primary">Ap dung</button>
+        </form>
+        <p class="h6 mt-3" th:inline="text">Year [[${syear}]] Revenue :[[${#numbers.formatDecimal(totalRevenue, 1, 'COMMA', 0, 'POINT')}]] VND</p>
+        <div class="container-fluid d-flex justify-content-center mt-3" style="height: 90vh">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+</body>
+</html>
+<script th:inline="javascript">
+    const select = document.getElementById("yearSelect");
+    const currentYear = new Date().getFullYear();
+    const startYear = 1950; // hoặc năm bạn muốn dừng
+
+    for (let year = currentYear; year >= startYear; year--) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        select.appendChild(option);
+    }
+
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            datasets: [{
+                    label: 'Doanh thu theo tháng (VND)',
+                    data: /*[[${monthlyRevenue}]]*/ [],
+                    borderWidth: 1
+                }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

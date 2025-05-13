@@ -109,6 +109,7 @@ create table Donkham(
     hssk_id int not null,
     bac_si_id int not null,
     lich_kham_id int not null,
+    created_date date not null,
     foreign key (benh_id) references Benh(id),
     foreign key (hssk_id) references HoSoSucKhoe(id),
     foreign key (bac_si_id) references User(id),
@@ -222,7 +223,113 @@ VALUES
 ('16:00 - 17:00', '16:00:00', '17:00:00'),
 ('17:00 - 18:00', '17:00:00', '18:00:00');
 
+
+-- Tạo bác sĩ
+INSERT INTO User (
+    ho, ten, username, password, email, created_date,
+    cccd, phone, is_active, avatar, khoa_id, role_id
+) VALUES (
+    'Nguyen', 'Doctor2', 'doctor2', 
+    '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
+    'doctor2@example.com', CURDATE(),
+    '012345678902', '0912345620', 
+    true, NULL, 1, 3
+),
+(
+    'Nguyen', 'Doctor3', 'doctor3', 
+    '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
+    'doctor3@example.com', CURDATE(),
+    '012345678903', '0912345630', 
+    true, NULL, 1, 3
+);
+
 INSERT INTO Giayphephanhnghe (created_date, image, is_valid, bac_si_id)
 VALUES 
 (CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+1', true, 2),
-(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+2', true, 6);
+(CURDATE(), 'https://via.placeholder.com/300x400?text=Giay+Phep+2', true, 3);
+
+-- Tạo bệnh nhân
+INSERT INTO User (
+    ho, ten, username, password, email, created_date,
+    cccd, phone, is_active, avatar, khoa_id, role_id
+) VALUES (
+    'Le', 'Patient4', 'patient4', 
+    '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
+    'patient4@example.com', CURDATE(),
+    '098765432104', '0901234540', 
+    true, NULL, NULL, 2
+),
+(
+    'Le', 'Patient5', 'patient5', 
+    '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
+    'patient5@example.com', CURDATE(),
+    '098765432105', '0901234550', 
+    true, NULL, NULL, 2
+);
+
+-- Tạo hồ sơ sức khỏe
+INSERT INTO HoSoSucKhoe (chieu_cao, can_nang, birth, benh_nhan_id)
+VALUES 
+(168, 69, '1994-01-01', 4),
+(164, 64, '1995-01-01', 5);
+
+-- Lịch khám + đơn khám + dịch vụ + xét nghiệm
+-- (Dưới đây là ví dụ cho 1 bệnh nhân với 2 bác sĩ)
+INSERT INTO Lichkham (ngay, da_kham, bac_si_id, khunggio_id)
+VALUES 
+('2025-05-05 08:00:00', true, 2, 1),
+('2025-05-06 09:00:00', true, 3, 2);
+
+INSERT INTO Donkham (ghi_chu, benh_id, hssk_id, bac_si_id, lich_kham_id,created_date)
+VALUES 
+('Benh nhan co trieu chung ...', 1, 1, 2, 1,CURDATE()),
+('Benh nhan co trieu chung ...', 4, 2, 3, 2,CURDATE());
+
+INSERT INTO Chitietdonkham (dich_vu, gia_tien, don_kham_id)
+VALUES 
+('Kham tong quat', 150.00, 1),
+('Sieu am', 250.00, 2);
+
+INSERT INTO Xetnghiem (don_kham_id)
+VALUES 
+(1), (2);
+
+INSERT INTO Chitietxetnghiem (mo_ta, xet_nghiem_id)
+VALUES 
+('Ket qua binh thuong', 1),
+('Co chi so bat thuong', 2);
+
+
+-- Donkham cho từng tháng (created_date từ tháng 1 đến 12)
+INSERT INTO Donkham (ghi_chu, benh_id, hssk_id, bac_si_id, lich_kham_id, created_date)
+VALUES 
+('Don kham thang 1', 1, 1, 2, 1, '2025-01-10'),
+('Don kham thang 2', 2, 1, 2, 1, '2025-02-15'),
+('Don kham thang 3', 3, 1, 2, 1, '2025-03-20'),
+('Don kham thang 4', 4, 1, 2, 1, '2025-04-05'),
+('Don kham thang 5', 5, 1, 2, 1, '2025-05-12'),
+('Don kham thang 6', 6, 1, 2, 1, '2025-06-18'),
+('Don kham thang 7', 1, 1, 2, 1, '2025-07-22'),
+('Don kham thang 8', 2, 1, 2, 1, '2025-08-09'),
+('Don kham thang 9', 3, 1, 2, 1, '2025-09-14'),
+('Don kham thang 10', 4, 1, 2, 1, '2025-10-27'),
+('Don kham thang 11', 5, 1, 2, 1, '2025-11-30'),
+('Don kham thang 12', 6, 1, 2, 1, '2025-12-03');
+
+-- Chitietdonkham tương ứng với từng Donkham ở trên
+INSERT INTO Chitietdonkham (dich_vu, gia_tien, don_kham_id)
+VALUES 
+('Kham tong quat', 1450000, 3),
+('Sieu am', 1500000, 4),
+('Xet nghiem mau', 1550000, 5),
+('Noi soi', 1400000, 6),
+('Chup X-Quang', 1520000, 7),
+('Dien tim', 1490000, 8),
+('Sieu am 4D', 1600000, 9),
+('Do huyet ap', 1480000, 10),
+('Xet nghiem nuoc tieu', 1510000, 11),
+('Kham da lieu', 1530000, 12),
+('Kham mat', 1460000, 13),
+('Xet nghiem sinh hoa', 1580000, 14);
+
+
