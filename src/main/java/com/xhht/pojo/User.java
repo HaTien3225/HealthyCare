@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ public class User {
     @Column(nullable = false, length = 20,unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false, length = 255)
     private String password;
 
@@ -78,25 +80,27 @@ public class User {
 
     @OneToOne(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
     private HoSoSucKhoe hoSoSucKhoeId;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private Set<DonKham> donKhams;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private Set<LichKham> lichKhams;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
     private Set<DanhGia> danhGiasCuaBenhNhans;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private Set<DanhGia> danhGiasCuaBacSis;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "senderId",cascade = CascadeType.ALL)
     private Set<TinNhan> tinNhanGuis;
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "receiverId",cascade = CascadeType.ALL)
     private Set<TinNhan> tinNhanNhans;
     
+    @JsonIgnore
     @Transient
     private MultipartFile file;
     /**

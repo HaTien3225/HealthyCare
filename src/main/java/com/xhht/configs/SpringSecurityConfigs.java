@@ -6,6 +6,8 @@ package com.xhht.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.xhht.filters.JwtFilter;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +17,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 /**
@@ -26,7 +32,8 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @ComponentScan(basePackages = {
     "com.xhht.controllers",
     "com.xhht.repositories",
-    "com.xhht.services"
+    "com.xhht.services",
+    "com.xhht.filters"
 })
 public class SpringSecurityConfigs {
 
@@ -44,18 +51,18 @@ public class SpringSecurityConfigs {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(c -> c.disable())
-                .authorizeHttpRequests(requests
-                        -> requests
-                        .requestMatchers("/", "/home", "/profile").authenticated()
-                        .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**").permitAll() // Đảm bảo các đường dẫn tĩnh được phép
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/doctor/**").hasRole("DOCTOR")
-                        .requestMatchers("/user/**").hasRole("USER")
-                     
-                        
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(requests -> requests
+                .requestMatchers("/", "/home", "/profile").authenticated()
+                .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/doctor/**").hasRole("DOCTOR")
+                .requestMatchers("/user/**").hasRole("USER")
                 )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Thêm dòng này
                 .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -71,7 +78,6 @@ public class SpringSecurityConfigs {
         return http.build();
     }
 
-    
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
@@ -83,4 +89,20 @@ public class SpringSecurityConfigs {
         return cloudinary;
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of("http://localhost:3000/"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setExposedHeaders(List.of("Authorization"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }

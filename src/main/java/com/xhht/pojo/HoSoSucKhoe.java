@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class HoSoSucKhoe implements Serializable{
     @Column(name = "birth")
     private LocalDate birth;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "benh_nhan_id", referencedColumnName = "id", nullable = false, unique = true)
     private User benhNhanId;
