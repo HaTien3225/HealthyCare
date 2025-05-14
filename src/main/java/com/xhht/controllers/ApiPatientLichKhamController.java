@@ -5,10 +5,16 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.LichKham;
+import com.xhht.pojo.User;
 import com.xhht.repositories.LichKhamRepository;
+import com.xhht.services.KhungGioService;
+import com.xhht.services.UserService;
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,44 +35,85 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiPatientLichKhamController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private KhungGioService khungGioService;
+
+    @Autowired
     private LichKhamRepository lichKhamRepository;
 
     // Lấy danh sách lịch khám của bệnh nhân
-    @GetMapping("/user/api/lichkham")
-    public ResponseEntity<?> getLichKhamForPatient(@RequestParam Long benhNhanId) {
-        List<LichKham> lichkhams = lichKhamRepository.findByBenhNhanId(benhNhanId);
-        if (lichkhams.isEmpty()) {
-            return ResponseEntity.status(404).body("Không tìm thấy lịch khám cho bệnh nhân với ID = " + benhNhanId);
+    @GetMapping("/api/lichkham")
+    public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
         }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        List<LichKham> lichkhams = lichKhamRepository.findByBenhNhanId(u.getId().longValue(), page);
         return ResponseEntity.ok(lichkhams);
     }
 
-    // Cập nhật trạng thái lịch khám (đã khám hoặc chưa)
-    @PutMapping("/user/lichkham/{id}")
-    public ResponseEntity<?> updateLichKham(@PathVariable int id, @RequestBody LichKham lichkhamDetails) {
-        Optional<LichKham> optionalLichKham = lichKhamRepository.findById(id);
-
-        if (optionalLichKham.isPresent()) {
-            LichKham lichKham = optionalLichKham.get();
-            lichKham.setDaKham(lichkhamDetails.getDaKham());
-            // Cập nhật các trường khác nếu cần
-            return ResponseEntity.ok(lichKhamRepository.save(lichKham));
-        } else {
-            return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
+    // Cập nhật trạng thái lịch khám (đã khám hoặc chưa) ko can sua lichkham o user dau ong
+//    @PutMapping("/api/lichkham/{id}")
+//    public ResponseEntity<?> updateLichKham(@PathVariable int id, @RequestBody LichKham lichkhamDetails,Principal principal) {
+//        if(principal == null)
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+//        User u = this.userService.getUserByUsername(principal.getName());
+//        if(!u.getRole().getRole().equals("ROLE_USER"))
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+//        Optional<LichKham> optionalLichKham = lichKhamRepository.findById(id);
+//
+//        if (optionalLichKham.isPresent()) {
+//            LichKham lichKham = optionalLichKham.get();
+//            lichKham.setDaKham(lichkhamDetails.getDaKham());
+//            // Cập nhật các trường khác nếu cần
+//            return ResponseEntity.ok(lichKhamRepository.save(lichKham));
+//        } else {
+//            return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
+//        }
+//    }
+    @PostMapping("/api/lichkham")
+    public ResponseEntity<?> createLichKham(@RequestBody LichKham lichKham, Principal principal, @RequestParam(name = "bacSiId", required = true) int bacSiId,
+            @RequestParam(name = "khungGioId", required = true) int khungGioId) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
         }
-    }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
 
-    @PostMapping("/user/api/lichkham")
-    public ResponseEntity<?> createLichKham(@RequestBody LichKham lichKham) {
+        lichKham.setBacSiId(this.userService.getUserById(bacSiId));
+        lichKham.setBenhNhanId(u);
+        lichKham.setCreatedDate(LocalDate.now());
+        lichKham.setKhungGio(this.khungGioService.findKhungGioById(khungGioId));
+
+        if (!this.lichKhamRepository.checkLichKhamConflict(lichKham)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Lich kham bi trung");
+        }
         LichKham saved = lichKhamRepository.save(lichKham);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/user/api/lichkham/{id}")
-    public ResponseEntity<?> cancelLichKham(@PathVariable int id) {
+    @DeleteMapping("/api/lichkham/{id}")
+    public ResponseEntity<?> cancelLichKham(@PathVariable(name = "id") int id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
         Optional<LichKham> optional = lichKhamRepository.findById(id);
         if (optional.isPresent()) {
             LichKham lichKham = optional.get();
+            if (lichKham.getBenhNhanId().getId() != u.getId()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+            }
             if (!lichKham.getDaKham()) {
                 lichKhamRepository.delete(lichKham);
                 return ResponseEntity.ok("Đã hủy lịch khám.");
@@ -76,6 +123,31 @@ public class ApiPatientLichKhamController {
         } else {
             return ResponseEntity.status(404).body("Không tìm thấy lịch khám.");
         }
+    }
+
+    @GetMapping("/api/lichkham/{id}")
+    public ResponseEntity<?> getLichKhamById(@PathVariable("id") int id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+
+        User currentUser = this.userService.getUserByUsername(principal.getName());
+        if (!currentUser.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> optional = this.lichKhamRepository.findById(id);
+
+        if (optional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy lịch khám.");
+        }
+
+        LichKham lichKham = optional.get();
+
+        if (!lichKham.getBenhNhanId().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Bạn không có quyền xem lịch khám này.");
+        }
+
+        return ResponseEntity.ok(lichKham);
     }
 
 }

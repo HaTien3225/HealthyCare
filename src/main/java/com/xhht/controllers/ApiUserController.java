@@ -48,8 +48,10 @@ public class ApiUserController {
     }
     
     @GetMapping("/profile")
-    public ResponseEntity<User> getProfile(Principal principal){
-        return new ResponseEntity<>(this.userService.getUserByUsername(principal.getName()), HttpStatus.OK);
+    public ResponseEntity<?> getProfile(Principal principal){
+        if(principal != null)
+            return new ResponseEntity<>(this.userService.getUserByUsername(principal.getName()), HttpStatus.OK);
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
     }
 
 }
