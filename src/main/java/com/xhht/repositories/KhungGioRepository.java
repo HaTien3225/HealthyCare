@@ -5,6 +5,8 @@
 package com.xhht.repositories;
 
 import com.xhht.pojo.KhungGio;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -12,4 +14,6 @@ import com.xhht.pojo.KhungGio;
  */
 public interface KhungGioRepository {
     KhungGio findKhungGioById(int id);
+    List<KhungGio> findKhungGioDaDatCuaBacSiTrongNgay(int bacSiId, LocalDate ngay);
+    List<KhungGio> getAllKhungGio();
 }

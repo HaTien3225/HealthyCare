@@ -34,6 +34,7 @@ public class ApiUserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody(required = false) User u) {
+
         if (u == null || u.getUsername() == null || u.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
         }

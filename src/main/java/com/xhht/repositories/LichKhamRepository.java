@@ -29,4 +29,6 @@ public interface LichKhamRepository {
     void delete(LichKham lichKham);
     
     boolean checkLichKhamConflict(LichKham lichKham);
+    
+    
 }
