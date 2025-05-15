@@ -36,6 +36,12 @@ public class ApiUserController {
     public ResponseEntity<?> login(@RequestBody(required = false) User u) {
 
         if (u == null || u.getUsername() == null || u.getPassword() == null) {
+            if(u == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("u == null");
+            if(u.getUsername() == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("username == null");
+            if( u.getPassword() == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password == null");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
         }
 
@@ -80,12 +86,12 @@ public class ApiUserController {
         }
     }
 
-    @GetMapping("/secure/profile")
-    @ResponseBody
-    public ResponseEntity<?> getSecureProfile(Principal principal) {
-        if (principal != null) {
-            return new ResponseEntity<>(this.userService.getUserByUsername(principal.getName()), HttpStatus.OK);
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
-    }
+//    @GetMapping("/secure/profile")
+//    @ResponseBody
+//    public ResponseEntity<?> getSecureProfile(Principal principal) {
+//        if (principal != null) {
+//            return new ResponseEntity<>(this.userService.getUserByUsername(principal.getName()), HttpStatus.OK);
+//        }
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+//    }
 }

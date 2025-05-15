@@ -11,6 +11,7 @@ import com.xhht.services.KhungGioService;
 import com.xhht.services.UserService;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ApiPatientLichKhamController {
     private LichKhamRepository lichKhamRepository;
 
     // Lấy danh sách lịch khám của bệnh nhân
-    @GetMapping("/api/user/lichkham")
+    @GetMapping("/api/lichkham")
     public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
@@ -93,8 +94,10 @@ public class ApiPatientLichKhamController {
         lichKham.setKhungGio(this.khungGioService.findKhungGioById(khungGioId));
 
         if (!this.lichKhamRepository.checkLichKhamConflict(lichKham)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Lich kham bi trung");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Lich kham bi trung");        
         }
+        if(lichKham.getNgay().isBefore(LocalDate.now()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("NGAY QUA KHU");    
         LichKham saved = lichKhamRepository.save(lichKham);
         return ResponseEntity.ok(saved);
     }
@@ -114,6 +117,8 @@ public class ApiPatientLichKhamController {
             if (lichKham.getBenhNhanId().getId() != u.getId()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
             }
+            if(ChronoUnit.DAYS.between(lichKham.getNgay(),LocalDate.now()) > 1)
+                return ResponseEntity.status(400).body("Qua 24h");
             if (!lichKham.getDaKham()) {
                 lichKhamRepository.delete(lichKham);
                 return ResponseEntity.ok("Đã hủy lịch khám.");
