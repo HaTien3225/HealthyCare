@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface HoSoSucKhoeRepository {
     Optional<HoSoSucKhoe> findByBenhNhanId(int benhNhanId);
 
-    HoSoSucKhoe save(HoSoSucKhoe hoSo);
+    HoSoSucKhoe createOrUpdate(HoSoSucKhoe hoSo);
 
     void delete(HoSoSucKhoe get);
 }

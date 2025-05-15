@@ -71,7 +71,7 @@ public class ApiUserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> create(@RequestParam Map<String, String> params,
-                                    @RequestParam("avatar") MultipartFile avatar) {
+                                    @RequestParam(name = "avatar",required = false) MultipartFile avatar) {
         try {
             User u = this.userService.addUser(params, avatar);
             if (u == null) {
