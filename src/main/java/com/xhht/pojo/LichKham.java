@@ -32,7 +32,7 @@ public class LichKham implements Serializable {
     private Integer id;
 
     @Column(name = "ngay", nullable = false)
-    private LocalDateTime ngay;
+    private LocalDate ngay;
 
     @Column(name = "da_kham", nullable = false)
     private Boolean daKham = false;
@@ -75,14 +75,14 @@ public class LichKham implements Serializable {
     /**
      * @return the ngay
      */
-    public LocalDateTime getNgay() {
+    public LocalDate getNgay() {
         return ngay;
     }
 
     /**
      * @param ngay the ngay to set
      */
-    public void setNgay(LocalDateTime ngay) {
+    public void setNgay(LocalDate ngay) {
         this.ngay = ngay;
     }
 

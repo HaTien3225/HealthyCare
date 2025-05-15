@@ -90,24 +90,26 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     }
 
     public boolean checkLichKhamConflict(LichKham lichKham) {
-    // Truy vấn HQL để kiểm tra sự trùng lặp
-    String hql = "SELECT COUNT(l) FROM LichKham l " +
-                 "WHERE l.ngay = :ngay " +
-                 "AND l.khungGioId = :khungGioId " +
-                 "AND l.bacSiId = :bacSiId " +
-                 "AND l.isAccept = true " +  // Chỉ kiểm tra các lịch đã xác nhận
-                 "AND l.daKham = false";    // Lịch chưa khám
+        // Truy vấn HQL để kiểm tra sự trùng lặp
+        String hql = "SELECT COUNT(l) FROM LichKham l "
+                + "WHERE l.ngay = :ngay "
+                + "AND l.khungGioId = :khungGioId "
+                + "AND l.bacSiId = :bacSiId "
+                + "AND l.isAccept = true "
+                + // Chỉ kiểm tra các lịch đã xác nhận
+                "AND l.daKham = false";    // Lịch chưa khám
 
-    Query<Long> query = sessionFactory.getCurrentSession().createQuery(hql, Long.class);
-    query.setParameter("ngay", lichKham.getNgay());
-    query.setParameter("khungGioId", lichKham.getKhungGio());
-    query.setParameter("bacSiId", lichKham.getBacSiId());
+        Query<Long> query = sessionFactory.getCurrentSession().createQuery(hql, Long.class);
+        query.setParameter("ngay", lichKham.getNgay());
+        query.setParameter("khungGioId", lichKham.getKhungGio());
+        query.setParameter("bacSiId", lichKham.getBacSiId());
 
-    Long count = query.uniqueResult();
+        Long count = query.uniqueResult();
 
-    // Nếu count > 0 thì có lịch khám trùng
-    return count == 0; // Trả về true nếu không có lịch trùng, false nếu có
-}
-
+        // Nếu count > 0 thì có lịch khám trùng
+        return count == 0; // Trả về true nếu không có lịch trùng, false nếu có
+    }
+    
+    
 
 }

@@ -9,6 +9,8 @@ import com.xhht.services.KhungGioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xhht.repositories.KhungGioRepository;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -23,6 +25,16 @@ public class KhungGioServiceImpl implements KhungGioService{
     @Override
     public KhungGio findKhungGioById(int id) {
         return this.khungGioRepo.findKhungGioById(id);
+    }
+
+    @Override
+    public List<KhungGio> findKhungGioDaDatCuaBacSiTrongNgay(int bacSiId, LocalDate ngay) {
+        return this.khungGioRepo.findKhungGioDaDatCuaBacSiTrongNgay(bacSiId, ngay);
+    }
+
+    @Override
+    public List<KhungGio> getAllKhungGio() {
+        return this.khungGioRepo.getAllKhungGio();
     }
     
 }

@@ -44,7 +44,7 @@ public class ApiPatientLichKhamController {
     private LichKhamRepository lichKhamRepository;
 
     // Lấy danh sách lịch khám của bệnh nhân
-    @GetMapping("/api/lichkham")
+    @GetMapping("/api/user/lichkham")
     public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");

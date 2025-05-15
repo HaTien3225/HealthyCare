@@ -33,9 +33,9 @@ public class ApiUserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody(required = false) User u) {
-        if (u == null || u.getUsername() == null || u.getPassword() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
-        }
+//        if (u == null || u.getUsername() == null || u.getPassword() == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
+//        }
         if (this.userService.authenticate(u.getUsername(), u.getPassword())) {
             try {
                 String token = JwtUtils.generateToken(u.getUsername());
