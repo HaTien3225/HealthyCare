@@ -85,9 +85,13 @@ create table Lichkham(
 	id int not null auto_increment primary key,
     ngay datetime not null,
     da_kham boolean default false,
+    is_accept boolean default false,
+    created_date date not null,
     
     bac_si_id int not null,
     foreign key (bac_si_id) references User(id) on delete restrict,
+    benh_nhan_id int not null,
+    foreign key (benh_nhan_id) references User(id) on delete restrict,
     khunggio_id int not null,
     foreign key (khunggio_id) references Khunggio(id) on delete restrict
 );
@@ -275,10 +279,10 @@ VALUES
 
 -- Lịch khám + đơn khám + dịch vụ + xét nghiệm
 -- (Dưới đây là ví dụ cho 1 bệnh nhân với 2 bác sĩ)
-INSERT INTO Lichkham (ngay, da_kham, bac_si_id, khunggio_id)
+INSERT INTO Lichkham (ngay, da_kham, bac_si_id, khunggio_id,benh_nhan_id,created_date)
 VALUES 
-('2025-05-05 08:00:00', true, 2, 1),
-('2025-05-06 09:00:00', true, 3, 2);
+('2025-05-05 08:00:00', true, 2, 1,4,CURDATE()),
+('2025-05-06 09:00:00', true, 3, 2,5,CURDATE());
 
 INSERT INTO Donkham (ghi_chu, benh_id, hssk_id, bac_si_id, lich_kham_id,created_date)
 VALUES 

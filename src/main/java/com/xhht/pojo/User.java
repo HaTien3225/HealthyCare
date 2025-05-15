@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ public class User {
     @Column(nullable = false, length = 20,unique = true)
     private String username;
 
+    @JsonIgnore
     @Column(nullable = false, length = 255)
     private String password;
 
@@ -69,34 +71,41 @@ public class User {
     private Khoa khoaId;
 
     // Quan hệ 1-1 với GiayPhepHanhNghe
+    @JsonIgnore
     @OneToOne(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private GiayPhepHanhNghe giayPhepHanhNgheId;
     // Quan hệ với Role (nhiều User cùng 1 Role)
     @ManyToOne( optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role roleId;
-
+    @JsonIgnore
     @OneToOne(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
     private HoSoSucKhoe hoSoSucKhoeId;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private Set<DonKham> donKhams;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
-    private Set<LichKham> lichKhams;
-
+    private Set<LichKham> lichKhamsBS;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
+    private Set<LichKham> lichKhamsBN;
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "benhNhanId", cascade = CascadeType.ALL)
     private Set<DanhGia> danhGiasCuaBenhNhans;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private Set<DanhGia> danhGiasCuaBacSis;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "senderId",cascade = CascadeType.ALL)
     private Set<TinNhan> tinNhanGuis;
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "receiverId",cascade = CascadeType.ALL)
     private Set<TinNhan> tinNhanNhans;
     
+    @JsonIgnore
     @Transient
     private MultipartFile file;
     /**
@@ -326,15 +335,15 @@ public class User {
     /**
      * @return the lichKhams
      */
-    public Set<LichKham> getLichKhams() {
-        return lichKhams;
+    public Set<LichKham> getLichKhamsBS() {
+        return lichKhamsBS;
     }
 
     /**
      * @param lichKhams the lichKhams to set
      */
-    public void setLichKhams(Set<LichKham> lichKhams) {
-        this.lichKhams = lichKhams;
+    public void setLichKhamsBS(Set<LichKham> lichKhamsBS) {
+        this.lichKhamsBS = lichKhamsBS;
     }
 
     /**
@@ -405,5 +414,19 @@ public class User {
      */
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    /**
+     * @return the lichKhamsBN
+     */
+    public Set<LichKham> getLichKhamsBN() {
+        return lichKhamsBN;
+    }
+
+    /**
+     * @param lichKhamsBN the lichKhamsBN to set
+     */
+    public void setLichKhamsBN(Set<LichKham> lichKhamsBN) {
+        this.lichKhamsBN = lichKhamsBN;
     }
 }

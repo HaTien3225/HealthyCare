@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,7 @@ public class KhungGio implements Serializable {
     @Column(name = "gio_ket_thuc", nullable = false)
     private LocalTime gioKetThuc;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "khungGioId",cascade = CascadeType.ALL)
     private Set<LichKham> lichKhams;
 

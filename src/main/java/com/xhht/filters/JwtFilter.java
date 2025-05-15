@@ -2,11 +2,8 @@ package com.xhht.filters;
 
 import com.xhht.utils.JwtUtils;
 import com.xhht.utils.JwtUtils.JwtUser;
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,40 +11,37 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtFilter implements Filter {
+@Component
+public class JwtFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = Logger.getLogger(JwtFilter.class.getName());
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String uri = httpRequest.getRequestURI();
-        String contextPath = httpRequest.getContextPath();
-
-        // Áp dụng filter cho các đường dẫn bắt đầu bằng /api/secure
+        // Áp dụng JWT Filter cho các đường dẫn bắt đầu bằng /api/secure
         if (uri.startsWith(contextPath + "/api/secure")) {
-
-            String header = httpRequest.getHeader("Authorization");
+            String header = request.getHeader("Authorization");
 
             if (header == null || !header.startsWith("Bearer ")) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                        "Missing or invalid Authorization header.");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Thiếu hoặc sai định dạng Authorization header.");
                 return;
             }
 
-            String token = header.substring(7); // Bỏ qua "Bearer "
+            String token = header.substring(7); // Bỏ "Bearer "
             try {
                 JwtUser user = JwtUtils.validateToken(token);
 
                 if (user != null) {
-                    httpRequest.setAttribute("username", user.getUsername());
-
-                    // Gắn role vào context nếu cần
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     user.getUsername(),
@@ -56,21 +50,18 @@ public class JwtFilter implements Filter {
                             );
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    chain.doFilter(request, response);
+                    filterChain.doFilter(request, response);
                     return;
                 }
 
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Token validation failed", e);
+                LOGGER.log(Level.SEVERE, "Xác thực token thất bại", e);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token không hợp lệ hoặc đã hết hạn.");
+                return;
             }
-
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                    "Token không hợp lệ hoặc đã hết hạn.");
-            return;
         }
 
-        // Nếu không phải /api/secure thì tiếp tục filter bình thường
-        chain.doFilter(request, response);
+        // Nếu không nằm trong /api/secure => tiếp tục filter như bình thường
+        filterChain.doFilter(request, response);
     }
-    
 }
