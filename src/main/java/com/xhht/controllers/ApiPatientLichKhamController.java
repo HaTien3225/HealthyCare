@@ -92,6 +92,8 @@ public class ApiPatientLichKhamController {
         lichKham.setBenhNhanId(u);
         lichKham.setCreatedDate(LocalDate.now());
         lichKham.setKhungGio(this.khungGioService.findKhungGioById(khungGioId));
+        lichKham.setDaKham(Boolean.FALSE);
+        lichKham.setIsAccept(Boolean.FALSE);
 
         if (!this.lichKhamRepository.checkLichKhamConflict(lichKham)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Lich kham bi trung");        

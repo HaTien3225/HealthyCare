@@ -56,5 +56,10 @@ public class ApiPatientKhungGioController {
         }
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("BAD_REQUEST");
     }
+    
+    @GetMapping("/khunggio")
+    public ResponseEntity<?> listKhungGio(){        
+        return ResponseEntity.ok(this.khungGioService.getAllKhungGio());
+    }
 
 }
