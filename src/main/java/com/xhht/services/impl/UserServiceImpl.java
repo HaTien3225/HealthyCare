@@ -1,37 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.xhht.services.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.xhht.pojo.GiayPhepHanhNghe;
 import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
+import com.xhht.repositories.GiayPhepHanhNgheRepository;
 import com.xhht.repositories.RoleRepository;
 import com.xhht.repositories.UserRepository;
 import com.xhht.services.UserService;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author lehuy
- */
 @Service("userDetailService")
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -40,10 +34,19 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepo;
 
     @Autowired
+    private BCryptPasswordEncoder passEncoder;
+
+    @Autowired
     private Cloudinary cloudinary;
 
     @Autowired
     private RoleRepository roleRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GiayPhepHanhNgheRepository giayphepReppo;
 
     @Override
     public User getUserByUsername(String username) {
@@ -52,10 +55,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createOrUpdate(User u) {
-        // Kiểm tra xem người dùng có upload file avatar hay không
-        if (!u.getFile().isEmpty()) {
+        if (u.getFile() != null && !u.getFile().isEmpty()) {
             try {
-                // Upload ảnh avatar lên Cloudinary
                 Map res = cloudinary.uploader().upload(u.getFile().getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatar(res.get("secure_url").toString());
@@ -64,41 +65,29 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        // Kiểm tra mật khẩu để đảm bảo không bị ghi đè nếu người dùng không thay đổi
         if (u.getPassword() == null || u.getPassword().isEmpty()) {
-            // Nếu password không thay đổi, giữ nguyên mật khẩu cũ
             User existingUser = this.userRepo.getUserById(u.getId());
             if (existingUser != null) {
-                u.setPassword(existingUser.getPassword());  // Giữ nguyên mật khẩu cũ
+                u.setPassword(existingUser.getPassword());
             }
         }
 
-        // Lưu user vào cơ sở dữ liệu
         return this.userRepo.createOrUpdate(u);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("[DEBUG] load user: " + username);
-
         User u = this.userRepo.getUserByUsername(username);
 
         if (u == null) {
-            System.out.println("[ERROR] can't find any user: " + username);
             throw new UsernameNotFoundException("Invalid username!");
         }
-
-        System.out.println("[DEBUG] User found: " + u.getUsername());
-        System.out.println("[DEBUG] Password from DB: " + u.getPassword());
-        System.out.println("[DEBUG] Role: " + u.getRole().getRole());
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole().getRole()));
 
-        System.out.println("[DEBUG] Authorities: " + authorities);
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
-
     }
 
     @Override
@@ -111,7 +100,6 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.getUserById(id);
     }
 
-
     public List<User> getDoctorsPendingVerification() {
         Role doctorRole = roleRepo.getRoleById(3);
         if (doctorRole != null) {
@@ -123,9 +111,11 @@ public class UserServiceImpl implements UserService {
     public void verifyDoctor(int doctorId) {
         User doctor = userRepo.getUserById(doctorId);
         if (doctor != null && doctor.getRole().getId() == 3) {
-            doctor.setIsActive(true); // Đánh dấu bác sĩ đã được xác nhận
-            doctor.getGiayPhepHanhNgheId().setIsValid(true);
-            userRepo.createOrUpdate(doctor);  // Lưu thay đổi
+            doctor.setIsActive(true);
+            if (doctor.getGiayPhepHanhNgheId() != null) {
+                doctor.getGiayPhepHanhNgheId().setIsValid(true);
+            }
+            userRepo.createOrUpdate(doctor);
         }
     }
 
@@ -138,4 +128,94 @@ public class UserServiceImpl implements UserService {
     public boolean authenticate(String username, String password) {
         return this.userRepo.authenticate(username, password);
     }
+
+    @Override
+    public boolean registerUser(User u) {
+        if (userRepo.existsByUsername(u.getUsername())) {
+            return false;
+        }
+
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        u.setIsActive(true);
+        u.setRole(roleRepo.getRoleById(2));
+        userRepo.createOrUpdate(u);
+        return true;
+    }
+
+    @Override
+    public boolean registerDoctor(String username, String password, String email, String ho, String ten,
+            MultipartFile licenseFile) {
+
+        if (userRepo.existsByUsername(username)) {
+            return false;
+        }
+
+        User doctor = new User();
+        doctor.setUsername(username);
+        doctor.setPassword(passwordEncoder.encode(password));
+        doctor.setEmail(email);
+        doctor.setHo(ho);
+        doctor.setTen(ten);
+        doctor.setIsActive(false);
+        doctor.setRole(roleRepo.getRoleById(3));
+
+        userRepo.createOrUpdate(doctor);
+
+        if (!licenseFile.isEmpty()) {
+            try {
+
+                Map res = cloudinary.uploader().upload(licenseFile.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                String fileUrl = res.get("secure_url").toString();
+
+                GiayPhepHanhNghe license = new GiayPhepHanhNghe();
+                license.setBacSiId(doctor);
+                license.setImage(fileUrl);
+                license.setCreated_date(LocalDate.now());
+                license.setIsValid(false);
+
+                giayphepReppo.save(license);
+
+                doctor.setGiayPhepHanhNgheId(license);
+                userRepo.createOrUpdate(doctor);
+            } catch (IOException e) {
+
+                System.err.println("Error uploading license file: " + e.getMessage());
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public User addUser(Map<String, String> params, MultipartFile avatar) {
+        User u = new User();
+
+        u.setHo(params.get("ho"));
+        u.setTen(params.get("ten"));
+        u.setUsername(params.get("username"));
+        u.setPassword(this.passEncoder.encode(params.get("password")));
+        u.setEmail(params.get("email"));
+        u.setCccd(params.get("cccd"));
+        u.setPhone(params.get("phone"));
+        u.setCreatedDate(LocalDate.now());
+        u.setIsActive(true);
+        Role role = this.roleRepo.getRoleById(2);
+        u.setRole(role);
+
+        // Upload avatar
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return this.userRepo.addUser(u);
+    }
+
 }

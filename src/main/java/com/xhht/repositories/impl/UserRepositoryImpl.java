@@ -176,9 +176,28 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean authenticate(String username, String password) {
         User u = this.getUserByUsername(username);
-        if( u == null)
+        if (u == null) {
             return false;
+        }
         return this.passwordEncoder.matches(password, u.getPassword());
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<Long> query = session.createQuery(
+                "SELECT COUNT(u) FROM User u WHERE u.username = :username", Long.class);
+        query.setParameter("username", username);
+        Long count = query.getSingleResult();
+        return count > 0;
+    }
+
+     @Override
+    public User addUser(User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+        
+        return u;
     }
 
 }

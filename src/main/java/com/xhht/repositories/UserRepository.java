@@ -21,4 +21,7 @@ public interface UserRepository  {
     List<User> findByRoleAndIsVerified(Role role, boolean isVerified);
     void updateUserStatus(int id, Boolean isActive);
     boolean authenticate(String username, String password);
+    boolean existsByUsername(String username);
+
+    User addUser(User u);
 }

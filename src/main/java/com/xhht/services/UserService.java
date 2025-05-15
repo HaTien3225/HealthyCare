@@ -14,14 +14,26 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author lehuy
  */
+public interface UserService extends UserDetailsService {
 
-public interface UserService extends UserDetailsService{
     User getUserByUsername(String username);
+
     User createOrUpdate(User u);
+
     List<User> getAllUser(Map<String, String> params);
+
     User getUserById(int id);
+
     List<User> getDoctorsPendingVerification();
+
     void verifyDoctor(int doctorId);
+
     void updateUserStatus(int id, Boolean isActive);
+
     boolean authenticate(String username, String password);
+
+    boolean registerUser(User u);
+
+    boolean registerDoctor(String username, String password, String email, String ho, String ten, MultipartFile licenseFile);
+    User addUser(Map<String, String> params, MultipartFile avatar);
 }

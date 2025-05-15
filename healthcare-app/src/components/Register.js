@@ -1,0 +1,120 @@
+import { useRef, useState } from "react";
+import { Alert, Button, Col, Form } from "react-bootstrap";
+import Apis, { endpoints } from "../configs/Apis";
+import MySpinner from "./layout/MySpinner";
+import { useNavigate } from "react-router-dom";
+
+const Register = () => {
+    const info = [
+        { label: "Tên", field: "ten", type: "text" },
+        { label: "Họ và tên lót", field: "ho", type: "text" },
+        { label: "Email", field: "email", type: "email" },
+        { label: "Điện thoại", field: "phone", type: "tel" },
+        { label: "CCCD", field: "cccd", type: "tel" },
+        { label: "Tên đăng nhập", field: "username", type: "text" },
+        { label: "Mật khẩu", field: "password", type: "password" },
+        { label: "Xác nhận mật khẩu", field: "confirm", type: "password" },
+    ];
+
+    const avatar = useRef();
+   
+    const [user, setUser] = useState({ role: "ROLE_USER" }); // mặc định là bệnh nhân
+    const [msg, setMsg] = useState();
+    const [loading, setLoading] = useState(false);
+    const nav = useNavigate();
+
+    const validate = () => {
+        if (!user.password || user.password !== user.confirm) {
+            setMsg("Mật khẩu không khớp!");
+            return false;
+        }
+        // Add additional validation for required fields
+        for (let field of info) {
+            if (!user[field.field]) {
+                setMsg(`${field.label} là bắt buộc!`);
+                return false;
+            }
+        }
+       
+        if (!avatar.current?.files[0]) {
+            setMsg("Ảnh đại diện là bắt buộc!");
+            return false;
+        }
+        return true;
+    };
+
+    const register = async (e) => {
+        e.preventDefault();
+
+        if (validate()) {
+            let form = new FormData();
+
+            // Append user details to FormData
+            for (let key in user) {
+                if (key !== "confirm") form.append(key, user[key]);
+            }
+
+            // Append avatar if exists
+            if (avatar.current?.files[0]) {
+                form.append("avatar", avatar.current.files[0]);
+            }
+
+            
+
+            try {
+                setLoading(true);
+                let res = await Apis.post(endpoints["register"], form, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+
+                if (res.status === 201) {
+                    alert("Đăng ký thành công. Vui lòng đăng nhập.");
+                    nav("/login");
+                }
+            } catch (ex) {
+                console.error(ex);
+                setMsg("Đăng ký thất bại. Vui lòng thử lại.");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    return (
+        <>
+            <h1 className="text-center text-success mt-2">ĐĂNG KÝ NGƯỜI DÙNG</h1>
+
+            {msg && <Alert variant="danger" className="mt-1">{msg}</Alert>}
+
+            <Form onSubmit={register}>
+                {info.map(i => (
+                    <Form.Group key={i.field} className="mb-3">
+                        <Form.Control
+                            value={user[i.field] || ""}
+                            onChange={e => setUser({ ...user, [i.field]: e.target.value })}
+                            type={i.type}
+                            placeholder={i.label}
+                            required
+                        />
+                    </Form.Group>
+                ))}
+
+                {/* Avatar Input */}
+                <Form.Group className="mb-3">
+                    <Form.Label>Ảnh đại diện</Form.Label>
+                    <Form.Control ref={avatar} type="file" accept="image/*" required />
+                </Form.Group>
+
+    
+                {/* Submit Button */}
+                <Form.Group className="mb-3 text-center">
+                    {loading ? <MySpinner /> : <Button type="submit" variant="danger">Đăng ký</Button>}
+                </Form.Group>
+            </Form>
+        </>
+    );
+};
+
+export default Register;

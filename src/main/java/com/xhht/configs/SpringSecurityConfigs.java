@@ -6,6 +6,7 @@ package com.xhht.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.xhht.filters.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +16,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 /**
@@ -45,17 +50,17 @@ public class SpringSecurityConfigs {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(c -> c.disable())
+        http.cors()
+                .and()
+                .csrf(c -> c.disable())
                 .authorizeHttpRequests(requests
                         -> requests
-                        .requestMatchers("/", "/home", "/profile").authenticated()
+                        .requestMatchers("/", "/home", "/profile", "/secure/**").authenticated()
                         .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**").permitAll() // Đảm bảo các đường dẫn tĩnh được phép
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/user/**").hasRole("USER")
-                     
-                        
-                )
+                ).addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -71,7 +76,6 @@ public class SpringSecurityConfigs {
         return http.build();
     }
 
-    
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
@@ -81,6 +85,19 @@ public class SpringSecurityConfigs {
                         "api_secret", "k0_M2bboaYFSx76BdpYZ9TTZSD4",
                         "secure", true));
         return cloudinary;
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:3000"); // ✅ Cho phép frontend React
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
 }

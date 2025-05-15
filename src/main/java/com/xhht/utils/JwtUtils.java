@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.xhht.utils;
 
 import com.nimbusds.jose.JWSAlgorithm;
@@ -14,20 +10,17 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
 
-/**
- *
- * @author lehuy
- */
 public class JwtUtils {
-    private static final String SECRET = "74857603750179589243685715785052"; // 32 ký tự (AES key)
-    private static final long EXPIRATION_MS = 86400000; // 1 ngày
+    private static final String SECRET = "74857603750179589243685715785052";
+    private static final long EXPIRATION_MS = 86400000;
 
-    // Thêm role vào token
-    public static String generateToken(String username) throws Exception {
+    // Tạo token chứa payload gồm subject (username) và claim role
+    public static String generateToken(String username, String role) throws Exception {
         JWSSigner signer = new MACSigner(SECRET);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(username)
+                .claim("role", role)
                 .expirationTime(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .issueTime(new Date())
                 .build();
@@ -38,29 +31,46 @@ public class JwtUtils {
         );
 
         signedJWT.sign(signer);
-
         return signedJWT.serialize();
     }
 
-    public static String validateTokenAndGetUsername(String token) throws Exception {
+    // Phương thức xác thực token và trả về đối tượng JwtUser chứa username và role
+    public static JwtUser validateToken(String token) throws Exception {
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWSVerifier verifier = new MACVerifier(SECRET);
 
         if (signedJWT.verify(verifier)) {
             Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
             if (expiration.after(new Date())) {
-                return signedJWT.getJWTClaimsSet().getSubject();
+                String username = signedJWT.getJWTClaimsSet().getSubject();
+                String role = (String) signedJWT.getJWTClaimsSet().getClaim("role");
+                return new JwtUser(username, role);
             }
         }
         return null;
     }
 
-    // Thêm phương thức để lấy role từ token
-    public static String getRoleFromToken(String token) throws Exception {
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        if (signedJWT != null) {
-            return signedJWT.getJWTClaimsSet().getStringClaim("role");
+    // Phương thức cũ vẫn còn để lấy username, tránh ảnh hưởng đến các phần khác của ứng dụng
+    public static String validateTokenAndGetUsername(String token) throws Exception {
+        JwtUser user = validateToken(token);
+        return user != null ? user.getUsername() : null;
+    }
+
+    public static class JwtUser {
+        private final String username;
+        private final String role;
+
+        public JwtUser(String username, String role) {
+            this.username = username;
+            this.role = role;
         }
-        return null;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getRole() {
+            return role;
+        }
     }
 }
