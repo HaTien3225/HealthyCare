@@ -52,7 +52,7 @@ public class LichKham implements Serializable {
     private Set<DonKham> donKhams;
     
     @Column(name = "is_accept",nullable = false)
-    private Boolean isAccept;
+    private Boolean isAccept=false;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "benh_nhan_id", referencedColumnName = "id")

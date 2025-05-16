@@ -6,14 +6,19 @@ const BASE_URL = 'http://localhost:8080/ung_dung_dat_lich_kham_suc_khoe_truc_tuy
 export const endpoints = {
     'register': '/api/register',
     'login': '/api/login',
-    'current-user': '/api/secure/profile',
-    'doctorLichKham': (bacSiId) => `/doctor/api/lichkham?bacSiId=${bacSiId}`,
-    'updateLichKham': (id) => `/doctor/api/lichkham/${id}`,
-    'getHoSoSucKhoe': (benhNhanId) => `/doctor/api/hosobenhnhan/${benhNhanId}`,
-    'updateHoSoSucKhoe': (benhNhanId) => `/doctor/api/hosobenhnhan/${benhNhanId}`,
-    'doctorThongKe': (bacSiId) => `/doctor/api/thongke/${bacSiId}`,
-    'doctorTuvan': (senderId, receiverId) => `/doctor/api/tuvan/${senderId}/${receiverId}`,
-    'sendTuvan': "/doctor/api/doctor/tuvan",
+    'current-user': '/api/profile',
+    'doctorLichKham': (bacSiId) => `/api/doctor/lichkham?bacSiId=${bacSiId}`,
+    'updateLichKham': (id) => `/api/doctor/lichkham/${id}`,
+    'getHoSoSucKhoe': (benhNhanId) => `/api/doctor/hosobenhnhan/${benhNhanId}`,
+    'updateHoSoSucKhoe': (benhNhanId) => `/api/doctor/hosobenhnhan/${benhNhanId}`,
+    'doctorThongKe': (bacSiId) => `/api/doctor/thongke/${bacSiId}`,
+    'doctorTuvan': (senderId, receiverId) => `/api/doctor/tuvan/${senderId}/${receiverId}`,
+    'sendTuvan': "/api/doctor/tuvan",
+    'lichkhampending': (bacSiId) => `/api/doctor/lichkham/pending?bacSiId=${bacSiId}`,
+    'accept': (id) => `/api/doctor/lichkham/${id}/accept`,
+    'reject': (id) => `/api/doctor/lichkham/${id}/reject`,
+    'acceptedLichKham': (bacSiId) => `/api/doctor/lichkham/accepted?bacSiId=${bacSiId}`,
+    'updateStatusLichKham': (id) => `/api/doctor/lichkham/${id}/update-status`,
 }
 
 export const authApis = () => {

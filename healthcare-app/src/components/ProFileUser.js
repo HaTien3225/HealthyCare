@@ -3,33 +3,29 @@ import { Button, Container, Image, Card, Row, Col } from "react-bootstrap";
 import { MyUserContext } from "../configs/Contexts";
 
 const ProFileUser = () => {
-    const [loading, setLoading] = useState(true);  // Thêm trạng thái loading
-    const user = useContext(MyUserContext); // Lấy dữ liệu người dùng từ context
+    const [loading, setLoading] = useState(true);
+    const user = useContext(MyUserContext);
 
     useEffect(() => {
         if (user) {
-            setLoading(false);  // Đảm bảo set loading là false khi đã có dữ liệu
+            setLoading(false);
         } else {
-            setLoading(true); // Nếu không có user thì tiếp tục loading
+            setLoading(true);
         }
     }, [user]);
 
     if (loading) {
-        return <div>Loading profile...</div>;  // Hiển thị khi đang tải
+        return <div>Đang tải thông tin hồ sơ...</div>;
     }
 
     if (!user) {
-        return <div>User is not logged in.</div>; // Nếu không có user, hiển thị thông báo lỗi
+        return <div>Người dùng chưa đăng nhập.</div>;
     }
-
-    console.log(user);
-    
-
 
     return (
         <Container>
             <Row className="mt-4">
-                <Col md={4}>
+                <Col md={4} className="text-center">
                     <Image
                         src={user.avatar || "/default-avatar.png"}
                         roundedCircle
@@ -41,18 +37,39 @@ const ProFileUser = () => {
                 <Col md={8}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>{user?.username || "Chưa có tên"}</Card.Title>
+                            <Card.Title>{user.username || "Chưa có tên đăng nhập"}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">
                                 {user.email || "Chưa có email"}
                             </Card.Subtitle>
                             <Card.Text>
-                                <strong>Tên: </strong>
-                                {user.ho || "Không có thông tin"} {user.ten || "Không có thông tin"}
+                                <strong>Họ và tên: </strong>
+                                {user.ho || "Không có"} {user.ten || ""}
                             </Card.Text>
                             <Card.Text>
-                                <strong>Số điện thoại: </strong>{user.phone || "Không có thông tin"}
+                                <strong>Số điện thoại: </strong>
+                                {user.phone || "Không có"}
                             </Card.Text>
-                            <Button variant="primary" onClick={() => alert('Chỉnh sửa hồ sơ')}>
+                            <Card.Text>
+                                <strong>Số CCCD: </strong>
+                                {user.cccd || "Không có"}
+                            </Card.Text>
+                            <Card.Text>
+                                <strong>Vai trò: </strong>
+                                {user.role || "Không xác định"}
+                            </Card.Text>
+                            {user.khoaId && (
+                                <>
+                                    <Card.Text>
+                                        <strong>Khoa: </strong>
+                                        {user.khoaId.tenKhoa || "Không có"}
+                                    </Card.Text>
+                                    <Card.Text>
+                                        <strong>Mô tả khoa: </strong>
+                                        {user.khoaId.moTa || ""}
+                                    </Card.Text>
+                                </>
+                            )}
+                            <Button variant="primary" onClick={() => alert("Chỉnh sửa hồ sơ")}>
                                 Chỉnh sửa hồ sơ
                             </Button>
                         </Card.Body>

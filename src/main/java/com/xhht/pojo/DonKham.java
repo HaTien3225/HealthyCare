@@ -156,6 +156,21 @@ public class DonKham implements Serializable{
         this.createdDate = createdDate;
     }
 
+    /**
+     * @return the lichKhamId
+     */
+    public LichKham getLichKhamId() {
+        return lichKhamId;
+    }
+
+    /**
+     * @param lichKhamId the lichKhamId to set
+     */
+    public void setLichKhamId(LichKham lichKhamId) {
+        this.lichKhamId = lichKhamId;
+    }
+    
+
    
     
 }

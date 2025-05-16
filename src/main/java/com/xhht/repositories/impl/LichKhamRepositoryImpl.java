@@ -56,7 +56,6 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public LichKham save(LichKham lichkham) {
         Session session = sessionFactory.getCurrentSession();
-        lichkham.setIsAccept(false);
         session.saveOrUpdate(lichkham);
         return lichkham;
     }
@@ -109,7 +108,24 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
         // Nếu count > 0 thì có lịch khám trùng
         return count == 0; // Trả về true nếu không có lịch trùng, false nếu có
     }
+
+    @Override
+    public List<LichKham> findByBacSiIdAndIsAcceptFalse(Long bacSiId) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = false";
+        Query<LichKham> query = session.createQuery(hql, LichKham.class);
+        query.setParameter("bacSiId", bacSiId);
+        return query.getResultList();
+    }
     
+     @Override
+    public List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(Long bacSiId) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = true AND l.daKham=false";
+        Query<LichKham> query = session.createQuery(hql, LichKham.class);
+        query.setParameter("bacSiId", bacSiId);
+        return query.getResultList();
+    }
     
 
 }

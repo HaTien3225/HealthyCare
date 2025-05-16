@@ -13,6 +13,8 @@ import DoctorHome from "./components/DoctorHome";
 import UserHome from "./components/UserHome";
 import DoctorSchedule from "./components/DoctorSchedule";
 import ProFileUser from "./components/ProFileUser";
+import PendingLichKham from "./components/PendingLichKham";
+import AcceptedLichKham from "./components/AcceptedLichKham";
 
 
 const App = () => {
@@ -34,6 +36,8 @@ const App = () => {
               <Route path="/user" element={<UserHome />} />
               <Route path="/doctor/schedule" element={<DoctorSchedule />} />
               <Route path="/profile" element={<ProFileUser />} />
+              <Route path="/doctor/pending" element={<PendingLichKham />} />
+              <Route path="/doctor/accepted" element={<AcceptedLichKham />} />
             </Routes>
           </Container>
 

@@ -54,7 +54,10 @@ const Header = () => {
                         </NavDropdown>
 
                         {user?.role === "ROLE_DOCTOR" && (
-                            <Link to="/doctor/schedule" className="nav-link">Lịch khám của tôi</Link>
+                            <>
+                                <Link to="/doctor/pending" className="nav-link">Lịch khám chờ duyệt</Link>
+                                <Link to="/doctor/accepted" className="nav-link">Lịch khám đã chấp nhận</Link>
+                            </>
                         )}
                     </Nav>
 
@@ -96,16 +99,6 @@ const Header = () => {
                         >
                             <Link to="/profile" className="dropdown-item">Thông tin cá nhân</Link>
 
-                            {user.role === "ROLE_USER" && (
-                                <Link to="/appointments" className="dropdown-item">Lịch hẹn khám</Link>
-                            )}
-
-                            {user.role === "ROLE_DOCTOR" && (
-                                <>
-                                    <Link to="/doctor/appointments" className="dropdown-item">Lịch hẹn với bệnh nhân</Link>
-                                    <Link to="/doctor/profile" className="dropdown-item">Hồ sơ bác sĩ</Link>
-                                </>
-                            )}
 
                             <NavDropdown.Divider />
                             <Button

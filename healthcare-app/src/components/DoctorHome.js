@@ -1,7 +1,16 @@
+import { useContext } from "react";
+import { MyUserContext } from "../configs/Contexts";
+import PendingLichKham from "./PendingLichKham";
+import AcceptedLichKham from "./AcceptedLichKham";
+
 const DoctorHome = () => {
+  const user = useContext(MyUserContext);
+
+  if (!user) return <div>Vui lòng đăng nhập để xem lịch khám</div>;
+
   return (
-    <div className="text-center mt-5">
-      <h2>Chào mừng Bác sĩ đến với hệ thống!</h2>
+    <div>
+      <h2>Chào bác sĩ {user.ho} {user.ten}</h2>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.Date;
 
 public class JwtUtils {
+
     private static final String SECRET = "74857603750179589243685715785052";
     private static final long EXPIRATION_MS = 86400000;
 
@@ -56,7 +57,13 @@ public class JwtUtils {
         return user != null ? user.getUsername() : null;
     }
 
+    public static String validateTokenAndGetRole(String token) throws Exception {
+        JwtUser user = validateToken(token);
+        return user != null ? user.getRole() : null;
+    }
+
     public static class JwtUser {
+
         private final String username;
         private final String role;
 

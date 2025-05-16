@@ -24,11 +24,14 @@ public interface LichKhamRepository {
 
     Optional<LichKham> findById(int id);
 
-    List<LichKham> findByBenhNhanId(Long benhNhanId,int page);
+    List<LichKham> findByBenhNhanId(Long benhNhanId, int page);
 
     void delete(LichKham lichKham);
-    
+
     boolean checkLichKhamConflict(LichKham lichKham);
-    
-    
+
+    List<LichKham> findByBacSiIdAndIsAcceptFalse(Long bacSiId);
+
+    List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(Long bacSiId);
+
 }
