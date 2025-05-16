@@ -4,8 +4,11 @@
  */
 package com.xhht.repositories.impl;
 
+import com.xhht.pojo.DonKham;
 import com.xhht.repositories.DonKhamRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,28 +22,70 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class DonKhamRepositoryImpl implements DonKhamRepository{
+public class DonKhamRepositoryImpl implements DonKhamRepository {
 
     @Autowired
-     private LocalSessionFactoryBean factory; 
-    
+    private LocalSessionFactoryBean factory;
+
     @Override
     public BigDecimal getTotalRevenue(int month, int year) {
-    Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
 
-    String hql = """
+        String hql = """
         SELECT COALESCE(SUM(ct.giaTien), 0)
         FROM ChiTietDonKham ct
         JOIN ct.donKhamId dk
-        WHERE MONTH(dk.createdDate) = :month AND YEAR(dk.createdDate) = :year
+        WHERE MONTH(dk.createdDate) = :month AND YEAR(dk.createdDate) = :year AND dk.isPaid = true
     """;
 
-    Query<BigDecimal> query = s.createQuery(hql, BigDecimal.class);
-    query.setParameter("month", month);
-    query.setParameter("year", year);
+        Query<BigDecimal> query = s.createQuery(hql, BigDecimal.class);
+        query.setParameter("month", month);
+        query.setParameter("year", year);
 
-    return query.getSingleResult();
-}
+        return query.getSingleResult();
+    }
 
-    
+    @Override
+    public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date) {
+        Session session =  this.factory.getObject().getCurrentSession();
+
+        StringBuilder hql = new StringBuilder("FROM DonKham dk WHERE ");
+
+        // Điều kiện theo userId
+        if (isBenhNhan) {
+            hql.append("dk.hoSoSucKhoeId.benhNhanId.id = :userId");
+        } else {
+            hql.append("dk.bacSiId.id = :userId");
+        }
+
+        // Điều kiện tìm kiếm theo từ khóa
+        if (kw != null && !kw.trim().isEmpty()) {
+            hql.append(" AND dk.ghiChu LIKE :kw");
+        }
+
+        // Điều kiện theo ngày
+        if (date != null) {
+            hql.append(" AND dk.createdDate = :date");
+        }
+
+        hql.append(" ORDER BY dk.createdDate DESC");
+
+        Query<DonKham> query = session.createQuery(hql.toString(), DonKham.class);
+        query.setParameter("userId", userId);
+
+        if (kw != null && !kw.trim().isEmpty()) {
+            query.setParameter("kw", "%" + kw + "%");
+        }
+
+        if (date != null) {
+            query.setParameter("date", date);
+        }
+
+        // Phân trang
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        return query.getResultList();
+    }
+
 }

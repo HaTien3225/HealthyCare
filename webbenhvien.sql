@@ -83,7 +83,7 @@ create table Khunggio(
 
 create table Lichkham(
 	id int not null auto_increment primary key,
-    ngay datetime not null,
+    ngay date not null,
     da_kham boolean default false,
     is_accept boolean default false,
     created_date date not null,
@@ -114,6 +114,7 @@ create table Donkham(
     bac_si_id int not null,
     lich_kham_id int not null,
     created_date date not null,
+    isPaid boolean default false,
     foreign key (benh_id) references Benh(id),
     foreign key (hssk_id) references HoSoSucKhoe(id),
     foreign key (bac_si_id) references User(id),

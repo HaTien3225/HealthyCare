@@ -4,7 +4,10 @@
  */
 package com.xhht.repositories;
 
+import com.xhht.pojo.DonKham;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -12,4 +15,5 @@ import java.math.BigDecimal;
  */
 public interface DonKhamRepository {
     BigDecimal getTotalRevenue(int month, int year);
+    List<DonKham> getAllDonKham(int userId,boolean isBenhNhan,int page,int pageSize,String kw,LocalDate date);
 }
