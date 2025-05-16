@@ -4,7 +4,9 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,16 +25,16 @@ import java.util.Set;
 @Entity
 @Table(name = "xetnghiem")
 public class XetNghiem implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name = "mo_ta", nullable = false, length = 255)
+    private String moTa;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(optional = false)
     @JoinColumn(name = "don_kham_id", referencedColumnName = "id")
     private DonKham donKhamId;
-    
-    @OneToMany(mappedBy = "xetNghiemId",cascade = CascadeType.ALL)
-    private Set<ChiTietXetNghiem> chiTietXetNghiems;
 
     /**
      * @return the id
@@ -63,17 +65,17 @@ public class XetNghiem implements Serializable {
     }
 
     /**
-     * @return the chiTietXetNghiems
+     * @return the moTa
      */
-    public Set<ChiTietXetNghiem> getChiTietXetNghiems() {
-        return chiTietXetNghiems;
+    public String getMoTa() {
+        return moTa;
     }
 
     /**
-     * @param chiTietXetNghiems the chiTietXetNghiems to set
+     * @param moTa the moTa to set
      */
-    public void setChiTietXetNghiems(Set<ChiTietXetNghiem> chiTietXetNghiems) {
-        this.chiTietXetNghiems = chiTietXetNghiems;
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
-    
+
 }

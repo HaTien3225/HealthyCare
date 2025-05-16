@@ -5,9 +5,13 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.HoSoSucKhoe;
+import com.xhht.pojo.User;
 import com.xhht.repositories.HoSoSucKhoeRepository;
+import com.xhht.services.UserService;
+import java.security.Principal;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,62 +30,90 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @CrossOrigin
+@RequestMapping("/api")
 public class ApiPatientHoSoController {
 
     @Autowired
     private HoSoSucKhoeRepository hoSoSucKhoeRepository;
 
+    @Autowired
+    private UserService userService;
+
     // Lấy hồ sơ bệnh nhân theo ID
-    @GetMapping("/user/api/hosobenhnhan/{benhNhanId}")
-    public ResponseEntity<?> getHoSoSucKhoe(@PathVariable int benhNhanId) {
-        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);
-        if (optionalHoSo.isPresent()) {
-            return ResponseEntity.ok(optionalHoSo.get());
-        } else {
-            return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân với ID = " + benhNhanId);
+    @GetMapping("/hososuckhoe")
+    public ResponseEntity<?> getHoSoSucKhoe(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
         }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
+        return ResponseEntity.ok(optionalHoSo.get());
     }
 
     // Cập nhật hồ sơ bệnh nhân
-    @PutMapping("/user/api/hosobenhnhan/{benhNhanId}")
+    @PutMapping("/hososuckhoe")
     public ResponseEntity<?> updateHoSoSucKhoe(
-            @PathVariable int benhNhanId,
+            Principal principal,
             @RequestBody HoSoSucKhoe hoSoDetails) {
-
-        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
         if (optionalHoSo.isPresent()) {
             HoSoSucKhoe hoSo = optionalHoSo.get();
-            hoSo.setChieuCao(hoSoDetails.getChieuCao());
-            hoSo.setCanNang(hoSoDetails.getCanNang());
-            hoSo.setBirth(hoSoDetails.getBirth());
 
-            HoSoSucKhoe updated = hoSoSucKhoeRepository.save(hoSo);
+            if (hoSoDetails.getChieuCao() != null) {
+                hoSo.setChieuCao(hoSoDetails.getChieuCao());
+            }
+
+            if (hoSoDetails.getCanNang() != null) {
+                hoSo.setCanNang(hoSoDetails.getCanNang());
+            }
+
+            if (hoSoDetails.getBirth() != null) {
+                hoSo.setBirth(hoSoDetails.getBirth());
+            }
+
+            HoSoSucKhoe updated = hoSoSucKhoeRepository.createOrUpdate(hoSo);
             return ResponseEntity.ok(updated);
         } else {
-            return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân với ID = " + benhNhanId);
+            return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân");
         }
     }
 
-    @PostMapping("/user/api/hosobenhnhan")
-    public ResponseEntity<?> createHoSoSucKhoe(@RequestBody HoSoSucKhoe hoSoSucKhoe) {
-        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeRepository.findByBenhNhanId(hoSoSucKhoe.getBenhNhanId().getId());
+    @PostMapping("/hososuckhoe")
+    public ResponseEntity<?> createHoSoSucKhoe(@RequestBody HoSoSucKhoe hoSoSucKhoe, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
         if (existingHoSo.isPresent()) {
             return ResponseEntity.status(400).body("Hồ sơ bệnh nhân đã tồn tại.");
         }
-
-        HoSoSucKhoe savedHoSo = hoSoSucKhoeRepository.save(hoSoSucKhoe);
+        hoSoSucKhoe.setBenhNhanId(this.userService.getUserById(u.getId()));
+        HoSoSucKhoe savedHoSo = hoSoSucKhoeRepository.createOrUpdate(hoSoSucKhoe);
         return ResponseEntity.status(201).body(savedHoSo);
     }
 
-    @DeleteMapping("/user/api/hosobenhnhan/{benhNhanId}")
-    public ResponseEntity<?> deleteHoSoSucKhoe(@PathVariable int benhNhanId) {
-        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);
-        if (existingHoSo.isPresent()) {
-            hoSoSucKhoeRepository.delete(existingHoSo.get());
-            return ResponseEntity.status(200).body("Hồ sơ bệnh nhân đã được xóa.");
-        } else {
-            return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân với ID = " + benhNhanId);
-        }
-    }
-
+//    @DeleteMapping("/hosobenhnhan/{benhNhanId}")
+//    public ResponseEntity<?> deleteHoSoSucKhoe(@PathVariable int benhNhanId) {
+//        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);
+//        if (existingHoSo.isPresent()) {
+//            hoSoSucKhoeRepository.delete(existingHoSo.get());
+//            return ResponseEntity.status(200).body("Hồ sơ bệnh nhân đã được xóa.");
+//        } else {
+//            return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân với ID = " + benhNhanId);
+//        }
+//    }
 }

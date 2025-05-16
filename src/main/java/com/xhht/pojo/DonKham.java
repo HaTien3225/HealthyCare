@@ -4,6 +4,8 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,11 +35,15 @@ public class DonKham implements Serializable{
 
     @Column(name = "ghi_chu", columnDefinition = "varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci")
     private String ghiChu;
+    
+    @Column(name = "isPaid")
+    private Boolean isPaid;
 
     @ManyToOne( optional = false)
     @JoinColumn(name = "benh_id", referencedColumnName = "id")
     private Benh benhId;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne( optional = false)
     @JoinColumn(name = "hssk_id",referencedColumnName = "id")
     private HoSoSucKhoe hoSoSucKhoeId;
@@ -46,6 +52,7 @@ public class DonKham implements Serializable{
     @JoinColumn(name = "bac_si_id", referencedColumnName = "id")
     private User bacSiId;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "donKhamId", cascade = CascadeType.ALL)
     private Set<ChiTietDonKham> chiTietDonKhams;
     
@@ -170,6 +177,17 @@ public class DonKham implements Serializable{
         this.lichKhamId = lichKhamId;
     }
     
+
+    public Boolean getIsPaid() {
+        return isPaid;
+    }
+
+    /**
+     * @param isPaid the isPaid to set
+     */
+    public void setIsPaid(Boolean isPaid) {
+        this.isPaid = isPaid;
+    }
 
    
     

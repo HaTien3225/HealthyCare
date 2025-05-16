@@ -8,6 +8,7 @@ import com.xhht.pojo.LichKham;
 import com.xhht.pojo.User;
 import com.xhht.repositories.LichKhamRepository;
 import com.xhht.services.KhungGioService;
+import com.xhht.services.MailSenderService;
 import com.xhht.services.UserService;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +46,11 @@ public class ApiPatientLichKhamController {
 
     @Autowired
     private LichKhamRepository lichKhamRepository;
+    
+    @Autowired
+    private MailSenderService mailSenderService;
+    
+
 
     // Lấy danh sách lịch khám của bệnh nhân
     @GetMapping("/api/lichkham")
@@ -101,6 +109,12 @@ public class ApiPatientLichKhamController {
         if(lichKham.getNgay().isBefore(LocalDate.now()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("NGAY QUA KHU");    
         LichKham saved = lichKhamRepository.save(lichKham);
+        
+        String mailBody = "Da tao yeu cau dat lich kham cua bac si "+lichKham.getBacSiId().getHo() + " "+lichKham.getBacSiId().getTen()
+                +"vao ngay "+ lichKham.getNgay()+" khung gio "+ lichKham.getKhungGio().getTenKg()+", "+"vui long doi phan hoi cua bac si.";
+        
+        mailSenderService.sendEmail(u.getEmail(), "THONG BAO DA TAO YEU CAU DAT LICH KHAM BENH ", mailBody);
+        
         return ResponseEntity.ok(saved);
     }
 

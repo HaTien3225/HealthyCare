@@ -39,7 +39,7 @@ public class ApiDoctorHosobenhnhanController {
             hoSo.setCanNang(hoSoDetails.getCanNang());
             hoSo.setBirth(hoSoDetails.getBirth());
 
-            HoSoSucKhoe updated = hoSoSucKhoeRepository.save(hoSo);
+            HoSoSucKhoe updated = hoSoSucKhoeRepository.createOrUpdate(hoSo);
             return ResponseEntity.ok(updated);
         } else {
             return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân có ID = " + benhNhanId);

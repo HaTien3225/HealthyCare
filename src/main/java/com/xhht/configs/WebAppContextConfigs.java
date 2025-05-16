@@ -6,9 +6,12 @@ package com.xhht.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -27,7 +30,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
     "com.xhht.controllers",
     "com.xhht.repositories",
     "com.xhht.services",
+   
+    
 })
+
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
     @Override
@@ -47,4 +53,6 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
     public StandardServletMultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
     }
+    
+    
 }

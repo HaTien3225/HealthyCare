@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class HoSoSucKhoeRepositoryImpl implements HoSoSucKhoeRepository {
 
     @Autowired
-    private SessionFactory sessionFactory;
+    private LocalSessionFactoryBean sessionFactory;
 
     @Autowired
     private HoSoSucKhoeRepository hoSoSucKhoeRepository;
 
     @Override
     public Optional<HoSoSucKhoe> findByBenhNhanId(int benhNhanId) {
-        Session session = sessionFactory.getCurrentSession();
-        Query q = session.createQuery("FROM HoSoSucKhoe WHERE benhNhan.id = :id", HoSoSucKhoe.class);
+        Session session = sessionFactory.getObject().getCurrentSession();
+        Query q = session.createQuery("FROM HoSoSucKhoe WHERE benhNhanId.id = :id", HoSoSucKhoe.class);
         q.setParameter("id", benhNhanId);
 
         try {
@@ -35,13 +36,19 @@ public class HoSoSucKhoeRepositoryImpl implements HoSoSucKhoeRepository {
     }
 
     @Override
-    public HoSoSucKhoe save(HoSoSucKhoe hoSo) {
-        return hoSoSucKhoeRepository.save(hoSo);
+    public HoSoSucKhoe createOrUpdate(HoSoSucKhoe hoSo) {
+        Session s = this.sessionFactory.getObject().getCurrentSession();
+        if (hoSo.getId() == null) {
+            s.persist(hoSo);
+        } else {
+            s.merge(hoSo);
+        }
+        return hoSo;         
     }
 
     @Override
     public void delete(HoSoSucKhoe hoSo) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getObject().getCurrentSession();
 
         Optional<HoSoSucKhoe> optional = this.findByBenhNhanId(hoSo.getBenhNhanId().getId());
 

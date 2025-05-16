@@ -83,7 +83,7 @@ create table Khunggio(
 
 create table Lichkham(
 	id int not null auto_increment primary key,
-    ngay datetime not null,
+    ngay date not null,
     da_kham boolean default false,
     is_accept boolean default false,
     created_date date not null,
@@ -114,6 +114,7 @@ create table Donkham(
     bac_si_id int not null,
     lich_kham_id int not null,
     created_date date not null,
+    isPaid boolean default false,
     foreign key (benh_id) references Benh(id),
     foreign key (hssk_id) references HoSoSucKhoe(id),
     foreign key (bac_si_id) references User(id),
@@ -131,17 +132,11 @@ create table Chitietdonkham(
 
 create table Xetnghiem(
 	id int not null auto_increment primary key,
-    
+    mo_ta varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
     don_kham_id int not null,
     foreign key (don_kham_id) references Donkham(id) on delete restrict
 );
 
-create table Chitietxetnghiem(
-	id int not null auto_increment primary key,
-    mo_ta varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
-    xet_nghiem_id int not null,
-    foreign key (xet_nghiem_id) references Xetnghiem(id) on delete restrict
-);
 
 create table Danhgia(
 	id int not null auto_increment primary key,
@@ -259,14 +254,14 @@ INSERT INTO User (
 ) VALUES (
     'Le', 'Patient4', 'patient4', 
     '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
-    'patient4@example.com', CURDATE(),
+    'shinobu7842@gmail.com', CURDATE(),
     '098765432104', '0901234540', 
     true, NULL, NULL, 2
 ),
 (
     'Le', 'Patient5', 'patient5', 
     '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
-    'patient5@example.com', CURDATE(),
+    'shinobu7842@gmail.com', CURDATE(),
     '098765432105', '0901234550', 
     true, NULL, NULL, 2
 );
@@ -291,14 +286,12 @@ VALUES
 
 INSERT INTO Chitietdonkham (dich_vu, gia_tien, don_kham_id)
 VALUES 
-('Kham tong quat', 150.00, 1),
-('Sieu am', 250.00, 2);
+('Kham tong quat', 150000.00, 1),
+('Sieu am', 250000.00, 2);
 
-INSERT INTO Xetnghiem (don_kham_id)
-VALUES 
-(1), (2);
 
-INSERT INTO Chitietxetnghiem (mo_ta, xet_nghiem_id)
+
+INSERT INTO Xetnghiem (mo_ta, don_kham_id)
 VALUES 
 ('Ket qua binh thuong', 1),
 ('Co chi so bat thuong', 2);

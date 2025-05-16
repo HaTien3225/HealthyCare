@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
         u.setRole(role);
 
         // Upload avatar
-        if (!avatar.isEmpty()) {
+        if (avatar != null && !avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
