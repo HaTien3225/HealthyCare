@@ -48,27 +48,27 @@ public class SpringSecurityConfigs {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(requests -> requests
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/", "/home", "/profile").authenticated()
-                .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**").permitAll()
+                .requestMatchers("/css/**", "/images/**", "/js/**", "/api/**","/vnpay-return").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/doctor/**").hasRole("DOCTOR")
                 .requestMatchers("/user/**").hasRole("USER")
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .formLogin(form -> form
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
-            )
-            .logout(logout -> logout
+                )
+                .logout(logout -> logout
                 .logoutSuccessUrl("/login")
                 .permitAll()
-            );
+                );
 
         return http.build();
     }
@@ -76,10 +76,10 @@ public class SpringSecurityConfigs {
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-            "cloud_name", "dv1nnzhrq",
-            "api_key", "389747467135855",
-            "api_secret", "k0_M2bboaYFSx76BdpYZ9TTZSD4",
-            "secure", true
+                "cloud_name", "dv1nnzhrq",
+                "api_key", "389747467135855",
+                "api_secret", "k0_M2bboaYFSx76BdpYZ9TTZSD4",
+                "secure", true
         ));
         return cloudinary;
     }
@@ -87,7 +87,8 @@ public class SpringSecurityConfigs {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000/")); // React frontend
+//        config.setAllowedOrigins(List.of("http://localhost:3000/")); // React frontend
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
@@ -98,15 +99,15 @@ public class SpringSecurityConfigs {
 
         return source;
     }
-    
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("gomeow78@gmail.com");           
-        mailSender.setPassword("kkqr zlyx ymgk uzsv");              
+        mailSender.setUsername("gomeow78@gmail.com");
+        mailSender.setPassword("kkqr zlyx ymgk uzsv");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

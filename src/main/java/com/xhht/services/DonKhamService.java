@@ -26,4 +26,8 @@ public interface DonKhamService {
     List<ChiTietDonKham> getAllChiTietDonKham(int donKhamId);
 
     List<XetNghiem> getALlXetNghiem(int donKhamId);
+    
+    BigDecimal getDonKhamPrice(int donKhamId);
+    
+    void updateIsPaid(int donKhamId, boolean isPaid) ;
 }

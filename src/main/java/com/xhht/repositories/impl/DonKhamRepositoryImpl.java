@@ -8,6 +8,7 @@ import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
 import com.xhht.pojo.XetNghiem;
 import com.xhht.repositories.DonKhamRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -112,6 +113,31 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         Query<XetNghiem> q = session.createQuery("FROM XetNghiem c WHERE c.donKhamId.id = :donKhamId", XetNghiem.class);
         q.setParameter("donKhamId", donKhamId);
         return q.getResultList();
+    }
+
+    @Override
+    public BigDecimal getDonKhamPrice(int donKhamId) {
+        Session session = this.factory.getObject().getCurrentSession();
+
+        String hql = "SELECT SUM(c.giaTien) FROM ChiTietDonKham c WHERE c.donKhamId.id = :donKhamId";
+        Query<BigDecimal> query = session.createQuery(hql, BigDecimal.class);
+        query.setParameter("donKhamId", donKhamId);
+
+        BigDecimal total = query.uniqueResult();
+        return total != null ? total : BigDecimal.ZERO;
+    }
+
+    @Override
+    public void updateIsPaid(int donKhamId, boolean isPaid) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query q = session.createQuery("UPDATE DonKham SET isPaid = :isPaid WHERE id = :id");
+        q.setParameter("isPaid", isPaid);
+        q.setParameter("id", donKhamId);
+        int updated = q.executeUpdate();
+
+        if (updated == 0) {
+            throw new EntityNotFoundException("Không tìm thấy DonKham với id = " + donKhamId);
+        }
     }
 
 }

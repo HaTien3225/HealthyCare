@@ -51,4 +51,14 @@ public class DonKhamServiceImpl implements DonKhamService {
         return this.donKhamRepo.getALlXetNghiem(donKhamId);
     }
 
+    @Override
+    public BigDecimal getDonKhamPrice(int donKhamId) {
+        return this.donKhamRepo.getDonKhamPrice(donKhamId);
+    }
+
+    @Override
+    public void updateIsPaid(int donKhamId, boolean isPaid) {
+        this.donKhamRepo.updateIsPaid(donKhamId, isPaid);
+    }
+
 }

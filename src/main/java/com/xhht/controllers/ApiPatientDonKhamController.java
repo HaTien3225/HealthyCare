@@ -4,12 +4,17 @@
  */
 package com.xhht.controllers;
 
+import com.xhht.dto.HoaDonThanhToanDTO;
 import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
 import com.xhht.pojo.User;
 import com.xhht.pojo.XetNghiem;
 import com.xhht.services.DonKhamService;
 import com.xhht.services.UserService;
+import com.xhht.vnpay.Vnpay;
+import jakarta.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -113,6 +118,33 @@ public class ApiPatientDonKhamController {
 
         List<XetNghiem> xetNghiemList = this.donKhamService.getALlXetNghiem(donKhamId);
         return ResponseEntity.ok(xetNghiemList);
+    }
+    
+    
+    @GetMapping("/thanhtoan")
+    public ResponseEntity<?> thanhToan(@RequestParam(name = "donKhamId",required = true) Integer donKhamId,Principal principal,HttpServletRequest req) throws UnsupportedEncodingException{
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_USER")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        
+        DonKham dk = this.donKhamService.getDonKham(donKhamId);
+        if (dk.getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        if(dk.getIsPaid()){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN isPaid = true");
+        }
+        BigDecimal price = this.donKhamService.getDonKhamPrice(donKhamId);
+        Vnpay vnpay = new Vnpay();
+        String vnPayURL = vnpay.vnPayURLInit(price.doubleValue(),req,donKhamId);
+        
+        HoaDonThanhToanDTO hdttdto = new HoaDonThanhToanDTO(donKhamId, dk.getGhiChu(), price, vnPayURL);
+        return ResponseEntity.ok(hdttdto);      
     }
 
 }

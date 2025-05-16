@@ -4,11 +4,14 @@
  */
 package com.xhht.controllers;
 
+import com.xhht.pojo.DonKham;
 import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
 import com.xhht.services.BenhVienService;
+import com.xhht.services.DonKhamService;
 import com.xhht.services.GiayPhepHanhNgheService;
 import com.xhht.services.KhoaService;
+import com.xhht.services.MailSenderService;
 import com.xhht.services.RoleService;
 import com.xhht.services.UserService;
 import java.time.LocalDate;
@@ -36,15 +39,21 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
-    
+
     @Autowired
     private KhoaService khoaService;
-    
+
     @Autowired
     private BenhVienService benhVienService;
-    
+
     @Autowired
     private GiayPhepHanhNgheService giayPhepService;
+
+    @Autowired
+    private DonKhamService donKhamService;
+
+    @Autowired
+    private MailSenderService mailSenderService;
 
     @GetMapping("/login")
     public String loginView() {
@@ -52,13 +61,13 @@ public class UserController {
     }
 
     @PostMapping("/admin/users/create")
-    public String createUser(@ModelAttribute(value = "user") User user, RedirectAttributes redirectAttributes, 
-            @RequestParam(name = "roleId",required = true) int roleId
-            ,@RequestParam(name = "khoaid" ,required = false) String khoaIdStr 
+    public String createUser(@ModelAttribute(value = "user") User user, RedirectAttributes redirectAttributes,
+            @RequestParam(name = "roleId", required = true) int roleId,
+            @RequestParam(name = "khoaid", required = false) String khoaIdStr
     ) {
-        user.setCreatedDate(LocalDate.now());       
-        user.setRole(this.roleService.getRoleById(roleId));        
-        if(khoaIdStr != null && !khoaIdStr.isEmpty()){
+        user.setCreatedDate(LocalDate.now());
+        user.setRole(this.roleService.getRoleById(roleId));
+        if (khoaIdStr != null && !khoaIdStr.isEmpty()) {
             Integer khoaId = Integer.parseInt(khoaIdStr);
             user.setKhoaId(this.khoaService.getKhoaByKhoaId(khoaId));
         }
@@ -86,7 +95,7 @@ public class UserController {
         String kw = params.get("kw");
         String page = params.getOrDefault("page", "1");
         List<User> users = this.userService.getAllUser(params);
-        List<Role> roles = this.roleService.getAllRole();       
+        List<Role> roles = this.roleService.getAllRole();
         model.addAttribute("kwr", kw);
         model.addAttribute("page", page);
         model.addAttribute("user", users);
@@ -99,42 +108,65 @@ public class UserController {
     public String userDetailView(Model model, @PathVariable(value = "id", required = true) int id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user", user);
-        model.addAttribute("role",user.getRole().getRole());
-        model.addAttribute("giayphep",user.getGiayPhepHanhNgheId());
-        if(user.getRole().getRole().equals("ROLE_DOCTOR")){
-            model.addAttribute("tenkhoa",user.getKhoaId().getTenKhoa());
-            model.addAttribute("tenbenhvien",user.getKhoaId().getBenhvien().getTenBenhVien());
-        }
-        else{
-            model.addAttribute("tenkhoa",null);
-            model.addAttribute("tenbenhvien",null);
+        model.addAttribute("role", user.getRole().getRole());
+        model.addAttribute("giayphep", user.getGiayPhepHanhNgheId());
+        if (user.getRole().getRole().equals("ROLE_DOCTOR")) {
+            model.addAttribute("tenkhoa", user.getKhoaId().getTenKhoa());
+            model.addAttribute("tenbenhvien", user.getKhoaId().getBenhvien().getTenBenhVien());
+        } else {
+            model.addAttribute("tenkhoa", null);
+            model.addAttribute("tenbenhvien", null);
         }
         return "user_detail_admin";
     }
+
     @PostMapping("/admin/users/{userid}")
-    public String updateUserStatusandLicenseStatus(@PathVariable(name = "userid",required = true) int userid,
+    public String updateUserStatusandLicenseStatus(@PathVariable(name = "userid", required = true) int userid,
             @RequestParam Map<String, String> params,
-            RedirectAttributes redirectAttributes){
+            RedirectAttributes redirectAttributes) {
         try {
-            if(this.userService.getUserById(userid).getGiayPhepHanhNgheId() != null){
+            if (this.userService.getUserById(userid).getGiayPhepHanhNgheId() != null) {
                 Boolean isValid = false;
                 String isValidStr = params.get("isValid");
-                if(isValidStr != null &&isValidStr.equals("true"))
+                if (isValidStr != null && isValidStr.equals("true")) {
                     isValid = true;
+                }
 
-                String giayPhepId = params.get("giayphepid");            
+                String giayPhepId = params.get("giayphepid");
                 giayPhepService.updateGiayPhepStatus(Integer.parseInt(giayPhepId), isValid);
             }
-            
+
             Boolean isActive = false;
             String isActiveStr = params.get("isActive");
-            if(isActiveStr != null &&isActiveStr.equals("true"))
+            if (isActiveStr != null && isActiveStr.equals("true")) {
                 isActive = true;
+            }
             userService.updateUserStatus(userid, isActive);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật user thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật user thất bại: " + e.getMessage());
         }
-        return "redirect:/admin/users";      
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping("/vnpay-return")
+    public String handleVNPayReturn(@RequestParam Map<String, String> params, Model model) {
+        // Kiểm tra response code từ VNPay
+        String responseCode = params.get("vnp_ResponseCode");
+
+        if ("00".equals(responseCode)) {
+            String donKhamId = params.get("vnp_OrderInfo");
+            this.donKhamService.updateIsPaid(Integer.parseInt(donKhamId), true);
+            DonKham dk = donKhamService.getDonKham(Integer.parseInt(donKhamId));
+            String mailBody = "Quy khach da thanh toan thanh cong don kham: id "+String.valueOf(donKhamId)+", vao tong tien : "+
+                    Double.parseDouble(params.get("vnp_Amount"))/100 + "vao ngay : "+LocalDate.now();
+
+            mailSenderService.sendEmail(dk.getHoSoSucKhoeId().getBenhNhanId().getEmail(), "THONG BAO THANH TOAN THANH CONG DON KHAM ", mailBody);
+            model.addAttribute("nofi", "THANH TOAN THANH CONG");
+
+        } else {
+            model.addAttribute("nofi", "THANH TOAN THAT BAI");
+        }
+        return "vnpay_return";
     }
 }

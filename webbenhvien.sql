@@ -254,14 +254,14 @@ INSERT INTO User (
 ) VALUES (
     'Le', 'Patient4', 'patient4', 
     '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
-    'patient4@example.com', CURDATE(),
+    'shinobu7842@gmail.com', CURDATE(),
     '098765432104', '0901234540', 
     true, NULL, NULL, 2
 ),
 (
     'Le', 'Patient5', 'patient5', 
     '$2a$10$soTjFAQani8fVvQ/LLhcF.y6xv2DH/.zbgLP4sigZg1D4y6x1F3ie', 
-    'patient5@example.com', CURDATE(),
+    'shinobu7842@gmail.com', CURDATE(),
     '098765432105', '0901234550', 
     true, NULL, NULL, 2
 );
@@ -286,12 +286,12 @@ VALUES
 
 INSERT INTO Chitietdonkham (dich_vu, gia_tien, don_kham_id)
 VALUES 
-('Kham tong quat', 150.00, 1),
-('Sieu am', 250.00, 2);
+('Kham tong quat', 150000.00, 1),
+('Sieu am', 250000.00, 2);
 
 
 
-INSERT INTO Chitietxetnghiem (mo_ta, don_kham_id)
+INSERT INTO Xetnghiem (mo_ta, don_kham_id)
 VALUES 
 ('Ket qua binh thuong', 1),
 ('Co chi so bat thuong', 2);
