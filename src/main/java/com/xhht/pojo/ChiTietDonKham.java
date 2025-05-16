@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,7 +35,8 @@ public class ChiTietDonKham implements Serializable{
     @Column(name = "gia_tien", precision = 10, scale = 2)
     private BigDecimal giaTien;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToOne( optional = false)
     @JoinColumn(name = "don_kham_id", referencedColumnName = "id")
     private DonKham donKhamId;
 

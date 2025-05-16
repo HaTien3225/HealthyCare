@@ -4,7 +4,9 @@
  */
 package com.xhht.repositories.impl;
 
+import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
+import com.xhht.pojo.XetNghiem;
 import com.xhht.repositories.DonKhamRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,7 +49,7 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
 
     @Override
     public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date) {
-        Session session =  this.factory.getObject().getCurrentSession();
+        Session session = this.factory.getObject().getCurrentSession();
 
         StringBuilder hql = new StringBuilder("FROM DonKham dk WHERE ");
 
@@ -86,6 +88,30 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         query.setMaxResults(pageSize);
 
         return query.getResultList();
+    }
+
+    @Override
+    public DonKham getDonKham(int donKhamId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<DonKham> q = session.createQuery("FROM DonKham WHERE id = :id", DonKham.class);
+        q.setParameter("id", donKhamId);
+        return q.getSingleResult();
+    }
+
+    @Override
+    public List<ChiTietDonKham> getAllChiTietDonKham(int donKhamId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<ChiTietDonKham> q = session.createQuery("FROM ChiTietDonKham c WHERE c.donKhamId.id = :donKhamId", ChiTietDonKham.class);
+        q.setParameter("donKhamId", donKhamId);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<XetNghiem> getALlXetNghiem(int donKhamId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<XetNghiem> q = session.createQuery("FROM XetNghiem c WHERE c.donKhamId.id = :donKhamId", XetNghiem.class);
+        q.setParameter("donKhamId", donKhamId);
+        return q.getResultList();
     }
 
 }

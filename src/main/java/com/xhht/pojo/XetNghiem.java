@@ -4,6 +4,7 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +31,7 @@ public class XetNghiem implements Serializable {
     private Integer id;
     @Column(name = "mo_ta", nullable = false, length = 255)
     private String moTa;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(optional = false)
     @JoinColumn(name = "don_kham_id", referencedColumnName = "id")
     private DonKham donKhamId;
@@ -60,20 +62,6 @@ public class XetNghiem implements Serializable {
      */
     public void setDonKhamId(DonKham donKhamId) {
         this.donKhamId = donKhamId;
-    }
-
-    /**
-     * @return the chiTietXetNghiems
-     */
-    public Set<ChiTietXetNghiem> getChiTietXetNghiems() {
-        return chiTietXetNghiems;
-    }
-
-    /**
-     * @param chiTietXetNghiems the chiTietXetNghiems to set
-     */
-    public void setChiTietXetNghiems(Set<ChiTietXetNghiem> chiTietXetNghiems) {
-        this.chiTietXetNghiems = chiTietXetNghiems;
     }
 
     /**
