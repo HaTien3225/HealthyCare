@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Apis, { endpoints } from '../configs/Apis';
 
 const AddXetNghiem = () => {
   const { donKhamId } = useParams();
-  const [xetNghiemTen, setXetNghiemTen] = useState('');
-  const [xetNghiemKetQua, setXetNghiemKetQua] = useState('');
+  const [moTa, setMoTa] = useState('');
   const [message, setMessage] = useState('');
+   const navigate = useNavigate();
 
   const handleAddXetNghiem = async () => {
     try {
-      await axios.post(`/api/donkham/${donKhamId}/xetnghiem`, {
-        tenXetNghiem: xetNghiemTen,
-        ketQua: xetNghiemKetQua,
+      await Apis.post(endpoints.add_xet_nghiem(donKhamId), {
+        moTa
       });
       setMessage('Thêm xét nghiệm thành công!');
-      setXetNghiemTen('');
-      setXetNghiemKetQua('');
+      setMoTa('');
     } catch (err) {
       setMessage(err.response?.data || 'Lỗi khi thêm xét nghiệm');
     }
+  };
+  const handleNext = () => {
+    navigate(`/doctor/accepted`);
   };
 
   return (
@@ -27,17 +29,13 @@ const AddXetNghiem = () => {
       <h2>Thêm xét nghiệm cho đơn khám</h2>
       <input
         type="text"
-        placeholder="Tên xét nghiệm"
-        value={xetNghiemTen}
-        onChange={(e) => setXetNghiemTen(e.target.value)}
+        placeholder="Mô tả xét nghiệm"
+        value={moTa}
+        onChange={(e) => setMoTa(e.target.value)}
       />
-      <input
-        type="text"
-        placeholder="Kết quả"
-        value={xetNghiemKetQua}
-        onChange={(e) => setXetNghiemKetQua(e.target.value)}
-      />
+
       <button onClick={handleAddXetNghiem}>Thêm xét nghiệm</button>
+      <button onClick={handleNext}>Hoàn tất</button>
 
       <p style={{ color: 'green', marginTop: '15px' }}>{message}</p>
     </div>

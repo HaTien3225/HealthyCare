@@ -150,7 +150,7 @@ public class ApiDoctorLichKhamController {
 
 // Tìm bệnh trong kho dữ liệu theo từ khóa (tên bệnh)
     @GetMapping("/benh/search")
-    public ResponseEntity<?> searchBenh(@RequestParam String keyword) {
+    public ResponseEntity<?> searchBenh(@RequestParam("keyword") String keyword) {
         List<Benh> benhList = benhRepository.findByTenBenh(keyword);
         return ResponseEntity.ok(benhList);
     }
@@ -164,7 +164,6 @@ public class ApiDoctorLichKhamController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy đơn khám!");
         }
 
-        
         if (benhOpt == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy bệnh!");
         }
@@ -176,6 +175,17 @@ public class ApiDoctorLichKhamController {
         donKhamRepository.save(donKham);
 
         return ResponseEntity.ok(donKham);
+    }
+
+    @GetMapping("/donkham/{donKhamId}/benh")
+    public ResponseEntity<?> getBenhByDonKham(@PathVariable("donKhamId") Long donKhamId) {
+        Optional<Benh> benhOpt = donKhamRepository.getBenhByDonKham(donKhamId);
+        if (benhOpt.isPresent()) {
+            return ResponseEntity.ok(benhOpt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Không tìm thấy bệnh cho đơn khám id = " + donKhamId);
+        }
     }
 
 }

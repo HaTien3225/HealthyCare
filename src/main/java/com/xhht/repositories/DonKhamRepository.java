@@ -4,6 +4,7 @@
  */
 package com.xhht.repositories;
 
+import com.xhht.pojo.Benh;
 import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
 import com.xhht.pojo.XetNghiem;
@@ -24,5 +25,7 @@ public interface DonKhamRepository {
     BigDecimal getDonKhamPrice(int donKhamId);
     void updateIsPaid(int donKhamId,boolean isPaid);
     DonKham save(DonKham donKham);
+
+    Optional<Benh> getBenhByDonKham(Long donKhamId);
     
 }

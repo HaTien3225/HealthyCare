@@ -4,6 +4,7 @@
  */
 package com.xhht.repositories.impl;
 
+import com.xhht.pojo.Benh;
 import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
 import com.xhht.pojo.XetNghiem;
@@ -109,8 +110,6 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         return q.getResultList();
     }
 
-    
-
     @Override
     public BigDecimal getDonKhamPrice(int donKhamId) {
         Session session = this.factory.getObject().getCurrentSession();
@@ -141,6 +140,21 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         Session session = this.factory.getObject().getCurrentSession();
         session.saveOrUpdate(donKham);
         return donKham;
+    }
+
+    @Override
+    public Optional<Benh> getBenhByDonKham(Long donKhamId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<Benh> query = session.createQuery(
+                "SELECT d.benhId FROM DonKham d WHERE d.id = :donKhamId", Benh.class);
+        query.setParameter("donKhamId", donKhamId);
+
+        List<Benh> result = query.getResultList();
+        if (result.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(result.get(0));
+        }
     }
 
 }

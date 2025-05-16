@@ -20,6 +20,11 @@ export const endpoints = {
     'acceptedLichKham': (bacSiId) => `/api/doctor/lichkham/accepted?bacSiId=${bacSiId}`,
     'updateStatusLichKham': (id) => `/api/doctor/lichkham/${id}/update-status`,
      'donkham': (id) => `/api/doctor/lichkham/${id}/donkham`,
+     'get_benh': (donKhamId) => `/api/doctor/donkham/${donKhamId}/benh`,
+     'search_benh': (keyword) => `/api/doctor/benh/search?keyword=${keyword}`,
+     'add_benh': (donKhamId, benhId) => `/api/doctor/donkham/${donKhamId}/benh/${benhId}`,
+     'add_xet_nghiem': (donKhamId) => `/api/doctor/donkham/${donKhamId}/xetnghiem`,
+
 }
 
 export const authApis = () => {

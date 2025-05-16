@@ -39,8 +39,8 @@ public class DonKham implements Serializable{
     @Column(name = "isPaid")
     private Boolean isPaid;
 
-    @ManyToOne( optional = false)
-    @JoinColumn(name = "benh_id", referencedColumnName = "id")
+    @ManyToOne( optional = true)
+    @JoinColumn(name = "benh_id", referencedColumnName = "id", nullable = true)
     private Benh benhId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

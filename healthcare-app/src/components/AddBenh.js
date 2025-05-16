@@ -1,69 +1,93 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Apis, { endpoints } from '../configs/Apis';
 
 const AddBenh = () => {
   const { donKhamId } = useParams();
-  const [benhName, setBenhName] = useState('');
-  const [benhs, setBenhs] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [assignedBenhs, setAssignedBenhs] = useState([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const loadBenhs = async () => {
+  // Load các bệnh đã được gán cho đơn khám
+  const loadAssignedBenhs = async () => {
     try {
-      const response = await axios.get(`/api/donkham/${donKhamId}/benh`);
-      setBenhs(response.data);
+      const res = await Apis.get(endpoints.get_benh(donKhamId));
+      setAssignedBenhs(res.data);
     } catch (err) {
-      console.error('Lỗi khi load danh sách bệnh', err);
+      console.error('Lỗi khi load danh sách bệnh đã gán:', err);
     }
   };
 
-  useEffect(() => {
-    loadBenhs();
-  }, [donKhamId]);
-
-  const handleAddBenh = async () => {
+  // Tìm bệnh theo từ khóa
+  const searchBenh = async () => {
     try {
-      await axios.post(`/api/donkham/${donKhamId}/benh`, {
-        ten: benhName,
-      });
-      setMessage('Thêm bệnh thành công!');
-      setBenhName('');
-      await loadBenhs();
+      const res = await Apis.get(endpoints.search_benh(keyword));
+      setSearchResults(res.data);
+    } catch (err) {
+      console.error('Lỗi khi tìm bệnh:', err);
+    }
+  };
+
+  // Gán bệnh đã chọn vào đơn khám
+  const assignBenh = async (benhId) => {
+    try {
+      await Apis.post(endpoints.add_benh(donKhamId, benhId));
+      setMessage('Đã thêm bệnh vào đơn khám!');
+      setKeyword('');
+      setSearchResults([]);
+      await loadAssignedBenhs();
     } catch (err) {
       setMessage(err.response?.data || 'Lỗi khi thêm bệnh');
     }
   };
 
   const handleNext = () => {
-    // Chuyển sang trang thêm xét nghiệm
     navigate(`/doctor/donkham/${donKhamId}/themxetnghiem`);
   };
+
+  useEffect(() => {
+    loadAssignedBenhs();
+  }, [donKhamId]);
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px' }}>
       <h2>Thêm bệnh vào đơn khám</h2>
+
       <input
         type="text"
-        placeholder="Tên bệnh"
-        value={benhName}
-        onChange={(e) => setBenhName(e.target.value)}
+        placeholder="Nhập tên bệnh để tìm"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
       />
-      <button onClick={handleAddBenh}>Thêm bệnh</button>
-      <button onClick={handleNext} style={{ marginLeft: '10px' }}>
-        Tiếp tục thêm xét nghiệm
-      </button>
+      <button onClick={searchBenh}>Tìm bệnh</button>
 
-      <h4>Danh sách bệnh đã thêm</h4>
-      {benhs.length === 0 ? (
+      <ul>
+        {searchResults.map((b, idx) => (
+          <li key={b.id}>
+            {b.tenBenh}
+            <button
+              style={{ marginLeft: '10px' }}
+              onClick={() => assignBenh(b.id)}
+            >
+              Thêm vào đơn khám
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <h4>Danh sách bệnh đã gán</h4>
+      {assignedBenhs.length === 0 ? (
         <p>Chưa có bệnh nào được thêm.</p>
       ) : (
         <ul>
-          {benhs.map((b, idx) => (
-            <li key={idx}>{b.ten}</li>
-          ))}
+          <li>{assignedBenhs.tenBenh}</li>
         </ul>
       )}
+
+      <button onClick={handleNext}>Tiếp tục thêm xét nghiệm</button>
 
       <p style={{ color: 'green', marginTop: '15px' }}>{message}</p>
     </div>

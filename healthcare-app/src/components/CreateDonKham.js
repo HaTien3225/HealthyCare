@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { endpoints } from '../configs/Apis';
+import Apis, { endpoints } from '../configs/Apis';
 
 const CreateDonKham = () => {
   const { lichKhamId } = useParams();
@@ -11,7 +10,7 @@ const CreateDonKham = () => {
 
   const handleCreateDonKham = async () => {
     try {
-      const response = await axios.post(endpoints.donkham(lichKhamId), {
+      const response = await Apis.post(endpoints.donkham(lichKhamId), {
         ghiChu,
       });
       setMessage('Tạo đơn khám thành công!');
