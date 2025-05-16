@@ -19,6 +19,7 @@ export const endpoints = {
     'reject': (id) => `/api/doctor/lichkham/${id}/reject`,
     'acceptedLichKham': (bacSiId) => `/api/doctor/lichkham/accepted?bacSiId=${bacSiId}`,
     'updateStatusLichKham': (id) => `/api/doctor/lichkham/${id}/update-status`,
+     'donkham': (id) => `/api/doctor/lichkham/${id}/donkham`,
 }
 
 export const authApis = () => {

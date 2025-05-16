@@ -57,6 +57,8 @@ const Header = () => {
                             <>
                                 <Link to="/doctor/pending" className="nav-link">Lịch khám chờ duyệt</Link>
                                 <Link to="/doctor/accepted" className="nav-link">Lịch khám đã chấp nhận</Link>
+                               
+                                
                             </>
                         )}
                     </Nav>

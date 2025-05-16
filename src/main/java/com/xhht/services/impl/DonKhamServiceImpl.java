@@ -12,6 +12,7 @@ import com.xhht.services.DonKhamService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class DonKhamServiceImpl implements DonKhamService {
     }
 
     @Override
-    public DonKham getDonKham(int donKhamId) {
+    public Optional<DonKham> getDonKham(int donKhamId) {
         return this.donKhamRepo.getDonKham(donKhamId);
     }
 
@@ -46,10 +47,6 @@ public class DonKhamServiceImpl implements DonKhamService {
         return this.donKhamRepo.getAllChiTietDonKham(donKhamId);
     }
 
-    @Override
-    public List<XetNghiem> getALlXetNghiem(int donKhamId) {
-        return this.donKhamRepo.getALlXetNghiem(donKhamId);
-    }
 
     @Override
     public BigDecimal getDonKhamPrice(int donKhamId) {

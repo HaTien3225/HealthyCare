@@ -11,6 +11,7 @@ import com.xhht.pojo.User;
 import com.xhht.pojo.XetNghiem;
 import com.xhht.services.DonKhamService;
 import com.xhht.services.UserService;
+import com.xhht.services.XetNghiemService;
 import com.xhht.vnpay.Vnpay;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,9 @@ public class ApiPatientDonKhamController {
     private DonKhamService donKhamService;
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private XetNghiemService xetNghiemService;
 
     @GetMapping("/donkham")
     public ResponseEntity<?> listDonKham(@RequestParam(name = "kw", required = false) String kw,
@@ -75,8 +80,8 @@ public class ApiPatientDonKhamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
 
-        DonKham dk = this.donKhamService.getDonKham(id);
-        if (dk.getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        Optional<DonKham> dk = this.donKhamService.getDonKham(id);
+        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         return ResponseEntity.ok(dk);
@@ -92,8 +97,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        DonKham dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
+        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         List<ChiTietDonKham> chiTietList = this.donKhamService.getAllChiTietDonKham(donKhamId);
@@ -111,12 +116,12 @@ public class ApiPatientDonKhamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         
-        DonKham dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
+        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
 
-        List<XetNghiem> xetNghiemList = this.donKhamService.getALlXetNghiem(donKhamId);
+        List<XetNghiem> xetNghiemList = this.xetNghiemService.getALlXetNghiem(donKhamId);
         return ResponseEntity.ok(xetNghiemList);
     }
     
@@ -132,18 +137,18 @@ public class ApiPatientDonKhamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         
-        DonKham dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
+        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        if(dk.getIsPaid()){
+        if(dk.get().getIsPaid()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN isPaid = true");
         }
         BigDecimal price = this.donKhamService.getDonKhamPrice(donKhamId);
         Vnpay vnpay = new Vnpay();
         String vnPayURL = vnpay.vnPayURLInit(price.doubleValue(),req,donKhamId);
         
-        HoaDonThanhToanDTO hdttdto = new HoaDonThanhToanDTO(donKhamId, dk.getGhiChu(), price, vnPayURL);
+        HoaDonThanhToanDTO hdttdto = new HoaDonThanhToanDTO(donKhamId, dk.get().getGhiChu(), price, vnPayURL);
         return ResponseEntity.ok(hdttdto);      
     }
 

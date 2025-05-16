@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class BenhRepositoryImpl implements BenhRepository{
+public class BenhRepositoryImpl implements BenhRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
@@ -47,4 +47,20 @@ public class BenhRepositoryImpl implements BenhRepository{
         query.setParameter("id", id);
         return query.getSingleResult();
     }
+
+    @Override
+    public Benh save(Benh benh) {
+        Session session = this.factory.getObject().getCurrentSession();
+        session.saveOrUpdate(benh);
+        return benh;
+    }
+
+    @Override
+    public List<Benh> findByTenBenh(String keyword) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query<Benh> query = s.createQuery("FROM Benh b WHERE LOWER(b.tenBenh) LIKE :kw", Benh.class);
+        query.setParameter("kw", "%" + keyword.toLowerCase() + "%");
+        return query.getResultList();
+    }
+
 }

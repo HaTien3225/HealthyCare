@@ -1,13 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { Table, Alert, Form } from "react-bootstrap";
-import Apis, { endpoints } from "../configs/Apis"; // Nhớ kiểm tra đúng đường dẫn import
+import { useNavigate } from "react-router-dom";
+import Apis, { endpoints } from "../configs/Apis";
 import { MyUserContext } from "../configs/Contexts";
 
 const AcceptedLichKham = () => {
   const [lichKhams, setLichKhams] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const user=useContext(MyUserContext);
+  const user = useContext(MyUserContext);
+  const navigate = useNavigate();
 
   const fetchAccepted = async () => {
     try {
@@ -47,6 +49,7 @@ const AcceptedLichKham = () => {
             <th>Bệnh nhân</th>
             <th>Email</th>
             <th>Đã khám</th>
+            <th>Khám bệnh</th>
           </tr>
         </thead>
         <tbody>
@@ -61,6 +64,13 @@ const AcceptedLichKham = () => {
                   checked={lk.daKham} 
                   onChange={e => handleStatusChange(lk.id, e.target.checked)} 
                 />
+              </td>
+              <td>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => navigate(`/doctor/lichkham/${lk.id}/taodon`)}>
+                  Khám bệnh
+                </button>
               </td>
             </tr>
           ))}

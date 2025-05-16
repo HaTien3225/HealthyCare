@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +93,12 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
     }
 
     @Override
-    public DonKham getDonKham(int donKhamId) {
+    public Optional<DonKham> getDonKham(int donKhamId) {
         Session session = this.factory.getObject().getCurrentSession();
         Query<DonKham> q = session.createQuery("FROM DonKham WHERE id = :id", DonKham.class);
         q.setParameter("id", donKhamId);
-        return q.getSingleResult();
+        DonKham result = q.uniqueResult();
+        return Optional.ofNullable(result);
     }
 
     @Override
@@ -107,13 +109,7 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         return q.getResultList();
     }
 
-    @Override
-    public List<XetNghiem> getALlXetNghiem(int donKhamId) {
-        Session session = this.factory.getObject().getCurrentSession();
-        Query<XetNghiem> q = session.createQuery("FROM XetNghiem c WHERE c.donKhamId.id = :donKhamId", XetNghiem.class);
-        q.setParameter("donKhamId", donKhamId);
-        return q.getResultList();
-    }
+    
 
     @Override
     public BigDecimal getDonKhamPrice(int donKhamId) {
@@ -138,6 +134,13 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         if (updated == 0) {
             throw new EntityNotFoundException("Không tìm thấy DonKham với id = " + donKhamId);
         }
+    }
+
+    @Override
+    public DonKham save(DonKham donKham) {
+        Session session = this.factory.getObject().getCurrentSession();
+        session.saveOrUpdate(donKham);
+        return donKham;
     }
 
 }

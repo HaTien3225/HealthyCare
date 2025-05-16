@@ -14,4 +14,7 @@ import java.util.List;
 public interface BenhRepository {
     List<Benh> getAllBenhByKhoaId(int id,int page, int pageSize);
     Benh getBenhById(int id);
+    Benh save(Benh benh);
+    List<Benh> findByTenBenh(String keyword);
+
 }

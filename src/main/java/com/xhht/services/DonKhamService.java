@@ -10,6 +10,7 @@ import com.xhht.pojo.XetNghiem;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -21,11 +22,11 @@ public interface DonKhamService {
 
     List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date);
 
-    DonKham getDonKham(int donKhamId);
+    Optional<DonKham> getDonKham(int donKhamId);
 
     List<ChiTietDonKham> getAllChiTietDonKham(int donKhamId);
 
-    List<XetNghiem> getALlXetNghiem(int donKhamId);
+    
     
     BigDecimal getDonKhamPrice(int donKhamId);
     

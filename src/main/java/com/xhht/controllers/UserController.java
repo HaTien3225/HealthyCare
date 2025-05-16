@@ -9,6 +9,7 @@ import com.xhht.pojo.Role;
 import com.xhht.pojo.User;
 import com.xhht.services.BenhVienService;
 import com.xhht.services.DonKhamService;
+import com.xhht.services.EmailService;
 import com.xhht.services.GiayPhepHanhNgheService;
 import com.xhht.services.KhoaService;
 import com.xhht.services.MailSenderService;
@@ -17,6 +18,7 @@ import com.xhht.services.UserService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,7 +55,7 @@ public class UserController {
     private DonKhamService donKhamService;
 
     @Autowired
-    private MailSenderService mailSenderService;
+    private EmailService mailSenderService;
 
     @GetMapping("/login")
     public String loginView() {
@@ -157,11 +159,11 @@ public class UserController {
         if ("00".equals(responseCode)) {
             String donKhamId = params.get("vnp_OrderInfo");
             this.donKhamService.updateIsPaid(Integer.parseInt(donKhamId), true);
-            DonKham dk = donKhamService.getDonKham(Integer.parseInt(donKhamId));
+            Optional<DonKham> dk = donKhamService.getDonKham(Integer.parseInt(donKhamId));
             String mailBody = "Quy khach da thanh toan thanh cong don kham: id "+String.valueOf(donKhamId)+", vao tong tien : "+
                     Double.parseDouble(params.get("vnp_Amount"))/100 + "vao ngay : "+LocalDate.now();
 
-            mailSenderService.sendEmail(dk.getHoSoSucKhoeId().getBenhNhanId().getEmail(), "THONG BAO THANH TOAN THANH CONG DON KHAM ", mailBody);
+            mailSenderService.sendSimpleEmail(dk.get().getHoSoSucKhoeId().getBenhNhanId().getEmail(), "THONG BAO THANH TOAN THANH CONG DON KHAM ", mailBody);
             model.addAttribute("nofi", "THANH TOAN THANH CONG");
 
         } else {

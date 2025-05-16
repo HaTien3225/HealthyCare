@@ -11,10 +11,12 @@ import { useReducer } from "react";
 import MyUserReducer from "./reducers/MyUserReducer";
 import DoctorHome from "./components/DoctorHome";
 import UserHome from "./components/UserHome";
-import DoctorSchedule from "./components/DoctorSchedule";
 import ProFileUser from "./components/ProFileUser";
 import PendingLichKham from "./components/PendingLichKham";
 import AcceptedLichKham from "./components/AcceptedLichKham";
+import CreateDonKham from "./components/CreateDonKham.js";
+import AddBenh from "./components/AddBenh.js";
+import AddXetNghiem from "./components/AddXetNghiem.js";
 
 
 const App = () => {
@@ -34,10 +36,12 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/doctor" element={<DoctorHome />} />
               <Route path="/user" element={<UserHome />} />
-              <Route path="/doctor/schedule" element={<DoctorSchedule />} />
               <Route path="/profile" element={<ProFileUser />} />
               <Route path="/doctor/pending" element={<PendingLichKham />} />
               <Route path="/doctor/accepted" element={<AcceptedLichKham />} />
+              <Route path="/doctor/lichkham/:lichKhamId/taodon" element={<CreateDonKham />} />
+              <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
+              <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
             </Routes>
           </Container>
 
