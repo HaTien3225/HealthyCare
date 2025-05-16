@@ -5,6 +5,7 @@
 package com.xhht.pojo;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,16 +24,15 @@ import java.util.Set;
 @Entity
 @Table(name = "xetnghiem")
 public class XetNghiem implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name = "mo_ta", nullable = false, length = 255)
+    private String moTa;
     @ManyToOne(optional = false)
     @JoinColumn(name = "don_kham_id", referencedColumnName = "id")
     private DonKham donKhamId;
-    
-    @OneToMany(mappedBy = "xetNghiemId",cascade = CascadeType.ALL)
-    private Set<ChiTietXetNghiem> chiTietXetNghiems;
 
     /**
      * @return the id
@@ -75,5 +75,19 @@ public class XetNghiem implements Serializable {
     public void setChiTietXetNghiems(Set<ChiTietXetNghiem> chiTietXetNghiems) {
         this.chiTietXetNghiems = chiTietXetNghiems;
     }
-    
+
+    /**
+     * @return the moTa
+     */
+    public String getMoTa() {
+        return moTa;
+    }
+
+    /**
+     * @param moTa the moTa to set
+     */
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
 }

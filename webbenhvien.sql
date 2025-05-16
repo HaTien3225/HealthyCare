@@ -132,17 +132,11 @@ create table Chitietdonkham(
 
 create table Xetnghiem(
 	id int not null auto_increment primary key,
-    
+    mo_ta varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
     don_kham_id int not null,
     foreign key (don_kham_id) references Donkham(id) on delete restrict
 );
 
-create table Chitietxetnghiem(
-	id int not null auto_increment primary key,
-    mo_ta varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci not null,
-    xet_nghiem_id int not null,
-    foreign key (xet_nghiem_id) references Xetnghiem(id) on delete restrict
-);
 
 create table Danhgia(
 	id int not null auto_increment primary key,
@@ -295,11 +289,9 @@ VALUES
 ('Kham tong quat', 150.00, 1),
 ('Sieu am', 250.00, 2);
 
-INSERT INTO Xetnghiem (don_kham_id)
-VALUES 
-(1), (2);
 
-INSERT INTO Chitietxetnghiem (mo_ta, xet_nghiem_id)
+
+INSERT INTO Chitietxetnghiem (mo_ta, don_kham_id)
 VALUES 
 ('Ket qua binh thuong', 1),
 ('Co chi so bat thuong', 2);
