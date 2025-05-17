@@ -33,8 +33,8 @@ public class DonKhamServiceImpl implements DonKhamService {
     }
 
     @Override
-    public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date) {
-        return this.donKhamRepo.getAllDonKham(userId, isBenhNhan, page, pageSize, kw, date);
+    public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date,Boolean isPaid) {
+        return this.donKhamRepo.getAllDonKham(userId, isBenhNhan, page, pageSize, kw, date, isPaid);
     }
 
     @Override

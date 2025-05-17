@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 public interface DonKhamRepository {
     BigDecimal getTotalRevenue(int month, int year);
-    List<DonKham> getAllDonKham(int userId,boolean isBenhNhan,int page,int pageSize,String kw,LocalDate date);
+    List<DonKham> getAllDonKham(int userId,boolean isBenhNhan,int page,int pageSize,String kw,LocalDate date,Boolean isPaid);
     Optional<DonKham> getDonKham(int donKhamId);
     List<ChiTietDonKham> getAllChiTietDonKham(int donKhamId);
     BigDecimal getDonKhamPrice(int donKhamId);

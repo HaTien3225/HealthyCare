@@ -27,7 +27,10 @@ export const endpoints = {
 
     //user api
     "hososuckhoe": "/api/hososuckhoe",
-    "donkham": "/api/donkham",
+    "donkhamuser": "/api/donkham",
+    "chitietdonkham" : "/api/chitietdonkham",
+    "xetnghiem":"/api/xetnghiem",
+    "thanhtoan":"/api/thanhtoan",
 }
 
 export const authApis = () => {

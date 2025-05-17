@@ -72,7 +72,14 @@ const Header = () => {
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="#action/3.4">Đặt lịch khám</NavDropdown.Item>
                                 </NavDropdown>
-                                <Link to="#" className="nav-link">Đánh giá bác sĩ</Link>
+                                 <NavDropdown
+                                    id="nav-dropdown-dark-example"
+                                    title="Đánh giá"
+                                    menuVariant="dark">
+                                    <NavDropdown.Item href="#action/3.3">Đánh giá bác sĩ</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">Xem đánh giá</NavDropdown.Item>
+                                </NavDropdown>
                                 <Link to="#" className="nav-link">Thanh toán</Link>
                             </>
                         )}

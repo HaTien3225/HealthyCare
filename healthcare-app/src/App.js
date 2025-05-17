@@ -19,6 +19,8 @@ import AddBenh from "./components/AddBenh.js";
 import AddXetNghiem from "./components/AddXetNghiem.js";
 import HoSoSucKhoeUser from "./components/HoSoSucKhoeUser.js";
 import HoSoSucKhoeCreate from "./components/HoSoSucKhoeCreate.js";
+import ChiTietDonKham from "./components/ChiTietDonKham.js";
+import ThanhToan from "./components/ThanhToan.js";
 
 
 const App = () => {
@@ -47,6 +49,8 @@ const App = () => {
               {/*user */}
               <Route path="/hososuckhoe" element={<HoSoSucKhoeUser/>}/>
               <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate/>}/>
+              <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />}/>
+              <Route path="/thanhtoan/:id" element={<ThanhToan />}/>
             </Routes>
           </Container>
 

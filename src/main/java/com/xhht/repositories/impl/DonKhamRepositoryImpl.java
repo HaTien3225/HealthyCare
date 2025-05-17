@@ -51,7 +51,7 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
     }
 
     @Override
-    public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date) {
+    public List<DonKham> getAllDonKham(int userId, boolean isBenhNhan, int page, int pageSize, String kw, LocalDate date,Boolean isPaid) {
         Session session = this.factory.getObject().getCurrentSession();
 
         StringBuilder hql = new StringBuilder("FROM DonKham dk WHERE ");
@@ -72,6 +72,10 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         if (date != null) {
             hql.append(" AND dk.createdDate = :date");
         }
+        
+        if (isPaid != null) {
+            hql.append(" AND dk.isPaid = :isPaid");
+        }
 
         hql.append(" ORDER BY dk.createdDate DESC");
 
@@ -85,6 +89,8 @@ public class DonKhamRepositoryImpl implements DonKhamRepository {
         if (date != null) {
             query.setParameter("date", date);
         }
+        if(isPaid != null)
+            query.setParameter("isPaid", isPaid);
 
         // Phân trang
         query.setFirstResult((page - 1) * pageSize);

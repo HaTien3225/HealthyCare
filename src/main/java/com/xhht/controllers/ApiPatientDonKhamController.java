@@ -52,6 +52,7 @@ public class ApiPatientDonKhamController {
             @RequestParam(name = "page", required = false) Integer page,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "date", required = false) LocalDate date,
+            @RequestParam(name = "isPaid", required = false) Boolean isPaid,
             Principal principal) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
@@ -66,7 +67,8 @@ public class ApiPatientDonKhamController {
         if (pageSize == null) {
             pageSize = 10;
         }
-        return ResponseEntity.ok(this.donKhamService.getAllDonKham(u.getId(), true, page, pageSize, kw, date));
+        
+        return ResponseEntity.ok(this.donKhamService.getAllDonKham(u.getId(), true, page, pageSize, kw, date,isPaid));
     }
 
     @GetMapping("/donkham/{id}")
@@ -84,7 +86,7 @@ public class ApiPatientDonKhamController {
         if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        return ResponseEntity.ok(dk);
+        return ResponseEntity.ok(dk.get());
     }
 
     @GetMapping("/chitietdonkham")

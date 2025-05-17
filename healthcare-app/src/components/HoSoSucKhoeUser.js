@@ -33,10 +33,12 @@ const HoSoSucKhoeUser = () => {
     const loadDonKham = async (page,kw,date) => {
         if (user != null) {            
             try {
-                if(page <= 0)
+                if(page <= 0){
                     page=1;
-                let url = `${endpoints.donkham}?page=${page}&pageSize=${10}`;
-                if(kw != null)
+                    setPage(1);
+                }
+                let url = `${endpoints.donkhamuser}?page=${page}&pageSize=${10}`;
+                if(kw != null && kw != "")
                     url += `&kw=${kw}`;
                 if(date != null){
                     const fdate = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
@@ -46,7 +48,7 @@ const HoSoSucKhoeUser = () => {
                 const res = await authApis().get(url);
                 setDonKhams(res.data);
                 if(donKhams.length === 0)
-                    setPage(prev => prev -1);
+                    setPage(1);
             }
             catch (e) {
                 console.log(e);
@@ -122,7 +124,7 @@ const HoSoSucKhoeUser = () => {
                                     dk.createdDate[1].toString().padStart(2, "0") + "/" +
                                     dk.createdDate[0]}
                             </p>
-                            <Button >Xem chi tiết</Button>
+                            <Button onClick={() => navigate(`/chitietdonkham/${dk.id}`)}>Xem chi tiết</Button>
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
@@ -134,6 +136,7 @@ const HoSoSucKhoeUser = () => {
                     <Pagination.Next onClick={() => setPage(page + 1)}/>
                 </Pagination>
             </div>
+            
         </>
     );
 
