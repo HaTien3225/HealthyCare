@@ -25,6 +25,9 @@ export const endpoints = {
      'add_benh': (donKhamId, benhId) => `/api/doctor/donkham/${donKhamId}/benh/${benhId}`,
      'add_xet_nghiem': (donKhamId) => `/api/doctor/donkham/${donKhamId}/xetnghiem`,
 
+    //user api
+    "hososuckhoe": "/api/hososuckhoe",
+    "donkham": "/api/donkham",
 }
 
 export const authApis = () => {
@@ -38,4 +41,4 @@ export const authApis = () => {
 
 export default axios.create({
     baseURL: BASE_URL
-});
+})

@@ -9,6 +9,7 @@ import com.xhht.pojo.User;
 import com.xhht.repositories.HoSoSucKhoeRepository;
 import com.xhht.services.UserService;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,8 @@ public class ApiPatientHoSoController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
+        if(optionalHoSo.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
         return ResponseEntity.ok(optionalHoSo.get());
     }
 

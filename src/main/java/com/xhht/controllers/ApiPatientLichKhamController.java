@@ -110,10 +110,10 @@ public class ApiPatientLichKhamController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("NGAY QUA KHU");    
         LichKham saved = lichKhamRepository.save(lichKham);
         
-        String mailBody = "Da tao yeu cau dat lich kham cua bac si "+lichKham.getBacSiId().getHo() + " "+lichKham.getBacSiId().getTen()
-                +"vao ngay "+ lichKham.getNgay()+" khung gio "+ lichKham.getKhungGio().getTenKg()+", "+"vui long doi phan hoi cua bac si.";
+        String mailBody = "Đã tạo yêu cầu đặt lịch khám với bác sĩ "+lichKham.getBacSiId().getHo() + " "+lichKham.getBacSiId().getTen()
+                +"vào ngày "+ lichKham.getNgay()+" khung giờ "+ lichKham.getKhungGio().getTenKg()+", "+"vui lòng đợi phản hồi của bác sĩ.";
         
-        mailSenderService.sendEmail(u.getEmail(), "THONG BAO DA TAO YEU CAU DAT LICH KHAM BENH ", mailBody);
+        mailSenderService.sendEmail(u.getEmail(), "Thông Báo Đã Tạo Yêu Cầu Đặt Lịch Khám Bệnh ", mailBody);
         
         return ResponseEntity.ok(saved);
     }

@@ -69,9 +69,9 @@ const ProFileUser = () => {
                                     </Card.Text>
                                 </>
                             )}
-                            <Button variant="primary" onClick={() => alert("Chỉnh sửa hồ sơ")}>
+                            {/* <Button variant="primary" onClick={() => alert("Chỉnh sửa hồ sơ")}>
                                 Chỉnh sửa hồ sơ
-                            </Button>
+                            </Button> */}
                         </Card.Body>
                     </Card>
                 </Col>

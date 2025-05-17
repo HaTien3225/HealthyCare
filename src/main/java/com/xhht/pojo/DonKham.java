@@ -59,6 +59,7 @@ public class DonKham implements Serializable{
     @OneToMany(mappedBy = "donKhamId",cascade = CascadeType.ALL)
     private Set<XetNghiem> xetNghiems;
     
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(optional = false)
     @JoinColumn(name = "lich_kham_id", referencedColumnName = "id")
     private LichKham lichKhamId;

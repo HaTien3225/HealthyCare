@@ -13,15 +13,15 @@ const Header = () => {
 
     // Load danh sách chuyên khoa
     useEffect(() => {
-        const loadSpecializations = async () => {
-            try {
-                let res = await Apis.get(endpoints['specializations']);
-                setSpecializations(res.data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        loadSpecializations();
+        // const loadSpecializations = async () => {
+        //     try {
+        //         let res = await Apis.get(endpoints['specializations']);
+        //         setSpecializations(res.data);
+        //     } catch (err) {
+        //         console.error(err);
+        //     }
+        // };
+        // loadSpecializations();
     }, []);
 
     // Xử lý tìm kiếm
@@ -45,26 +45,41 @@ const Header = () => {
                     <Nav className="me-auto align-items-center">
                         <Link to="/" className="nav-link">Trang chủ</Link>
 
-                        <NavDropdown title="Chuyên khoa" id="specialization-dropdown">
+                        {/* <NavDropdown title="Chuyên khoa" id="specialization-dropdown">
                             {specializations.map(s => (
                                 <Link to={`/?specId=${s.id}`} key={s.id} className="dropdown-item">
                                     {s.name}
                                 </Link>
                             ))}
-                        </NavDropdown>
+                        </NavDropdown> */}
 
                         {user?.role === "ROLE_DOCTOR" && (
                             <>
                                 <Link to="/doctor/pending" className="nav-link">Lịch khám chờ duyệt</Link>
                                 <Link to="/doctor/accepted" className="nav-link">Lịch khám đã chấp nhận</Link>
-                               
-                                
+
+
+                            </>
+                        )}
+                        {user?.role === "ROLE_USER" && (
+                            <>
+                                <Link to="/hososuckhoe" className="nav-link">Hồ sơ sức khỏe</Link>
+                                <NavDropdown
+                                    id="nav-dropdown-dark-example"
+                                    title="Lịch khám"
+                                    menuVariant="dark">
+                                    <NavDropdown.Item href="#action/3.3">Lịch khám của tôi</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">Đặt lịch khám</NavDropdown.Item>
+                                </NavDropdown>
+                                <Link to="#" className="nav-link">Đánh giá bác sĩ</Link>
+                                <Link to="#" className="nav-link">Thanh toán</Link>
                             </>
                         )}
                     </Nav>
 
                     {/* Form tìm kiếm */}
-                    <Form className="d-flex me-3" onSubmit={search}>
+                    {/* <Form className="d-flex me-3" onSubmit={search}>
                         <Form.Control
                             type="text"
                             value={kw}
@@ -73,7 +88,7 @@ const Header = () => {
                             className="me-2"
                         />
                         <Button type="submit" variant="outline-success">Tìm</Button>
-                    </Form>
+                    </Form> */}
 
                     {/* Menu tài khoản */}
                     {user === null ? (

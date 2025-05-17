@@ -160,10 +160,10 @@ public class UserController {
             String donKhamId = params.get("vnp_OrderInfo");
             this.donKhamService.updateIsPaid(Integer.parseInt(donKhamId), true);
             Optional<DonKham> dk = donKhamService.getDonKham(Integer.parseInt(donKhamId));
-            String mailBody = "Quy khach da thanh toan thanh cong don kham: id "+String.valueOf(donKhamId)+", vao tong tien : "+
-                    Double.parseDouble(params.get("vnp_Amount"))/100 + "vao ngay : "+LocalDate.now();
+            String mailBody = "Quý khách đã thanh toán thành công đơn khám: id "+String.valueOf(donKhamId)+", với tổng tiền : "+
+                    Integer.parseInt(params.get("vnp_Amount"))/100 + " VND, vào ngày : "+LocalDate.now();
 
-            mailSenderService.sendSimpleEmail(dk.get().getHoSoSucKhoeId().getBenhNhanId().getEmail(), "THONG BAO THANH TOAN THANH CONG DON KHAM ", mailBody);
+            mailSenderService.sendSimpleEmail(dk.get().getHoSoSucKhoeId().getBenhNhanId().getEmail(), "Thông Báo Đã Thanh Toán Đơn Khám", mailBody);
             model.addAttribute("nofi", "THANH TOAN THANH CONG");
 
         } else {

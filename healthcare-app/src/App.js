@@ -17,6 +17,8 @@ import AcceptedLichKham from "./components/AcceptedLichKham";
 import CreateDonKham from "./components/CreateDonKham.js";
 import AddBenh from "./components/AddBenh.js";
 import AddXetNghiem from "./components/AddXetNghiem.js";
+import HoSoSucKhoeUser from "./components/HoSoSucKhoeUser.js";
+import HoSoSucKhoeCreate from "./components/HoSoSucKhoeCreate.js";
 
 
 const App = () => {
@@ -42,6 +44,9 @@ const App = () => {
               <Route path="/doctor/lichkham/:lichKhamId/taodon" element={<CreateDonKham />} />
               <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
               <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
+              {/*user */}
+              <Route path="/hososuckhoe" element={<HoSoSucKhoeUser/>}/>
+              <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate/>}/>
             </Routes>
           </Container>
 

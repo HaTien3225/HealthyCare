@@ -72,42 +72,43 @@ const Home = () => {
     };
 
     return (
-        <>
-            {loading && <MySpinner />}
+        <></>
+        // <>
+        //     {loading && <MySpinner />}
 
-            {/* If no doctors found */}
-            {doctors.length === 0 && !loading && (
-                <Alert variant="info" className="mt-2">Không tìm thấy bác sĩ phù hợp!</Alert>
-            )}
+        //     {/* If no doctors found */}
+        //     {doctors.length === 0 && !loading && (
+        //         <Alert variant="info" className="mt-2">Không tìm thấy bác sĩ phù hợp!</Alert>
+        //     )}
 
-            {/* Display doctors in cards */}
-            <Row>
-                {doctors.map(d => (
-                    <Col className="p-2" md={3} xs={6} key={d.id}>
-                        <Card>
-                            <Card.Img variant="top" src={d.image || "/default-avatar.png"} />
-                            <Card.Body>
-                                <Card.Title>{d.name}</Card.Title>
-                                <Card.Text>
-                                    <strong>Chuyên khoa:</strong> {d.specialization}<br />
-                                    <strong>Phí khám:</strong> {d.price.toLocaleString()} VNĐ
-                                </Card.Text>
-                                <Button className="me-1" variant="primary">Xem chi tiết</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+        //     {/* Display doctors in cards */}
+        //     <Row>
+        //         {doctors.map(d => (
+        //             <Col className="p-2" md={3} xs={6} key={d.id}>
+        //                 <Card>
+        //                     <Card.Img variant="top" src={d.image || "/default-avatar.png"} />
+        //                     <Card.Body>
+        //                         <Card.Title>{d.name}</Card.Title>
+        //                         <Card.Text>
+        //                             <strong>Chuyên khoa:</strong> {d.specialization}<br />
+        //                             <strong>Phí khám:</strong> {d.price.toLocaleString()} VNĐ
+        //                         </Card.Text>
+        //                         <Button className="me-1" variant="primary">Xem chi tiết</Button>
+        //                     </Card.Body>
+        //                 </Card>
+        //             </Col>
+        //         ))}
+        //     </Row>
 
-            {/* Pagination button */}
-            {page > 0 && (
-                <div className="text-center mb-2">
-                    <Button variant="info" onClick={loadMore} disabled={loading}>
-                        Xem thêm bác sĩ...
-                    </Button>
-                </div>
-            )}
-        </>
+        //     {/* Pagination button */}
+        //     {page > 0 && (
+        //         <div className="text-center mb-2">
+        //             <Button variant="info" onClick={loadMore} disabled={loading}>
+        //                 Xem thêm bác sĩ...
+        //             </Button>
+        //         </div>
+        //     )}
+        //</>
     );
 };
 
