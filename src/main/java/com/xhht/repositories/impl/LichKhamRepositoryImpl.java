@@ -5,6 +5,7 @@ import com.xhht.pojo.LichKham;
 import com.xhht.repositories.LichKhamRepository;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,7 +32,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     }
 
     @Override
-    public long countByBacSiIdAndDaKhamTrue(Long bacSiId) {
+    public long countByBacSiIdAndDaKhamTrue(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
         Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = true");
         q.setParameter("bacSiId", bacSiId);
@@ -39,7 +40,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     }
 
     @Override
-    public long countByBacSiIdAndDaKhamFalse(Long bacSiId) {
+    public long countByBacSiIdAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
         Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = false");
         q.setParameter("bacSiId", bacSiId);
@@ -110,22 +111,79 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     }
 
     @Override
-    public List<LichKham> findByBacSiIdAndIsAcceptFalse(Long bacSiId) {
+    public List<LichKham> findByBacSiIdAndIsAcceptFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = false";
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
         query.setParameter("bacSiId", bacSiId);
         return query.getResultList();
     }
-    
-     @Override
-    public List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(Long bacSiId) {
+
+    @Override
+    public List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = true AND l.daKham=false";
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
         query.setParameter("bacSiId", bacSiId);
         return query.getResultList();
     }
-    
+
+    @Override
+    public Map<String, Long> getBenhPhoBienTheoThang(int bacSiId, Integer month) {
+        Session session = sessionFactory.getCurrentSession();
+
+        String hql = "SELECT d.benhId.tenBenh, COUNT(d.id) "
+                + "FROM DonKham d "
+                + "JOIN d.lichKhamId lk "
+                + "WHERE MONTH(lk.ngay) = :month AND lk.bacSiId.id = :bacSiId AND lk.daKham = true "
+                + "GROUP BY d.benhId.tenBenh";
+
+        Query<Object[]> query = session.createQuery(hql, Object[].class);
+        query.setParameter("month", month);
+        query.setParameter("bacSiId", bacSiId);
+
+        List<Object[]> results = query.getResultList();
+
+        Map<String, Long> resultMap = new java.util.HashMap<>();
+        for (Object[] row : results) {
+            String tenBenh = (String) row[0];
+            Long count = (Long) row[1];
+            resultMap.put(tenBenh, count);
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Long> getBenhPhoBienTheoQuy(int bacSiId, Integer quarter) {
+        Session session = sessionFactory.getCurrentSession();
+
+        // Tính khoảng tháng của quý
+        int startMonth = (quarter - 1) * 3 + 1;
+        int endMonth = startMonth + 2;
+
+        String hql = "SELECT d.benhId.tenBenh, COUNT(d.id) "
+                + "FROM DonKham d "
+                + "JOIN d.lichKhamId lk "
+                + "WHERE MONTH(lk.ngay) BETWEEN :startMonth AND :endMonth "
+                + "AND lk.bacSiId.id = :bacSiId AND lk.daKham = true "
+                + "GROUP BY d.benhId.tenBenh";
+
+        Query<Object[]> query = session.createQuery(hql, Object[].class);
+        query.setParameter("startMonth", startMonth);
+        query.setParameter("endMonth", endMonth);
+        query.setParameter("bacSiId", bacSiId);
+
+        List<Object[]> results = query.getResultList();
+
+        Map<String, Long> resultMap = new java.util.HashMap<>();
+        for (Object[] row : results) {
+            String tenBenh = (String) row[0];
+            Long count = (Long) row[1];
+            resultMap.put(tenBenh, count);
+        }
+
+        return resultMap;
+    }
 
 }

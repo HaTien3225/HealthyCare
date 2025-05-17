@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Apis, { endpoints } from '../configs/Apis';
+import Apis, { authApis, endpoints } from '../configs/Apis';
 
 const AddXetNghiem = () => {
   const { donKhamId } = useParams();
@@ -11,7 +11,7 @@ const AddXetNghiem = () => {
 
   const handleAddXetNghiem = async () => {
     try {
-      await Apis.post(endpoints.add_xet_nghiem(donKhamId), {
+      await authApis().post(endpoints.add_xet_nghiem(donKhamId), {
         moTa
       });
       setMessage('Thêm xét nghiệm thành công!');

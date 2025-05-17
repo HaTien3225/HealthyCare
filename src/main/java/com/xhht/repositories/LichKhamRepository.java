@@ -6,6 +6,7 @@ package com.xhht.repositories;
 
 import com.xhht.pojo.LichKham;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -16,9 +17,9 @@ public interface LichKhamRepository {
 
     List<LichKham> findByBacSiIdAndDaKhamFalse(Long bacSiId);
 
-    long countByBacSiIdAndDaKhamTrue(Long bacSiId);
+    long countByBacSiIdAndDaKhamTrue(int bacSiId);
 
-    long countByBacSiIdAndDaKhamFalse(Long bacSiId);
+    long countByBacSiIdAndDaKhamFalse(int bacSiId);
 
     LichKham save(LichKham lichkham);
 
@@ -30,8 +31,12 @@ public interface LichKhamRepository {
 
     boolean checkLichKhamConflict(LichKham lichKham);
 
-    List<LichKham> findByBacSiIdAndIsAcceptFalse(Long bacSiId);
+    List<LichKham> findByBacSiIdAndIsAcceptFalse(int bacSiId);
 
-    List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(Long bacSiId);
+    List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(int bacSiId);
+
+    Map<String, Long> getBenhPhoBienTheoThang(int bacSiId, Integer month);
+
+    Map<String, Long> getBenhPhoBienTheoQuy(int bacSiId, Integer quarter);
 
 }

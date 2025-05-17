@@ -41,6 +41,7 @@ const Login = () => {
       // Save token to cookies
       cookie.save("token", token);
 
+
       const decoded = jwtDecode(token);
 
 
@@ -52,7 +53,9 @@ const Login = () => {
       // Fetch user information from the server
       let u = await authApis().get(endpoints["current-user"]);
 
-      
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify({ ...u.data, role }));
+
 
       // Dispatch login action
       dispatch({

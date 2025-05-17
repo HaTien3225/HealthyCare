@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/doctor")
 @CrossOrigin
 public class ApiDoctorHosobenhnhanController {
 
@@ -16,8 +17,8 @@ public class ApiDoctorHosobenhnhanController {
     private HoSoSucKhoeRepository hoSoSucKhoeRepository;
 
     // Lấy hồ sơ bệnh nhân
-    @GetMapping("/doctor/api/hosobenhnhan/{benhNhanId}")
-    public ResponseEntity<?> getHoSoSucKhoe(@PathVariable int benhNhanId) {
+    @GetMapping("/hosobenhnhan/{benhNhanId}")
+    public ResponseEntity<?> getHoSoSucKhoe(@PathVariable("benhNhanId") int benhNhanId) {
         Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);
         if (optionalHoSo.isPresent()) {
             return ResponseEntity.ok(optionalHoSo.get());
@@ -27,9 +28,9 @@ public class ApiDoctorHosobenhnhanController {
     }
 
     // Cập nhật hồ sơ bệnh nhân
-    @PutMapping("/doctor/api/hosobenhnhan/{benhNhanId}")
+    @PutMapping("/hosobenhnhan/{benhNhanId}")
     public ResponseEntity<?> updateHoSoSucKhoe(
-            @PathVariable int benhNhanId,
+            @PathVariable("benhNhanId") int benhNhanId,
             @RequestBody HoSoSucKhoe hoSoDetails) {
 
         Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(benhNhanId);

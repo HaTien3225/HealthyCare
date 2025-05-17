@@ -10,4 +10,5 @@ package com.xhht.services;
  */
 public interface MailSenderService {
     void sendEmail(String toEmail, String subject, String body);
+    void sendInviteEmail(String email, String link);
 }

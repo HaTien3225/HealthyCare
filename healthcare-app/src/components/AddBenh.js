@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Apis, { endpoints } from '../configs/Apis';
+import Apis, { authApis, endpoints } from '../configs/Apis';
 
 const AddBenh = () => {
   const { donKhamId } = useParams();
@@ -14,7 +14,7 @@ const AddBenh = () => {
   // Load các bệnh đã được gán cho đơn khám
   const loadAssignedBenhs = async () => {
     try {
-      const res = await Apis.get(endpoints.get_benh(donKhamId));
+      const res = await authApis().get(endpoints.get_benh(donKhamId));
       setAssignedBenhs(res.data);
     } catch (err) {
       console.error('Lỗi khi load danh sách bệnh đã gán:', err);
@@ -24,7 +24,7 @@ const AddBenh = () => {
   // Tìm bệnh theo từ khóa
   const searchBenh = async () => {
     try {
-      const res = await Apis.get(endpoints.search_benh(keyword));
+      const res = await authApis().get(endpoints.search_benh(keyword));
       setSearchResults(res.data);
     } catch (err) {
       console.error('Lỗi khi tìm bệnh:', err);
@@ -34,7 +34,7 @@ const AddBenh = () => {
   // Gán bệnh đã chọn vào đơn khám
   const assignBenh = async (benhId) => {
     try {
-      await Apis.post(endpoints.add_benh(donKhamId, benhId));
+      await authApis().post(endpoints.add_benh(donKhamId, benhId));
       setMessage('Đã thêm bệnh vào đơn khám!');
       setKeyword('');
       setSearchResults([]);

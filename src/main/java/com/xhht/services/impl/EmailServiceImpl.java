@@ -36,4 +36,11 @@ private JavaMailSender mailSender;
         
         mailSender.send(message);
     }
+    public void sendInviteEmail(String email, String link) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Mời tham gia tư vấn trực tuyến");
+        message.setText("Chào bạn,\n\nBạn có lịch tư vấn từ xa sắp diễn ra.\nVui lòng truy cập link sau để tham gia tư vấn:\n\n" + link + "\n\nTrân trọng,\nHệ thống tư vấn sức khỏe");
+        mailSender.send(message);
+    }
 }

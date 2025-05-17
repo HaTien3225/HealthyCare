@@ -18,6 +18,8 @@ export default (current, action) => {
             }
 
         case "logout":
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
             cookie.remove('token');
             return null;
 

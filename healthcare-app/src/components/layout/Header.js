@@ -1,92 +1,67 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Container, Form, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import Apis, { endpoints } from "../../configs/Apis";
+import { useContext, useState } from "react";
+import { Button, Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { MyDispatchContext, MyUserContext } from "../../configs/Contexts";
 
 const Header = () => {
-    const [specializations, setSpecializations] = useState([]);
     const nav = useNavigate();
     const [kw, setKw] = useState("");
     const user = useContext(MyUserContext);
     const dispatch = useContext(MyDispatchContext);
 
-    // Load danh sách chuyên khoa
-    useEffect(() => {
-        // const loadSpecializations = async () => {
-        //     try {
-        //         let res = await Apis.get(endpoints['specializations']);
-        //         setSpecializations(res.data);
-        //     } catch (err) {
-        //         console.error(err);
-        //     }
-        // };
-        // loadSpecializations();
-    }, []);
-
-    // Xử lý tìm kiếm
     const search = (e) => {
         e.preventDefault();
-        if (kw.trim() !== "")
-            nav(`/?kw=${kw}`);
+        if (kw.trim() !== "") nav(`/?kw=${kw}`);
     };
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary shadow-sm">
             <Container>
-                {/* Logo và Tên ứng dụng */}
                 <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
                     Healthy_OU's
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    {/* Menu bên trái */}
                     <Nav className="me-auto align-items-center">
                         <Link to="/" className="nav-link">Trang chủ</Link>
 
-                        {/* <NavDropdown title="Chuyên khoa" id="specialization-dropdown">
-                            {specializations.map(s => (
-                                <Link to={`/?specId=${s.id}`} key={s.id} className="dropdown-item">
-                                    {s.name}
-                                </Link>
-                            ))}
-                        </NavDropdown> */}
-
                         {user?.role === "ROLE_DOCTOR" && (
                             <>
-                                <Link to="/doctor/pending" className="nav-link">Lịch khám chờ duyệt</Link>
-                                <Link to="/doctor/accepted" className="nav-link">Lịch khám đã chấp nhận</Link>
 
-
+                                <Link to="/doctor/thongke" className="nav-link">Thống kê</Link>
+                                <NavDropdown title="Lịch khám" menuVariant="light">
+                                    <NavDropdown.Item as={Link} to="/doctor/pending">Lịch khám chờ duyệt</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item as={Link} to="/doctor/accepted">Lịch khám đã chấp nhận</NavDropdown.Item>
+                                </NavDropdown>
                             </>
                         )}
+
                         {user?.role === "ROLE_USER" && (
                             <>
                                 <Link to="/hososuckhoe" className="nav-link">Hồ sơ sức khỏe</Link>
-                                <NavDropdown
-                                    id="nav-dropdown-dark-example"
-                                    title="Lịch khám"
-                                    menuVariant="dark">
-                                    <NavDropdown.Item href="#action/3.3">Lịch khám của tôi</NavDropdown.Item>
+
+                                <NavDropdown title="Lịch khám" menuVariant="dark">
+                                    <NavDropdown.Item as={Link} to="/lichkham">Lịch khám của tôi</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Đặt lịch khám</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/datlich">Đặt lịch khám</NavDropdown.Item>
                                 </NavDropdown>
-                                 <NavDropdown
-                                    id="nav-dropdown-dark-example"
-                                    title="Đánh giá"
-                                    menuVariant="dark">
-                                    <NavDropdown.Item href="#action/3.3">Đánh giá bác sĩ</NavDropdown.Item>
+
+                                <NavDropdown title="Đánh giá" menuVariant="dark">
+                                    <NavDropdown.Item as={Link} to="/danhgia">Đánh giá bác sĩ</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Xem đánh giá</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/xemdanhgia">Xem đánh giá</NavDropdown.Item>
                                 </NavDropdown>
-                                <Link to="#" className="nav-link">Thanh toán</Link>
+
+                                <Link to="/thanhtoan" className="nav-link">Thanh toán</Link>
                             </>
                         )}
                     </Nav>
 
-                    {/* Form tìm kiếm */}
-                    {/* <Form className="d-flex me-3" onSubmit={search}>
+                    {/* Nếu muốn bật lại form tìm kiếm */}
+                    {/* 
+                    <Form className="d-flex me-3" onSubmit={search}>
                         <Form.Control
                             type="text"
                             value={kw}
@@ -95,9 +70,9 @@ const Header = () => {
                             className="me-2"
                         />
                         <Button type="submit" variant="outline-success">Tìm</Button>
-                    </Form> */}
+                    </Form> 
+                    */}
 
-                    {/* Menu tài khoản */}
                     {user === null ? (
                         <>
                             <Link to="/register" className="nav-link text-success">Đăng ký</Link>
@@ -121,16 +96,11 @@ const Header = () => {
                             id="user-nav-dropdown"
                             align="end"
                         >
-                            <Link to="/profile" className="dropdown-item">Thông tin cá nhân</Link>
-
-
+                            <NavDropdown.Item as={Link} to="/profile">Thông tin cá nhân</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <Button
-                                onClick={() => dispatch({ type: "logout" })}
-                                className="dropdown-item text-danger"
-                            >
+                            <NavDropdown.Item as="button" className="text-danger" onClick={() => dispatch({ type: "logout" })}>
                                 Đăng xuất
-                            </Button>
+                            </NavDropdown.Item>
                         </NavDropdown>
                     )}
                 </Navbar.Collapse>

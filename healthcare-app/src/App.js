@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from "./components/Register";
 import Login from "./components/Login";
 import { MyDispatchContext, MyUserContext } from "./configs/Contexts";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import MyUserReducer from "./reducers/MyUserReducer";
 import DoctorHome from "./components/DoctorHome";
 import UserHome from "./components/UserHome";
@@ -21,10 +21,26 @@ import HoSoSucKhoeUser from "./components/HoSoSucKhoeUser.js";
 import HoSoSucKhoeCreate from "./components/HoSoSucKhoeCreate.js";
 import ChiTietDonKham from "./components/ChiTietDonKham.js";
 import ThanhToan from "./components/ThanhToan.js";
+import HoSoBenhNhan from "./components/HoSoBenhNhan.js";
+import DoctorStatistics from "./components/DoctorStatistics.js";
+import DoctorTuvan from "./components/DoctorTuvan.js";
+import ChatComponent from "./components/ChatComponent.js";
 
 
 const App = () => {
   const [user, dispatch] = useReducer(MyUserReducer, null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+
+    if (token && savedUser) {
+      dispatch({
+        type: "login",
+        payload: JSON.parse(savedUser)
+      });
+    }
+  }, []);
 
 
   return (
@@ -46,11 +62,18 @@ const App = () => {
               <Route path="/doctor/lichkham/:lichKhamId/taodon" element={<CreateDonKham />} />
               <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
               <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
+              <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoBenhNhan />} />
+              <Route path="/doctor/thongke" element={<DoctorStatistics/>} />
+              <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
+              <Route path="/doctor/chat/:id" element={<ChatComponent />} />
+
+
               {/*user */}
               <Route path="/hososuckhoe" element={<HoSoSucKhoeUser/>}/>
               <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate/>}/>
               <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />}/>
               <Route path="/thanhtoan/:id" element={<ThanhToan />}/>
+              
             </Routes>
           </Container>
 

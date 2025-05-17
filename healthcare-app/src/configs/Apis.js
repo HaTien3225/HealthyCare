@@ -1,36 +1,41 @@
 import axios from "axios";
 import cookie from 'react-cookies';
 
-const BASE_URL = 'http://localhost:8080/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen';
+const BASE_URL = 'http://localhost:8080/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/api';
 
 export const endpoints = {
-    'register': '/api/register',
-    'login': '/api/login',
-    'current-user': '/api/profile',
-    'doctorLichKham': (bacSiId) => `/api/doctor/lichkham?bacSiId=${bacSiId}`,
-    'updateLichKham': (id) => `/api/doctor/lichkham/${id}`,
-    'getHoSoSucKhoe': (benhNhanId) => `/api/doctor/hosobenhnhan/${benhNhanId}`,
-    'updateHoSoSucKhoe': (benhNhanId) => `/api/doctor/hosobenhnhan/${benhNhanId}`,
-    'doctorThongKe': (bacSiId) => `/api/doctor/thongke/${bacSiId}`,
-    'doctorTuvan': (senderId, receiverId) => `/api/doctor/tuvan/${senderId}/${receiverId}`,
-    'sendTuvan': "/api/doctor/tuvan",
-    'lichkhampending': (bacSiId) => `/api/doctor/lichkham/pending?bacSiId=${bacSiId}`,
-    'accept': (id) => `/api/doctor/lichkham/${id}/accept`,
-    'reject': (id) => `/api/doctor/lichkham/${id}/reject`,
-    'acceptedLichKham': (bacSiId) => `/api/doctor/lichkham/accepted?bacSiId=${bacSiId}`,
-    'updateStatusLichKham': (id) => `/api/doctor/lichkham/${id}/update-status`,
-     'donkham': (id) => `/api/doctor/lichkham/${id}/donkham`,
-     'get_benh': (donKhamId) => `/api/doctor/donkham/${donKhamId}/benh`,
-     'search_benh': (keyword) => `/api/doctor/benh/search?keyword=${keyword}`,
-     'add_benh': (donKhamId, benhId) => `/api/doctor/donkham/${donKhamId}/benh/${benhId}`,
-     'add_xet_nghiem': (donKhamId) => `/api/doctor/donkham/${donKhamId}/xetnghiem`,
+    'register': '/register',
+    'login': '/login',
+    'current-user': '/profile',
+    'getHoSoSucKhoe': (benhNhanId) => `/doctor/hosobenhnhan/${benhNhanId}`,
+    'updateHoSoSucKhoe': (benhNhanId) => `/doctor/hosobenhnhan/${benhNhanId}`,
+    'doctorThongKe': `/doctor/thongke`,
+    'doctorTuvan': (senderId, receiverId) => `/doctor/tuvan/${senderId}/${receiverId}`,
+    'sendTuvan': "/doctor/tuvan",
+    'lichkhampending': `/doctor/lichkham/pending`,
+    'accept': (id) => `/doctor/lichkham/${id}/accept`,
+    'reject': (id) => `/doctor/lichkham/${id}/reject`,
+    'acceptedLichKham': `/doctor/lichkham/accepted`,
+    'updateStatusLichKham': (id) => `/doctor/lichkham/${id}/update-status`,
+    'donkham': (id) => `/doctor/lichkham/${id}/donkham`,
+    'get_benh': (donKhamId) => `/doctor/donkham/${donKhamId}/benh`,
+    'search_benh': (keyword) => `/doctor/benh/search?keyword=${keyword}`,
+    'add_benh': (donKhamId, benhId) => `/doctor/donkham/${donKhamId}/benh/${benhId}`,
+    'add_xet_nghiem': (donKhamId) => `/doctor/donkham/${donKhamId}/xetnghiem`,
+    'benhPhoBien': (month, quarter) => {
+        const params = [];
+        if (month) params.push(`month=${month}`);
+        if (quarter) params.push(`quarter=${quarter}`);
+        return `/doctor/benhphobien${params.length ? '?' + params.join('&') : ''}`;
+    },
+    'send_mail':(lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`, 
 
     //user api
-    "hososuckhoe": "/api/hososuckhoe",
-    "donkhamuser": "/api/donkham",
-    "chitietdonkham" : "/api/chitietdonkham",
-    "xetnghiem":"/api/xetnghiem",
-    "thanhtoan":"/api/thanhtoan",
+    "hososuckhoe": "/hososuckhoe",
+    "donkhamuser": "/donkham",
+    "chitietdonkham": "/chitietdonkham",
+    "xetnghiem": "/xetnghiem",
+    "thanhtoan": "/thanhtoan",
 }
 
 export const authApis = () => {

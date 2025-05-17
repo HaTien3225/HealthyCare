@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Button, Table, Alert } from "react-bootstrap";
-import { MyUserContext } from "../configs/Contexts";  
-import Apis, { endpoints } from "../configs/Apis";   
+import { MyUserContext } from "../configs/Contexts";
+import { endpoints, authApis } from "../configs/Apis";
 
 const PendingLichKham = () => {
     const [lichKhams, setLichKhams] = useState([]);
@@ -16,10 +16,9 @@ const PendingLichKham = () => {
             return;
         }
         try {
-            const res = await Apis.get(endpoints.lichkhampending(user.id));
+            const res = await authApis().get(endpoints.lichkhampending);
             if (res.status !== 200) throw new Error("Lấy lịch khám thất bại");
-            const data = res.data;  // nếu axios
-            setLichKhams(data);
+            setLichKhams(res.data);
         } catch (e) {
             setError(e.message);
         } finally {
@@ -29,11 +28,11 @@ const PendingLichKham = () => {
 
     useEffect(() => {
         fetchPending();
-    }, [user?.id]);  // chạy lại khi user.id thay đổi
+    }, [user?.id]);
 
     const handleAccept = async (id) => {
         try {
-            const res = await Apis.put(endpoints.accept(id));
+            const res = await authApis().put(endpoints.accept(id));
             if (res.status !== 200) throw new Error("Chấp nhận lịch khám thất bại");
             fetchPending();
         } catch (e) {
@@ -43,7 +42,7 @@ const PendingLichKham = () => {
 
     const handleReject = async (id) => {
         try {
-            const res = await Apis.put(endpoints.reject(id));
+            const res = await authApis().put(endpoints.reject(id));
             if (res.status !== 200) throw new Error("Từ chối lịch khám thất bại");
             fetchPending();
         } catch (e) {

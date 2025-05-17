@@ -1,23 +1,15 @@
 package com.xhht.controllers;
 
-import com.xhht.pojo.Benh;
-import com.xhht.pojo.DonKham;
-import com.xhht.pojo.LichKham;
-import com.xhht.pojo.User;
-import com.xhht.pojo.XetNghiem;
-import com.xhht.repositories.BenhRepository;
-import com.xhht.repositories.DonKhamRepository;
-import com.xhht.repositories.LichKhamRepository;
-import com.xhht.repositories.XetNghiemRepository;
+import com.xhht.pojo.*;
+import com.xhht.repositories.*;
 import com.xhht.services.EmailService;
-import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.springframework.http.HttpStatus;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/doctor")
@@ -39,10 +31,19 @@ public class ApiDoctorLichKhamController {
     @Autowired
     private EmailService emailService;
 
-    // 1. Lấy danh sách lịch khám đang chờ bác sĩ chấp nhận (isAccept = false)
+    @Autowired
+    private UserRepository userRepository;
+
+    // Lấy thông tin bác sĩ từ Principal
+    private User getCurrentDoctor(Principal principal) {
+        return userRepository.getUserByUsername(principal.getName());
+    }
+
+    // 1. Lấy danh sách lịch khám đang chờ bác sĩ chấp nhận
     @GetMapping("/lichkham/pending")
-    public ResponseEntity<?> getPendingLichKham(@RequestParam("bacSiId") Long bacSiId) {
-        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptFalse(bacSiId);
+    public ResponseEntity<?> getPendingLichKham(Principal principal) {
+        User doctor = getCurrentDoctor(principal);
+        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptFalse(doctor.getId());
         return ResponseEntity.ok(lichkhams);
     }
 
@@ -54,7 +55,6 @@ public class ApiDoctorLichKhamController {
             LichKham lichkham = optional.get();
             lichkham.setIsAccept(true);
 
-            // Gửi mail thông báo
             emailService.sendSimpleEmail(
                     lichkham.getBenhNhanId().getEmail(),
                     "Lịch khám được chấp nhận",
@@ -73,7 +73,6 @@ public class ApiDoctorLichKhamController {
             LichKham lichkham = optional.get();
             lichkham.setIsAccept(false);
 
-            // Gửi mail thông báo từ chối
             emailService.sendSimpleEmail(
                     lichkham.getBenhNhanId().getEmail(),
                     "Lịch khám bị từ chối",
@@ -84,30 +83,30 @@ public class ApiDoctorLichKhamController {
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
     }
 
-    // 4. Lấy lịch trình bác sĩ (lịch khám đã được accept, chưa khám)
+    // 4. Lấy lịch trình bác sĩ (đã accept, chưa khám)
     @GetMapping("/lichkham/accepted")
-    public ResponseEntity<?> getAcceptedLichKham(@RequestParam("bacSiId") Long bacSiId) {
-        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(bacSiId);
+    public ResponseEntity<?> getAcceptedLichKham(Principal principal) {
+        User doctor = getCurrentDoctor(principal);
+        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(doctor.getId());
         return ResponseEntity.ok(lichkhams);
     }
 
-    // 5. Cập nhật trạng thái khám (daKham)
+    // 5. Cập nhật trạng thái khám
     @PutMapping("/lichkham/{id}/update-status")
     public ResponseEntity<?> updateLichKhamStatus(@PathVariable("id") int id, @RequestBody LichKham lichkhamDetails) {
         Optional<LichKham> optional = lichkhamRepository.findById(id);
         if (optional.isPresent()) {
             LichKham lichkham = optional.get();
             lichkham.setDaKham(lichkhamDetails.getDaKham());
-
             return ResponseEntity.ok(lichkhamRepository.save(lichkham));
         }
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
     }
 
+    // 6. Tạo đơn khám
     @PostMapping("/lichkham/{id}/donkham")
-    public ResponseEntity<?> createDonKham(@PathVariable("id") int lichKhamId, @RequestBody DonKham donKhamRequest) {
+    public ResponseEntity<?> createDonKham(@PathVariable("id") int lichKhamId, @RequestBody DonKham donKhamRequest, Principal principal) {
         Optional<LichKham> lichKhamOpt = lichkhamRepository.findById(lichKhamId);
-
         if (lichKhamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy lịch khám!");
         }
@@ -118,7 +117,7 @@ public class ApiDoctorLichKhamController {
             return ResponseEntity.badRequest().body("Lịch khám chưa được bác sĩ duyệt!");
         }
 
-        User doctor = lichKham.getBacSiId();
+        User doctor = getCurrentDoctor(principal);
 
         donKhamRequest.setBacSiId(doctor);
         donKhamRequest.setIsPaid(false);
@@ -131,11 +130,10 @@ public class ApiDoctorLichKhamController {
         return ResponseEntity.ok(savedDonKham);
     }
 
-// Thêm kết quả xét nghiệm cho đơn khám
+    // 7. Thêm kết quả xét nghiệm
     @PostMapping("/donkham/{id}/xetnghiem")
     public ResponseEntity<?> addXetNghiem(@PathVariable("id") int donKhamId, @RequestBody XetNghiem xetNghiemRequest) {
         Optional<DonKham> donKhamOpt = donKhamRepository.getDonKham(donKhamId);
-
         if (donKhamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy đơn khám!");
         }
@@ -148,13 +146,14 @@ public class ApiDoctorLichKhamController {
         return ResponseEntity.ok(savedXetNghiem);
     }
 
-// Tìm bệnh trong kho dữ liệu theo từ khóa (tên bệnh)
+    // 8. Tìm bệnh theo từ khóa
     @GetMapping("/benh/search")
     public ResponseEntity<?> searchBenh(@RequestParam("keyword") String keyword) {
         List<Benh> benhList = benhRepository.findByTenBenh(keyword);
         return ResponseEntity.ok(benhList);
     }
 
+    // 9. Gán bệnh vào đơn khám
     @PostMapping("/donkham/{id}/benh/{benhId}")
     public ResponseEntity<?> assignBenhToDonKham(@PathVariable("id") int donKhamId, @PathVariable("benhId") int benhId) {
         Optional<DonKham> donKhamOpt = donKhamRepository.getDonKham(donKhamId);
@@ -169,14 +168,13 @@ public class ApiDoctorLichKhamController {
         }
 
         DonKham donKham = donKhamOpt.get();
-        Benh benh = benhOpt;
-
-        donKham.setBenhId(benh);
+        donKham.setBenhId(benhOpt);
         donKhamRepository.save(donKham);
 
         return ResponseEntity.ok(donKham);
     }
 
+    // 10. Lấy bệnh theo đơn khám
     @GetMapping("/donkham/{donKhamId}/benh")
     public ResponseEntity<?> getBenhByDonKham(@PathVariable("donKhamId") Long donKhamId) {
         Optional<Benh> benhOpt = donKhamRepository.getBenhByDonKham(donKhamId);
@@ -186,6 +184,19 @@ public class ApiDoctorLichKhamController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Không tìm thấy bệnh cho đơn khám id = " + donKhamId);
         }
+    }
+
+    @PostMapping("/lichkham/{id}/send-invite")
+    public ResponseEntity<?> sendTuvanInvite(@PathVariable("id") int id) {
+        Optional<LichKham> lichKham = lichkhamRepository.findById(id);
+        String email = lichKham.get().getBenhNhanId().getEmail();  
+
+        String roomId = "tu-van-" + id;
+        String link = "https://meet.jit.si/" + roomId;
+
+        emailService.sendInviteEmail(email, link);
+
+        return ResponseEntity.ok("Email mời đã được gửi.");
     }
 
 }
