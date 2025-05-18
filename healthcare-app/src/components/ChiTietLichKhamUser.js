@@ -45,7 +45,7 @@ const ChiTIetLichKhamUser = () => {
                 {lichKham.daKham && <><strong style={st}>Đã khám</strong> <br/></>}
                 {!lichKham.daKham && <><strong style={st}>Chưa khám</strong><br/> </>}
                 <strong style={st}>-----------------------------------------</strong><br/>
-                <strong style={st}>Khung giờ : </strong><p style={st}>{lichKham.khungGio.gioBatDau} đến {lichKham.khungGio.gioKetThuc}</p>
+                <strong style={st}>Khung giờ chi tiết: </strong><p style={st}>{lichKham.khungGio.gioBatDau[0]+":"+lichKham.khungGio.gioBatDau[1]}h đến {lichKham.khungGio.gioKetThuc[0]+":"+lichKham.khungGio.gioKetThuc[1]}h</p>
                 <strong style={st}>Địa chỉ bệnh viện : </strong><p style={st}>{lichKham.bacSiId.khoaId.benhvien.diaChi}</p>
             </Container>
         }
