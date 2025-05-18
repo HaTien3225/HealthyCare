@@ -219,5 +219,15 @@ public class UserRepositoryImpl implements UserRepository {
         
         return u;
     }
+    
+    @Override
+    public boolean existsByEmail(String email) {
+        Session session = this.factory.getObject().getCurrentSession();
+        Query<Long> query = session.createQuery(
+                "SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class);
+        query.setParameter("email", email);
+        Long count = query.getSingleResult();
+        return count > 0;
+    }
 
 }

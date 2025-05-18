@@ -36,4 +36,7 @@ public interface UserService extends UserDetailsService {
 
     boolean registerDoctor(String username, String password, String email, String ho, String ten, MultipartFile licenseFile);
     User addUser(Map<String, String> params, MultipartFile avatar);
+    
+    User registerFromFirebase(String email, String uid);
+
 }

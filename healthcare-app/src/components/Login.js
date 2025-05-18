@@ -5,7 +5,10 @@ import MySpinner from "./layout/MySpinner";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import cookie from "react-cookies";
 import { MyDispatchContext } from "../configs/Contexts";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
+
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../configs/firebase";
 
 const Login = () => {
   const info = [
@@ -34,44 +37,27 @@ const Login = () => {
     try {
       setLoading(true);
 
-      // Make login API request
       let res = await Apis.post(endpoints["login"], user);
       const token = res.data.token;
 
-      // Save token to cookies
       cookie.save("token", token);
-
-
       const decoded = jwtDecode(token);
+      const { sub: username, role } = decoded;
 
-
-      // Đảm bảo lấy đúng trường từ decoded
-      const { sub: username, role } = decoded; // sub có thể là username
-      console.log("Username:", username);
-      console.log("Role:", role);
-
-      // Fetch user information from the server
       let u = await authApis().get(endpoints["current-user"]);
-
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({ ...u.data, role }));
 
-
-      // Dispatch login action
       dispatch({
         type: "login",
-        payload: { ...u.data, role: role }
+        payload: { ...u.data, role }
       });
 
-
-
-      // Navigate to appropriate page based on role
       if (role === "ROLE_DOCTOR") {
         nav("/doctor");
       } else {
         nav("/user");
       }
-
     } catch (err) {
       console.error(err);
       setMsg("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!");
@@ -80,6 +66,37 @@ const Login = () => {
     }
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const userData = result.user;
+
+      // Lấy idToken của Google
+      const idToken = await userData.getIdToken();
+
+      // Nếu backend có api login google, gửi token idToken lên để lấy JWT
+      let res = await Apis.post(endpoints.google, { idToken: idToken });
+      const token = res.data.token;
+      cookie.save("token", token);
+      localStorage.setItem("token", token);
+
+      dispatch({
+        type: "login",
+        payload: {
+          username: userData.displayName,
+          email: userData.email,
+          avatar: userData.photoURL,
+          role: "ROLE_USER"
+        }
+      });
+
+      localStorage.setItem("googleUser", JSON.stringify(userData));
+      nav("/user");
+    } catch (err) {
+      console.error("Lỗi đăng nhập Google:", err);
+      setMsg("Đăng nhập Google thất bại.");
+    }
+  };
   return (
     <>
       <h1 className="text-center text-success mt-2">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
@@ -99,8 +116,14 @@ const Login = () => {
           </Form.Group>
         ))}
 
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-3 text-center">
           {loading ? <MySpinner /> : <Button type="submit" variant="danger">Đăng nhập</Button>}
+        </Form.Group>
+
+        <Form.Group className="mb-3 text-center">
+          <Button variant="outline-primary" onClick={loginWithGoogle}>
+            <i className="fab fa-google me-2"></i> Đăng nhập bằng Google
+          </Button>
         </Form.Group>
       </Form>
     </>

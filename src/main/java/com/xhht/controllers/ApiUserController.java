@@ -1,5 +1,7 @@
 package com.xhht.controllers;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import com.xhht.dto.UserDTO;
 import com.xhht.pojo.User;
 import com.xhht.repositories.RoleRepository;
@@ -27,6 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ApiUserController {
 
     @Autowired
+    private FirebaseAuth firebaseAuth;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -36,12 +41,15 @@ public class ApiUserController {
     public ResponseEntity<?> login(@RequestBody(required = false) User u) {
 
         if (u == null || u.getUsername() == null || u.getPassword() == null) {
-            if(u == null)
+            if (u == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("u == null");
-            if(u.getUsername() == null)
+            }
+            if (u.getUsername() == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("username == null");
-            if( u.getPassword() == null)
+            }
+            if (u.getPassword() == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("password == null");
+            }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Thiếu thông tin đăng nhập");
         }
 
@@ -71,7 +79,7 @@ public class ApiUserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> create(@RequestParam Map<String, String> params,
-                                    @RequestParam(name = "avatar",required = false) MultipartFile avatar) {
+            @RequestParam(name = "avatar", required = false) MultipartFile avatar) {
         try {
             User u = this.userService.addUser(params, avatar);
             if (u == null) {
@@ -94,6 +102,30 @@ public class ApiUserController {
 //        }
 //        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
 //    }
-    
-      
+    @PostMapping("/firebase-login")
+public ResponseEntity<?> firebaseLogin(@RequestBody Map<String, String> payload) {
+    String idToken = payload.get("idToken");
+
+    if (idToken == null || idToken.trim().isEmpty()) {
+        return ResponseEntity.badRequest().body("ID token không được để trống");
+    }
+
+    try {
+        FirebaseToken decodedToken = firebaseAuth.verifyIdToken(idToken);
+        String uid = decodedToken.getUid();
+        String email = decodedToken.getEmail();
+
+        User existingUser = userService.getUserByEmail(email);
+        if (existingUser == null) {
+            existingUser = userService.registerFromFirebase(email, uid);
+        }
+
+        String jwtToken = JwtUtils.generateToken(existingUser.getUsername(), existingUser.getRole().getRole());
+        return ResponseEntity.ok(Collections.singletonMap("token", jwtToken));
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Firebase token không hợp lệ: " + e.getMessage());
+    }
+}
+
 }

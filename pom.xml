@@ -127,7 +127,13 @@
             <artifactId>google-http-client-jackson2</artifactId>
             <version>1.39.2</version> 
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-context</artifactId>
+            <version>1.56.0</version>
+        </dependency>
     </dependencies>
+    
     
     <build>
         <plugins>

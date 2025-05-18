@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
     }
-    
+
     @Override
     public User getUserByEmail(String email) {
         return this.userRepo.getUserByEmail(email);
@@ -221,6 +221,38 @@ public class UserServiceImpl implements UserService {
         }
 
         return this.userRepo.addUser(u);
+    }
+
+    @Override
+    public User registerFromFirebase(String email, String uid) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email không được để trống");
+        }
+
+        if (userRepo.existsByEmail(email)) {
+            return userRepo.getUserByEmail(email);
+        }
+
+        // Lấy role mặc định
+        Role role = roleRepo.getRoleById(2);
+        if (role == null) {
+            throw new RuntimeException("Vai trò mặc định ROLE_USER không tồn tại trong hệ thống");
+        }
+
+        // Tạo người dùng mới
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(email); 
+        user.setPassword(uid);   
+        user.setRole(role);
+        user.setCccd("");
+        user.setHo("");
+        user.setIsActive(true);
+        user.setCreatedDate(LocalDate.now());
+        user.setPhone("");
+        user.setTen("");
+
+        return userRepo.createOrUpdate(user);
     }
 
 }
