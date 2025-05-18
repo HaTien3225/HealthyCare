@@ -3,6 +3,7 @@ import { Button, ButtonGroup, Container, ListGroup, Pagination, ToggleButton } f
 import { useNavigate } from "react-router-dom";
 import { authApis, endpoints } from "../configs/Apis";
 import { MyUserContext } from "../configs/Contexts";
+import MySpinner from "./layout/MySpinner";
 
 
 const LichKhamUser = () => {
@@ -111,7 +112,7 @@ const LichKhamUser = () => {
 
                 <Container style={{ height: "70vh", overflowY: "scroll", backgroundColor: "#e6f0ff", padding: "10px", borderRadius: "8px", marginTop: "20px" }}>
                     {lichKham.length === 0 && <p>Không có lịch khám</p>}
-                    {isLoading && <p>Đang load...</p>}
+                    {isLoading && <MySpinner />}
                     {!isLoading && <ListGroup>
                         {lichKham.map( lk =>
                             <ListGroup.Item key={lk.id} style={{ backgroundColor: "#d6eaff", border: "1px solid #b0d4f1", borderRadius: "6px", marginBottom: "10px" }}>

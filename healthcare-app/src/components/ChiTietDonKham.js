@@ -3,6 +3,7 @@ import { Button, Container, ListGroup } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { authApis, endpoints } from "../configs/Apis";
 import { MyUserContext } from "../configs/Contexts";
+import MySpinner from "./layout/MySpinner";
 
 const ChiTietDonKham = () => {
 
@@ -70,7 +71,7 @@ const ChiTietDonKham = () => {
   
 
   { if (user === null) return <h1>Vui lòng đăng nhập</h1> }
-  { if (isLoadDK) return <h1>Đang load...</h1> }
+  { if (isLoadDK) return <MySpinner/> }
 
   return (
     <>
@@ -96,7 +97,7 @@ const ChiTietDonKham = () => {
         </Container>
       )}
       {chiTiet.length === 0 && <p>Ko có chi tiết !</p>}
-      {isLoadCT && <p>Đang load...</p>} 
+      {isLoadCT && <MySpinner/>} 
       </ListGroup>
       <h3 style={{marginTop: "20px"}}>Các xét nghiệm :</h3>
       < ListGroup variant="flush">

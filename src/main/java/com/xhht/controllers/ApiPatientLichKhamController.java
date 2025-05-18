@@ -136,7 +136,7 @@ public class ApiPatientLichKhamController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
             }
             if(ChronoUnit.DAYS.between(lichKham.getCreatedDate(),LocalDate.now()) > 1)
-                return ResponseEntity.status(400).body("Qua 24h");
+                return ResponseEntity.status(400).body("Đã qua 24 hours");
             if (!lichKham.getDaKham()) {
                 lichKhamRepository.delete(lichKham);
                 return ResponseEntity.ok("Đã hủy lịch khám.");

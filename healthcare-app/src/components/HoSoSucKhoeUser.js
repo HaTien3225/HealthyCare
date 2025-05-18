@@ -5,6 +5,7 @@ import Apis, { authApis, endpoints } from "../configs/Apis";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import MySpinner from "./layout/MySpinner";
 
 const HoSoSucKhoeUser = () => {
     const [hssk, setHssk] = useState([]);
@@ -66,7 +67,7 @@ const HoSoSucKhoeUser = () => {
     },[])
 
     { if (user === null) return <h1>Vui lòng đăng nhập</h1> }
-    if (loading) return <div>Đang tải...</div>;
+    if (loading) return <MySpinner />;
     if (hssk.length === 0) return (
         <div style={{ alignItems: "center", justifyContent: "center", display: "flex", flexDirection: "column" }}>
             <p style={lGI}>Chưa có hồ sơ súc khỏe...</p>

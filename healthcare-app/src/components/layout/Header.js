@@ -54,7 +54,7 @@ const Header = () => {
                                     <NavDropdown.Item as={Link} to="/xemdanhgia">Xem đánh giá</NavDropdown.Item>
                                 </NavDropdown>
 
-                                <Link to="/thanhtoan" className="nav-link">Thanh toán</Link>
+                                <Link to="/cacdonchuathanhtoan" className="nav-link">Thanh toán</Link>
                             </>
                         )}
                     </Nav>

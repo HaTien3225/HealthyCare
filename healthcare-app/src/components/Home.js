@@ -1,114 +1,60 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Card, Col, Row } from "react-bootstrap";
+import { Alert, Button, Card, Carousel, Col, Container, Image, Row } from "react-bootstrap";
 import Apis, { endpoints } from "../configs/Apis";
 import { useSearchParams } from "react-router-dom";
 import MySpinner from "./layout/MySpinner";
 
 const Home = () => {
-    const [doctors, setDoctors] = useState([]);  // Initialize as an empty array
-    const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
-    const [q] = useSearchParams();
-
-    // Load doctors list based on current page and filters
-    const loadDoctors = async () => {
-        try {
-            setLoading(true);
-
-            let url = `${endpoints['doctors']}?page=${page}`;
-
-            // Apply filters if available
-            const specId = q.get('specId');
-            if (specId) url += `&specializationId=${specId}`;
-
-            const kw = q.get('kw');
-            if (kw) url += `&kw=${kw}`;
-
-            const res = await Apis.get(url);
-
-            // Log the response to check structure
-            console.log("API response:", res.data);
-
-            // Ensure res.data is an array before using .map
-            if (Array.isArray(res.data)) {
-                // If no doctors are found, stop pagination
-                if (res.data.length === 0) {
-                    setPage(0);
-                } else {
-                    // Append new doctors to the list if not on the first page
-                    if (page === 1) {
-                        setDoctors(res.data);
-                    } else {
-                        setDoctors(prev => [...prev, ...res.data]);
-                    }
-                }
-            } else {
-                console.error("Expected an array, but got:", res.data);
-                setDoctors([]);  // Reset doctors if data is not an array
-            }
-        } catch (ex) {
-            console.error(ex);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Run on page or search parameters change
-    useEffect(() => {
-        if (page > 0) loadDoctors();
-    }, [page, q]);
-
-    // Reset pagination and doctor list when search params change
-    useEffect(() => {
-        setPage(1);
-        setDoctors([]);
-    }, [q]);
-
-    // Handle load more action (pagination)
-    const loadMore = () => {
-        if (!loading && page > 0) {
-            setPage(page + 1);
-        }
-    };
-
     return (
-        <></>
-        // <>
-        //     {loading && <MySpinner />}
+        <>
+            <Carousel>
+                <Carousel.Item>
+                    <Image src="/360_F_172745118_kfspuHw9aNALulN1yZI5VKWPQ6VqJVEt.jpg" style={{ width: '100%', height: '500px', }} />
+                    <Carousel.Caption>
 
-        //     {/* If no doctors found */}
-        //     {doctors.length === 0 && !loading && (
-        //         <Alert variant="info" className="mt-2">Không tìm thấy bác sĩ phù hợp!</Alert>
-        //     )}
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Image src="/modern-hospital-clinic-building-exterior-67609416.jpg" style={{ width: '100%', height: '500px' }} />
+                    <Carousel.Caption>
 
-        //     {/* Display doctors in cards */}
-        //     <Row>
-        //         {doctors.map(d => (
-        //             <Col className="p-2" md={3} xs={6} key={d.id}>
-        //                 <Card>
-        //                     <Card.Img variant="top" src={d.image || "/default-avatar.png"} />
-        //                     <Card.Body>
-        //                         <Card.Title>{d.name}</Card.Title>
-        //                         <Card.Text>
-        //                             <strong>Chuyên khoa:</strong> {d.specialization}<br />
-        //                             <strong>Phí khám:</strong> {d.price.toLocaleString()} VNĐ
-        //                         </Card.Text>
-        //                         <Button className="me-1" variant="primary">Xem chi tiết</Button>
-        //                     </Card.Body>
-        //                 </Card>
-        //             </Col>
-        //         ))}
-        //     </Row>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Image src="/smiling-medical-team-standing-together-outside-hospital-127007504.jpg" style={{ width: '100%', height: '500px' }} />
+                    <Carousel.Caption>
 
-        //     {/* Pagination button */}
-        //     {page > 0 && (
-        //         <div className="text-center mb-2">
-        //             <Button variant="info" onClick={loadMore} disabled={loading}>
-        //                 Xem thêm bác sĩ...
-        //             </Button>
-        //         </div>
-        //     )}
-        //</>
+                    </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Image src="/il_fullxfull.3798184838_48gu.jpg" style={{ width: '100%', height: '500px' }} />
+                    <Carousel.Caption>
+
+                    </Carousel.Caption>
+                </Carousel.Item>
+            </Carousel>
+            <Container className="mt-5">
+                <Row className="justify-content-center">
+                    <Col md={8}>
+                        <Card className="shadow-lg">
+                            <Card.Body>
+                                <Card.Title as="h2" className="mb-3 text-primary text-center">
+                                    Giới thiệu Bệnh viện
+                                </Card.Title>
+                                <Card.Text style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
+                                    Chào mừng bạn đến với hệ thống bệnh viện của chúng tôi! Với đội ngũ y bác sĩ tận tâm,
+                                    hệ thống trang thiết bị hiện đại, chúng tôi cam kết mang lại dịch vụ chăm sóc sức khỏe tốt nhất
+                                    cho cộng đồng.
+                                    <br /><br />
+                                    Hệ thống đặt lịch khám trực tuyến giúp bạn tiết kiệm thời gian, chủ động lựa chọn bác sĩ và khung giờ phù hợp.
+                                    Hãy trải nghiệm dịch vụ y tế thông minh cùng chúng tôi.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 };
 
