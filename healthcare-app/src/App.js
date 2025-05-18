@@ -21,13 +21,13 @@ import HoSoSucKhoeUser from "./components/HoSoSucKhoeUser.js";
 import HoSoSucKhoeCreate from "./components/HoSoSucKhoeCreate.js";
 import ChiTietDonKham from "./components/ChiTietDonKham.js";
 import ThanhToan from "./components/ThanhToan.js";
-import HoSoBenhNhan from "./components/HoSoBenhNhan.js";
 import DoctorStatistics from "./components/DoctorStatistics.js";
 import DoctorTuvan from "./components/DoctorTuvan.js";
 import ChatComponent from "./components/ChatComponent.js";
 import LichKhamUser from "./components/LichKhamUser.js";
 import ChiTIetLichKhamUser from "./components/ChiTietLichKhamUser.js";
 import ThanhToanDonKham from "./components/ThanhToanDonKham.js";
+import HoSoSucKhoeBacSi from "./components/HoSoSucKhoeBacSi.js";
 
 
 const App = () => {
@@ -65,7 +65,7 @@ const App = () => {
               <Route path="/doctor/lichkham/:lichKhamId/taodon" element={<CreateDonKham />} />
               <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
               <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
-              <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoBenhNhan />} />
+              <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoSucKhoeBacSi />} />
               <Route path="/doctor/thongke" element={<DoctorStatistics/>} />
               <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
               <Route path="/doctor/chat/:id" element={<ChatComponent />} />

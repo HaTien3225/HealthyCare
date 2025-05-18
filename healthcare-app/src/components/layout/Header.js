@@ -83,7 +83,7 @@ const Header = () => {
                             title={
                                 <span>
                                     <Image
-                                        src={user.avatar}
+                                        src={user.avatar||"/default-avatar.png"}
                                         roundedCircle
                                         width="30"
                                         height="30"

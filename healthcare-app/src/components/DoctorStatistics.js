@@ -115,7 +115,7 @@ const DoctorStatistics = () => {
 
     const data = viewMode === "month" ? benhThang : benhQuy;
     const fillColor = viewMode === "month" ? "#8884d8" : "#82ca9d";
-
+         if (!user) return <p>Vui lòng đăng nhập</p>
     return (
         <Container className="mt-4">
             <h3 className="mb-4">Thống kê lịch khám</h3>

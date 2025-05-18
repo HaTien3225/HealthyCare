@@ -51,6 +51,22 @@ public class UserRepositoryImpl implements UserRepository {
             session.close();
         }
     }
+    @Override
+    public User getUserByEmail(String email) {
+        Session session = this.factory.getObject().openSession();
+        try {
+            Query<User> q = session.createQuery(
+                    "SELECT u FROM User u LEFT JOIN FETCH u.roleId WHERE u.email = :email",
+                    User.class
+            );
+            q.setParameter("email", email);
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            session.close();
+        }
+    }
 
     @Override
     public User createOrUpdate(User u) {

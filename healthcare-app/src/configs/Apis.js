@@ -29,6 +29,7 @@ export const endpoints = {
         return `/doctor/benhphobien${params.length ? '?' + params.join('&') : ''}`;
     },
     'send_mail':(lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`, 
+    'google': '/firebase-login',
 
     //user api
     "hososuckhoe": "/hososuckhoe",

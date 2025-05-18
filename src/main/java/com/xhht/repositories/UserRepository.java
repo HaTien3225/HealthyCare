@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public interface UserRepository  {
     User getUserByUsername(String username);
+     User getUserByEmail(String email);
     User createOrUpdate(User u);
     List<User> getAllUser(Map<String, String> params);
     User getUserById(int id);

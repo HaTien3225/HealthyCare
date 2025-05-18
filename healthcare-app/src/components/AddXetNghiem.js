@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Apis, { authApis, endpoints } from '../configs/Apis';
+import { MyUserContext } from '../configs/Contexts';
 
 const AddXetNghiem = () => {
   const { donKhamId } = useParams();
   const [moTa, setMoTa] = useState('');
   const [message, setMessage] = useState('');
    const navigate = useNavigate();
+   const user=useContext(MyUserContext);
 
   const handleAddXetNghiem = async () => {
     try {
@@ -23,7 +25,7 @@ const AddXetNghiem = () => {
   const handleNext = () => {
     navigate(`/doctor/accepted`);
   };
-
+ if (!user) return <p>Vui lòng đăng nhập</p>
   return (
     <div style={{ padding: '20px', maxWidth: '600px' }}>
       <h2>Thêm xét nghiệm cho đơn khám</h2>

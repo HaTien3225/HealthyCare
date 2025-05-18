@@ -10,7 +10,7 @@ const DoctorTuvan = () => {
 
   const roomName = `tuvan-${lichKhamId}`;
   const userName = user?.lastName + " " + user?.firstName;
-
+ if (!user) return <p>Vui lòng đăng nhập</p>
   return (
     <div className="container mt-4">
       <h3>Phòng tư vấn: {roomName}</h3>

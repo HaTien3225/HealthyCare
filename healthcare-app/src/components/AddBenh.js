@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Apis, { authApis, endpoints } from '../configs/Apis';
+import { MyUserContext } from '../configs/Contexts';
 
 const AddBenh = () => {
   const { donKhamId } = useParams();
@@ -10,6 +11,7 @@ const AddBenh = () => {
   const [assignedBenhs, setAssignedBenhs] = useState([]);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const user=useContext(MyUserContext);
 
   // Load các bệnh đã được gán cho đơn khám
   const loadAssignedBenhs = async () => {
@@ -51,7 +53,7 @@ const AddBenh = () => {
   useEffect(() => {
     loadAssignedBenhs();
   }, [donKhamId]);
-
+ if (!user) return <p>Vui lòng đăng nhập</p>
   return (
     <div style={{ padding: '20px', maxWidth: '600px' }}>
       <h2>Thêm bệnh vào đơn khám</h2>

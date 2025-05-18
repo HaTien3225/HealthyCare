@@ -49,6 +49,7 @@ const AcceptedLichKham = () => {
       toast.error("Lỗi khi gửi link tư vấn: " + e.message);
     }
   };
+   if (!user) return <p>Vui lòng đăng nhập</p>
   return (
     <>
       <h3>Danh sách lịch khám đã chấp nhận</h3>

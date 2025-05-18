@@ -12,7 +12,8 @@ const ChiTIetLichKhamUser = () => {
     const { id } = useParams();
     const navigator = useNavigate();
 
-    const [isDeleting,setIsDeleting] = useState(false);
+
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const loadLichKham = async () => {
         setIsLoading(true);
@@ -37,13 +38,12 @@ const ChiTIetLichKhamUser = () => {
                 alert("Hủy lịch khám thành công !");
                 navigator("/lichkhamuser");
             }
-        }catch(e){
-            if(e.response)
-            {
+        } catch (e) {
+            if (e.response) {
                 alert(e.response.data);
             }
-            
-        }finally{
+
+        } finally {
             setIsDeleting(false);
         }
 
@@ -73,7 +73,28 @@ const ChiTIetLichKhamUser = () => {
                     <p style={st}><strong >Khung giờ chi tiết: </strong>{lichKham.khungGio.gioBatDau[0] + ":" + lichKham.khungGio.gioBatDau[1]}h đến {lichKham.khungGio.gioKetThuc[0] + ":" + lichKham.khungGio.gioKetThuc[1]}h</p>
                     <p style={st}><strong >Địa chỉ bệnh viện : </strong>{lichKham.bacSiId.khoaId.benhvien.diaChi}</p>
                     {!lichKham.daKham && <Button variant="danger" onClick={deleteLichKham}>Hủy lịch khám</Button>}
-                    {isDeleting && <MySpinner/>}
+                    {isDeleting && <MySpinner />}
+                    <div className="mt-3">
+                        <Button
+                            variant="success"
+                            href={`/tuvan/${lichKham.id}`}
+                            target="_blank"
+                        >
+                            Video Call
+                        </Button>
+                    </div>
+
+                    <div className="mt-3">
+                        <button
+                            className="btn btn-info"
+                            onClick={() => {
+                                const otherUserId = user.role === "ROLE_DOCTOR" ? lichKham.benhNhanId.id : lichKham.bacSiId.id;
+                                navigator(`/doctor/chat/${otherUserId}`);
+                            }}
+                        >
+                            Chat
+                        </button>
+                    </div>
                 </Container>
             }
         </>

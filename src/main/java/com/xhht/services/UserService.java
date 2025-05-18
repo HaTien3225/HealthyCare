@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService extends UserDetailsService {
 
     User getUserByUsername(String username);
-
+    User getUserByEmail(String email);
     User createOrUpdate(User u);
 
     List<User> getAllUser(Map<String, String> params);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { authApis, endpoints } from "../configs/Apis";
 
-const HoSoBenhNhan = () => {
+const HoSoSucKhoeBacSi = () => {
   const { benhNhanId } = useParams(); // lấy ID từ URL
   const [hoSo, setHoSo] = useState(null);
   const [message, setMessage] = useState("");
@@ -97,4 +97,4 @@ const HoSoBenhNhan = () => {
   );
 };
 
-export default HoSoBenhNhan;
+export default HoSoSucKhoeBacSi;

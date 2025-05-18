@@ -52,6 +52,11 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
     }
+    
+    @Override
+    public User getUserByEmail(String email) {
+        return this.userRepo.getUserByEmail(email);
+    }
 
     @Override
     public User createOrUpdate(User u) {
