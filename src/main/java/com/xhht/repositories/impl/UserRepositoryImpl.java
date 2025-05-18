@@ -136,12 +136,16 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         Query query = s.createQuery(q);
-
+        
+        int pageSize = 10;
+        String pageSizeStr = params.get("pageSize");
+        if(pageSizeStr != null && !pageSizeStr.isEmpty())
+            pageSize = Integer.parseInt(pageSizeStr);
         // Hỗ trợ phân trang
         if (params != null && params.containsKey("page")) {
             int page = Integer.parseInt(params.getOrDefault("page", "1"));
-            int start = (page - 1) * 10;
-            query.setMaxResults(10);
+            int start = (page - 1) * pageSize;
+            query.setMaxResults(pageSize);
             query.setFirstResult(start);
         }
 

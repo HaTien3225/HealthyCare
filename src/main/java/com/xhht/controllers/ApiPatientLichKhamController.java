@@ -54,7 +54,9 @@ public class ApiPatientLichKhamController {
 
     // Lấy danh sách lịch khám của bệnh nhân
     @GetMapping("/api/lichkham")
-    public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page) {
+    public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam (name = "isAccept",required = false) Boolean isAccept,
+            @RequestParam (name = "daKham",required = false) Boolean daKham) {
         if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
         }
@@ -62,7 +64,7 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        List<LichKham> lichkhams = lichKhamRepository.findByBenhNhanId(u.getId().longValue(), page);
+        List<LichKham> lichkhams = lichKhamRepository.findByBenhNhanId(u.getId().longValue(),isAccept,daKham,page);
         return ResponseEntity.ok(lichkhams);
     }
 
@@ -133,7 +135,7 @@ public class ApiPatientLichKhamController {
             if (lichKham.getBenhNhanId().getId() != u.getId()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
             }
-            if(ChronoUnit.DAYS.between(lichKham.getNgay(),LocalDate.now()) > 1)
+            if(ChronoUnit.DAYS.between(lichKham.getCreatedDate(),LocalDate.now()) > 1)
                 return ResponseEntity.status(400).body("Qua 24h");
             if (!lichKham.getDaKham()) {
                 lichKhamRepository.delete(lichKham);

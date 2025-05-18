@@ -62,11 +62,18 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     }
 
     @Override
-    public List<LichKham> findByBenhNhanId(Long benhNhanId, int page) {
+    public List<LichKham> findByBenhNhanId(Long benhNhanId, Boolean isAccept, Boolean daKham, int page) {
         Session session = sessionFactory.getCurrentSession();
-        Query<LichKham> query = session.createQuery(
-                "FROM LichKham WHERE benhNhanId.id = :benhNhanId", LichKham.class);
+
+        String hql = "FROM LichKham WHERE benhNhanId.id = :benhNhanId "
+                + "AND (:isAccept IS NULL OR isAccept = :isAccept) "
+                + "AND (:daKham IS NULL OR daKham = :daKham)"
+                + "ORDER BY ngay DESC";
+
+        Query<LichKham> query = session.createQuery(hql, LichKham.class);
         query.setParameter("benhNhanId", benhNhanId);
+        query.setParameter("isAccept", isAccept);
+        query.setParameter("daKham", daKham);
 
         // Thiết lập phân trang
         int start = (page - 1) * PAGE_SIZE;

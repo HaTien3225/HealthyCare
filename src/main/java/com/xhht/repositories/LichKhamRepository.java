@@ -25,7 +25,7 @@ public interface LichKhamRepository {
 
     Optional<LichKham> findById(int id);
 
-    List<LichKham> findByBenhNhanId(Long benhNhanId, int page);
+    List<LichKham> findByBenhNhanId(Long benhNhanId, Boolean isAccept, Boolean daKham, int page);
 
     void delete(LichKham lichKham);
 

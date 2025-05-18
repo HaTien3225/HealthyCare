@@ -25,6 +25,8 @@ import HoSoBenhNhan from "./components/HoSoBenhNhan.js";
 import DoctorStatistics from "./components/DoctorStatistics.js";
 import DoctorTuvan from "./components/DoctorTuvan.js";
 import ChatComponent from "./components/ChatComponent.js";
+import LichKhamUser from "./components/LichKhamUser.js";
+import ChiTIetLichKhamUser from "./components/ChiTietLichKhamUser.js";
 
 
 const App = () => {
@@ -73,6 +75,8 @@ const App = () => {
               <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate/>}/>
               <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />}/>
               <Route path="/thanhtoan/:id" element={<ThanhToan />}/>
+              <Route path="/lichkhamuser" element={<LichKhamUser/>}/>
+              <Route path="/lichkhamuser/:id" element={<ChiTIetLichKhamUser/>}/>
               
             </Routes>
           </Container>

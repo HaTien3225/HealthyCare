@@ -107,7 +107,7 @@ public class Khoa implements Serializable{
     /**
      * @return the benhVienId
      */
-    @JsonIgnore
+    
     public BenhVien getBenhvien() {
         return benhVienId;
     }

@@ -78,8 +78,8 @@ const HoSoSucKhoeUser = () => {
             <h2 style={{ marginTop: "10px", }}>Hồ sơ sức khỏe {user.ho} {user.ten}</h2>
             <ListGroup style={{ margin: "10px" }}>
                 <ListGroup.Item style={lGI}>ID :{hssk.id} </ListGroup.Item>
-                <ListGroup.Item style={lGI}>Chiều cao : {hssk.chieuCao}</ListGroup.Item>
-                <ListGroup.Item style={lGI}>Cân nặng :{hssk.canNang}</ListGroup.Item>
+                <ListGroup.Item style={lGI}>Chiều cao : {hssk.chieuCao} CM</ListGroup.Item>
+                <ListGroup.Item style={lGI}>Cân nặng :{hssk.canNang} KG</ListGroup.Item>
                 <ListGroup.Item style={lGI}>
                     Năm sinh: {hssk.birth[2].toString().padStart(2, '0')}/
                     {hssk.birth[1].toString().padStart(2, '0')}/

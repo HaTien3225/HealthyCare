@@ -61,18 +61,22 @@ public class ApiPatientBacSiController {
     @GetMapping("/bacsi")
     public ResponseEntity<?> listBacSi(@RequestParam(name = "khoaId",required = false) Integer khoaId,
             @RequestParam(name = "page",required = false) Integer page,
-            @RequestParam(name = "kw",required = false) String kw) {
+            @RequestParam(name = "kw",required = false) String kw,
+            @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         if (khoaId != null) {
             if(kw == null)
                 kw ="";
             if(page == null)
                 page = 1;
+            if(pageSize == null)
+                pageSize = 100;
  
             Map<String, String> params = new HashMap<>();
             params.put("isActive", "true");
             params.put("roleId", "3");
             params.put("khoaid", String.valueOf(khoaId));
             params.put("kw", kw);
+            params.put("pageSize", String.valueOf( pageSize));
             
             return ResponseEntity.ok(this.userService.getAllUser(params));
         }
