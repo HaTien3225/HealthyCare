@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { authApis, endpoints } from "../configs/Apis";
+import { Container, Form, Button, Alert } from 'react-bootstrap';
 
 const HoSoSucKhoeBacSi = () => {
   const { benhNhanId } = useParams(); 
@@ -63,37 +64,47 @@ const HoSoSucKhoeBacSi = () => {
 
   return (
     <div className="container">
-      <h2>Hồ sơ sức khỏe bệnh nhân</h2>
-      <div>
-        <label>Chiều cao (cm): </label>
-        <input
+  <Container>
+    <h2 className="mb-4">Hồ sơ sức khỏe bệnh nhân</h2>
+    <Form>
+      <Form.Group className="mb-3">
+        <Form.Label>Chiều cao (cm):</Form.Label>
+        <Form.Control
           type="number"
           name="chieuCao"
           value={hoSo.chieuCao || ""}
           onChange={handleChange}
         />
-      </div>
-      <div>
-        <label>Cân nặng (kg): </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>Cân nặng (kg):</Form.Label>
+        <Form.Control
           type="number"
           name="canNang"
           value={hoSo.canNang || ""}
           onChange={handleChange}
         />
-      </div>
-      <div>
-        <label>Ngày sinh: </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>Ngày sinh:</Form.Label>
+        <Form.Control
           type="date"
           name="birth"
           value={hoSo.birth || ""}
           onChange={handleChange}
         />
-      </div>
-      <button onClick={handleUpdate}>Cập nhật hồ sơ</button>
-      {message && <p>{message}</p>}
-    </div>
+      </Form.Group>
+
+      <Button variant="primary" onClick={handleUpdate}>
+        Cập nhật hồ sơ
+      </Button>
+      
+      {message && <Alert variant="info" className="mt-3">{message}</Alert>}
+    </Form>
+  </Container>
+</div>
   );
 };
 
