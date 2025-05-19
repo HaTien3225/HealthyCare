@@ -28,6 +28,7 @@ import LichKhamUser from "./components/LichKhamUser.js";
 import ChiTIetLichKhamUser from "./components/ChiTietLichKhamUser.js";
 import ThanhToanDonKham from "./components/ThanhToanDonKham.js";
 import HoSoSucKhoeBacSi from "./components/HoSoSucKhoeBacSi.js";
+import DatLichKhamUser from "./components/DatLichKhamUser.js";
 
 
 const App = () => {
@@ -79,6 +80,7 @@ const App = () => {
               <Route path="/lichkhamuser" element={<LichKhamUser />} />
               <Route path="/lichkhamuser/:id" element={<ChiTIetLichKhamUser />} />
               <Route path="/cacdonchuathanhtoan" element={<ThanhToanDonKham />} />
+              <Route path="/datlichkham" element={<DatLichKhamUser />}/>
 
             </Routes>
           </Container>

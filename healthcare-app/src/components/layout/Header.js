@@ -45,7 +45,7 @@ const Header = () => {
                                 <NavDropdown title="Lịch khám" menuVariant="dark">
                                     <NavDropdown.Item as={Link} to="/lichkhamuser">Lịch khám của tôi</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item as={Link} to="/datlich">Đặt lịch khám</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to="/datlichkham">Đặt lịch khám</NavDropdown.Item>
                                 </NavDropdown>
 
                                 <NavDropdown title="Đánh giá" menuVariant="dark">

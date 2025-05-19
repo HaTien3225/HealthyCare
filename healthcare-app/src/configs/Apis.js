@@ -38,6 +38,11 @@ export const endpoints = {
     "xetnghiem": "/xetnghiem",
     "thanhtoan": "/thanhtoan",
     "lichkhamuser": "/lichkham",
+    "bennvienuser":"/benhvien",
+    "khoauser":"/benhvien/khoa",
+    "bacsiuser":"/bacsi",
+    "khunggio":"/khunggio",
+    "khunggiotrong":"/khunggiotrong",
 }
 
 export const authApis = () => {
