@@ -6,7 +6,7 @@ package com.xhht.controllers;
 
 import com.xhht.pojo.HoSoSucKhoe;
 import com.xhht.pojo.User;
-import com.xhht.repositories.HoSoSucKhoeRepository;
+import com.xhht.services.HoSoSucKhoeService;
 import com.xhht.services.UserService;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -15,14 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,12 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiPatientHoSoController {
 
     @Autowired
-    private HoSoSucKhoeRepository hoSoSucKhoeRepository;
+    private HoSoSucKhoeService hoSoSucKhoeService;
 
     @Autowired
     private UserService userService;
 
-    // Lấy hồ sơ bệnh nhân theo ID
+    
     @GetMapping("/hososuckhoe")
     public ResponseEntity<?> getHoSoSucKhoe(Principal principal) {
         if (principal == null) {
@@ -50,13 +47,13 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
+        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if(optionalHoSo.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
         return ResponseEntity.ok(optionalHoSo.get());
     }
 
-    // Cập nhật hồ sơ bệnh nhân
+   
     @PutMapping("/hososuckhoe")
     public ResponseEntity<?> updateHoSoSucKhoe(
             Principal principal,
@@ -68,7 +65,7 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
+        Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if (optionalHoSo.isPresent()) {
             HoSoSucKhoe hoSo = optionalHoSo.get();
 
@@ -84,7 +81,7 @@ public class ApiPatientHoSoController {
                 hoSo.setBirth(hoSoDetails.getBirth());
             }
 
-            HoSoSucKhoe updated = hoSoSucKhoeRepository.createOrUpdate(hoSo);
+            HoSoSucKhoe updated = hoSoSucKhoeService.saveOrUpdate(hoSo);
             return ResponseEntity.ok(updated);
         } else {
             return ResponseEntity.status(404).body("Không tìm thấy hồ sơ bệnh nhân");
@@ -100,12 +97,12 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeRepository.findByBenhNhanId(u.getId());
+        Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if (existingHoSo.isPresent()) {
             return ResponseEntity.status(400).body("Hồ sơ bệnh nhân đã tồn tại.");
         }
         hoSoSucKhoe.setBenhNhanId(this.userService.getUserById(u.getId()));
-        HoSoSucKhoe savedHoSo = hoSoSucKhoeRepository.createOrUpdate(hoSoSucKhoe);
+        HoSoSucKhoe savedHoSo = hoSoSucKhoeService.saveOrUpdate(hoSoSucKhoe);
         return ResponseEntity.status(201).body(savedHoSo);
     }
 

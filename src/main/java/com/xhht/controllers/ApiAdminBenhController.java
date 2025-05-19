@@ -22,13 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 public class ApiAdminBenhController {
+
     @Autowired
     private BenhService benhService;
-    
+
     @GetMapping("/admin/api/benhs")
     public ResponseEntity<List<Benh>> listBenhByKhoaId(
-        @RequestParam(name = "khoaid", required = true) int khoaId,
-        @RequestParam(name = "page", defaultValue = "1") int page){
-        return new ResponseEntity<>( this.benhService.getAllBenhByKhoaId(khoaId, page, 10),HttpStatus.OK);
+            @RequestParam(name = "khoaid", required = true) int khoaId,
+            @RequestParam(name = "page", defaultValue = "1") int page) {
+        return new ResponseEntity<>(this.benhService.getAllBenhByKhoaId(khoaId, page, 10), HttpStatus.OK);
     }
 }

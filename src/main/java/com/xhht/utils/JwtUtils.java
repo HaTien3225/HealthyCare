@@ -15,7 +15,7 @@ public class JwtUtils {
     private static final String SECRET = "74857603750179589243685715785052";
     private static final long EXPIRATION_MS = 86400000;
 
-    // Tạo token chứa payload gồm subject (username) và claim role
+    
     public static String generateToken(String username, String role) throws Exception {
         JWSSigner signer = new MACSigner(SECRET);
 
@@ -35,7 +35,7 @@ public class JwtUtils {
         return signedJWT.serialize();
     }
 
-    // Phương thức xác thực token và trả về đối tượng JwtUser chứa username và role
+    
     public static JwtUser validateToken(String token) throws Exception {
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWSVerifier verifier = new MACVerifier(SECRET);
@@ -51,7 +51,7 @@ public class JwtUtils {
         return null;
     }
 
-    // Phương thức cũ vẫn còn để lấy username, tránh ảnh hưởng đến các phần khác của ứng dụng
+   
     public static String validateTokenAndGetUsername(String token) throws Exception {
         JwtUser user = validateToken(token);
         return user != null ? user.getUsername() : null;

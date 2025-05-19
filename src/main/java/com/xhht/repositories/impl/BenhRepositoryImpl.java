@@ -5,7 +5,6 @@
 package com.xhht.repositories.impl;
 
 import com.xhht.pojo.Benh;
-import com.xhht.pojo.Khoa;
 import com.xhht.repositories.BenhRepository;
 import java.util.List;
 import org.hibernate.Session;

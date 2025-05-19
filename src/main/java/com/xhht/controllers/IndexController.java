@@ -5,18 +5,14 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.User;
-import com.xhht.repositories.UserRepository;
 import com.xhht.services.UserService;
-import com.xhht.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.xhht.services.BenhVienService;
 
 /**
  *
@@ -51,10 +47,10 @@ public class IndexController {
     public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Lấy username hiện tại
+      
         String username = authentication.getName();
 
-        // Lấy User từ DB
+        
         User user = userService.getUserByUsername(username);
         String role = user.getRole().getRole();
         
@@ -82,25 +78,25 @@ public class IndexController {
     public String workspace_doctor(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Lấy username hiện tại
+      
         String username = authentication.getName();
 
-        // Lấy User từ DB
+      
         User user = userService.getUserByUsername(username);
 
         if (user != null && user.getRole().getId() == 3) {
-            // Nếu chưa được xác thực (chưa upload thông tin hoặc chưa được active)
+            
             if (!user.isIsActive()) {
-                return "redirect:/doctor/upload-profile";  // Chuyển hướng đến trang upload file
+                return "redirect:/doctor/upload-profile"; 
             }
 
             model.addAttribute("currentDoctor", user);
         }
 
-        return "workspace_doctor";  // Trang làm việc chính của bác sĩ
+        return "workspace_doctor";  
     }
 
-    // Trang dành cho bệnh nhân
+    
     @GetMapping("/patient/workspace")
     public String workspace_patient(Model model) {
         return "workspace_patient";

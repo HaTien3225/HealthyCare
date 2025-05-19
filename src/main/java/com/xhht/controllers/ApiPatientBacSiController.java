@@ -7,7 +7,6 @@ package com.xhht.controllers;
 import com.xhht.services.BenhVienService;
 import com.xhht.services.KhoaService;
 import com.xhht.services.UserService;
-import jakarta.faces.annotation.RequestMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

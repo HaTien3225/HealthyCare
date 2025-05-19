@@ -37,7 +37,7 @@ public class TinNhanRepositoryImpl implements TinNhanRepository {
      @Override
     public TinNhan save(TinNhan tinNhan) {
         Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(tinNhan);  // Lưu hoặc cập nhật đối tượng
+        session.saveOrUpdate(tinNhan); 
         return tinNhan;
     }
     

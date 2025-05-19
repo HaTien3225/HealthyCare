@@ -5,16 +5,16 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.User;
-import com.xhht.repositories.LichKhamRepository;
-import com.xhht.repositories.UserRepository;
+import com.xhht.services.LichKhamService;
+import com.xhht.services.UserService;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,24 +29,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiDoctorThongKeController {
 
     @Autowired
-    private LichKhamRepository lichkhamRepository;
+    private LichKhamService lichKhamService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/thongke")
     public Map<String, Long> getThongKe(Principal principal) {
+        if (principal == null) {
+            return (Map<String, Long>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return (Map<String, Long>) ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
         String username = principal.getName();
 
-        User bacSi = userRepository.getUserByUsername(username);
+        User bacSi = userService.getUserByUsername(username);
         if (bacSi == null) {
             throw new RuntimeException("Không tìm thấy thông tin bác sĩ!");
         }
 
         int bacSiId = bacSi.getId();
 
-        long totalAppointments = lichkhamRepository.countByBacSiIdAndDaKhamTrue(bacSiId);
-        long pendingAppointments = lichkhamRepository.countByBacSiIdAndDaKhamFalse(bacSiId);
+        long totalAppointments = lichKhamService.countLichDaKham(bacSiId);
+        long pendingAppointments = lichKhamService.countLichChuaKham(bacSiId);
 
         Map<String, Long> result = new HashMap<>();
         result.put("totalAppointments", totalAppointments);
@@ -58,8 +65,15 @@ public class ApiDoctorThongKeController {
     public Map<String, Long> getBenhPhoBienTheoThang(@RequestParam(value = "month", required = false) Integer month,
             @RequestParam(value = "quarter", required = false) Integer quarter,
             Principal principal) {
+        if (principal == null) {
+            return (Map<String, Long>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return (Map<String, Long>) ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
         String username = principal.getName();
-        User bacSi = userRepository.getUserByUsername(username);
+        User bacSi = userService.getUserByUsername(username);
         if (bacSi == null) {
             throw new RuntimeException("Không tìm thấy thông tin bác sĩ!");
         }
@@ -68,9 +82,9 @@ public class ApiDoctorThongKeController {
         Map<String, Long> result;
 
         if (month != null) {
-            result = lichkhamRepository.getBenhPhoBienTheoThang(bacSiId, month);
+            result = lichKhamService.getBenhPhoBienTheoThang(bacSiId, month);
         } else if (quarter != null) {
-            result = lichkhamRepository.getBenhPhoBienTheoQuy(bacSiId, quarter);
+            result = lichKhamService.getBenhPhoBienTheoQuy(bacSiId, quarter);
         } else {
             throw new IllegalArgumentException("Phải cung cấp tháng hoặc quý để thống kê!");
         }

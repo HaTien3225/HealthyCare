@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { authApis, endpoints } from "../configs/Apis";
 
 const HoSoSucKhoeBacSi = () => {
-  const { benhNhanId } = useParams(); // lấy ID từ URL
+  const { benhNhanId } = useParams(); 
   const [hoSo, setHoSo] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -15,7 +15,7 @@ const HoSoSucKhoeBacSi = () => {
         .then((res) => {
           const data = res.data;
 
-          // Chuyển birth từ [yyyy, mm, dd] → "yyyy-mm-dd"
+          
           if (Array.isArray(data.birth)) {
             const [year, month, day] = data.birth;
             data.birth = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -42,7 +42,7 @@ const HoSoSucKhoeBacSi = () => {
     if (!hoSo) return;
     setMessage("");
 
-    // Convert birth from "yyyy-mm-dd" to [yyyy, mm, dd]
+  
     let updateData = { ...hoSo };
     if (typeof updateData.birth === "string") {
       const [year, month, day] = updateData.birth.split("-").map(Number);

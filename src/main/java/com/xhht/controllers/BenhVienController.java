@@ -43,7 +43,7 @@ public class BenhVienController {
     }
 
     @PostMapping("/admin/benhviens/create")
-    public String benhVienCreate(@ModelAttribute(value = "benhvien") BenhVien bv, RedirectAttributes redirectAttributes  ) {
+    public String benhVienCreate(@ModelAttribute(value = "benhvien") BenhVien bv, RedirectAttributes redirectAttributes) {
         try {
             this.benhVienService.createOrUpdate(bv);
             redirectAttributes.addFlashAttribute("successMessage", "Tạo bệnh viện thành công!");
@@ -52,15 +52,17 @@ public class BenhVienController {
         }
         return "redirect:/admin/benhviens";
     }
+
     @GetMapping("/admin/benhviens/{benhVienId}")
-    public String benhVienDetail(Model model, @PathVariable(value = "benhVienId") int id){
+    public String benhVienDetail(Model model, @PathVariable(value = "benhVienId") int id) {
         BenhVien benhVien = this.benhVienService.getBenhVienById(id);
-        model.addAttribute("benhvien",benhVien);
+        model.addAttribute("benhvien", benhVien);
         return "benhvien_detail";
     }
+
     @PostMapping("/admin/benhviens/update")
-    public String benhVienUpdate(@ModelAttribute(value = "benhvien") BenhVien bv){
-        this.benhVienService.createOrUpdate(bv);      
+    public String benhVienUpdate(@ModelAttribute(value = "benhvien") BenhVien bv) {
+        this.benhVienService.createOrUpdate(bv);
         return "redirect:/admin/benhviens";
     }
 }

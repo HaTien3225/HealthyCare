@@ -28,7 +28,7 @@ export const endpoints = {
         if (quarter) params.push(`quarter=${quarter}`);
         return `/doctor/benhphobien${params.length ? '?' + params.join('&') : ''}`;
     },
-    'send_mail':(lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`, 
+    'send_mail': (lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`,
     'google': '/firebase-login',
 
     //user api
@@ -37,7 +37,7 @@ export const endpoints = {
     "chitietdonkham": "/chitietdonkham",
     "xetnghiem": "/xetnghiem",
     "thanhtoan": "/thanhtoan",
-    "lichkhamuser":"/lichkham",
+    "lichkhamuser": "/lichkham",
 }
 
 export const authApis = () => {

@@ -1,8 +1,12 @@
 package com.xhht.controllers;
 
 import com.xhht.pojo.*;
-import com.xhht.repositories.*;
+import com.xhht.services.BenhService;
+import com.xhht.services.XetNghiemService;
+import com.xhht.services.DonKhamService;
 import com.xhht.services.EmailService;
+import com.xhht.services.LichKhamService;
+import com.xhht.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -17,40 +21,51 @@ import java.util.*;
 public class ApiDoctorLichKhamController {
 
     @Autowired
-    private LichKhamRepository lichkhamRepository;
+    private LichKhamService lichKhamService;
 
     @Autowired
-    private DonKhamRepository donKhamRepository;
+    private DonKhamService donKhamService;
 
     @Autowired
-    private BenhRepository benhRepository;
+    private BenhService benhService;
 
     @Autowired
-    private XetNghiemRepository xetNghiemRepository;
+    private XetNghiemService xetNghiemService;
 
     @Autowired
     private EmailService emailService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    // Lấy thông tin bác sĩ từ Principal
     private User getCurrentDoctor(Principal principal) {
-        return userRepository.getUserByUsername(principal.getName());
+        return userService.getUserByUsername(principal.getName());
     }
 
-    // 1. Lấy danh sách lịch khám đang chờ bác sĩ chấp nhận
     @GetMapping("/lichkham/pending")
     public ResponseEntity<?> getPendingLichKham(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
         User doctor = getCurrentDoctor(principal);
-        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptFalse(doctor.getId());
+        List<LichKham> lichkhams = lichKhamService.getLichKhamByBacSiChuaKham(doctor.getId());
         return ResponseEntity.ok(lichkhams);
     }
 
-    // 2. Chấp nhận lịch khám
     @PutMapping("/lichkham/{id}/accept")
-    public ResponseEntity<?> acceptLichKham(@PathVariable("id") int id) {
-        Optional<LichKham> optional = lichkhamRepository.findById(id);
+    public ResponseEntity<?> acceptLichKham(@PathVariable("id") int id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> optional = lichKhamService.getLichKhamById(id);
         if (optional.isPresent()) {
             LichKham lichkham = optional.get();
             lichkham.setIsAccept(true);
@@ -60,15 +75,21 @@ public class ApiDoctorLichKhamController {
                     "Lịch khám được chấp nhận",
                     "Bác sĩ đã chấp nhận lịch khám của bạn vào ngày " + lichkham.getNgay()
             );
-            return ResponseEntity.ok(lichkhamRepository.save(lichkham));
+            return ResponseEntity.ok(lichKhamService.saveLichKham(lichkham));
         }
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
     }
 
-    // 3. Từ chối lịch khám
     @PutMapping("/lichkham/{id}/reject")
-    public ResponseEntity<?> rejectLichKham(@PathVariable("id") int id) {
-        Optional<LichKham> optional = lichkhamRepository.findById(id);
+    public ResponseEntity<?> rejectLichKham(@PathVariable("id") int id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> optional = lichKhamService.getLichKhamById(id);
         if (optional.isPresent()) {
             LichKham lichkham = optional.get();
             lichkham.setIsAccept(false);
@@ -78,35 +99,53 @@ public class ApiDoctorLichKhamController {
                     "Lịch khám bị từ chối",
                     "Rất tiếc, lịch khám của bạn vào ngày " + lichkham.getNgay() + " đã bị từ chối."
             );
-            return ResponseEntity.ok(lichkhamRepository.save(lichkham));
+            return ResponseEntity.ok(lichKhamService.saveLichKham(lichkham));
         }
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
     }
 
-    // 4. Lấy lịch trình bác sĩ (đã accept, chưa khám)
     @GetMapping("/lichkham/accepted")
     public ResponseEntity<?> getAcceptedLichKham(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
         User doctor = getCurrentDoctor(principal);
-        List<LichKham> lichkhams = lichkhamRepository.findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(doctor.getId());
+        List<LichKham> lichkhams = lichKhamService.getLichKhamDaDuyetChuaKham(doctor.getId());
         return ResponseEntity.ok(lichkhams);
     }
 
-    // 5. Cập nhật trạng thái khám
     @PutMapping("/lichkham/{id}/update-status")
-    public ResponseEntity<?> updateLichKhamStatus(@PathVariable("id") int id, @RequestBody LichKham lichkhamDetails) {
-        Optional<LichKham> optional = lichkhamRepository.findById(id);
+    public ResponseEntity<?> updateLichKhamStatus(@PathVariable("id") int id, @RequestBody LichKham lichkhamDetails, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> optional = lichKhamService.getLichKhamById(id);
         if (optional.isPresent()) {
             LichKham lichkham = optional.get();
             lichkham.setDaKham(lichkhamDetails.getDaKham());
-            return ResponseEntity.ok(lichkhamRepository.save(lichkham));
+            return ResponseEntity.ok(lichKhamService.saveLichKham(lichkham));
         }
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);
     }
 
-    // 6. Tạo đơn khám
     @PostMapping("/lichkham/{id}/donkham")
     public ResponseEntity<?> createDonKham(@PathVariable("id") int lichKhamId, @RequestBody DonKham donKhamRequest, Principal principal) {
-        Optional<LichKham> lichKhamOpt = lichkhamRepository.findById(lichKhamId);
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> lichKhamOpt = lichKhamService.getLichKhamById(lichKhamId);
         if (lichKhamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy lịch khám!");
         }
@@ -125,15 +164,21 @@ public class ApiDoctorLichKhamController {
         donKhamRequest.setLichKhamId(lichKham);
         donKhamRequest.setCreatedDate(LocalDate.now());
 
-        DonKham savedDonKham = donKhamRepository.save(donKhamRequest);
+        DonKham savedDonKham = donKhamService.save(donKhamRequest);
 
         return ResponseEntity.ok(savedDonKham);
     }
 
-    // 7. Thêm kết quả xét nghiệm
     @PostMapping("/donkham/{id}/xetnghiem")
-    public ResponseEntity<?> addXetNghiem(@PathVariable("id") int donKhamId, @RequestBody XetNghiem xetNghiemRequest) {
-        Optional<DonKham> donKhamOpt = donKhamRepository.getDonKham(donKhamId);
+    public ResponseEntity<?> addXetNghiem(@PathVariable("id") int donKhamId, @RequestBody XetNghiem xetNghiemRequest, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<DonKham> donKhamOpt = donKhamService.getDonKham(donKhamId);
         if (donKhamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy đơn khám!");
         }
@@ -141,23 +186,35 @@ public class ApiDoctorLichKhamController {
         DonKham donKham = donKhamOpt.get();
         xetNghiemRequest.setDonKhamId(donKham);
 
-        XetNghiem savedXetNghiem = xetNghiemRepository.save(xetNghiemRequest);
+        XetNghiem savedXetNghiem = xetNghiemService.save(xetNghiemRequest);
 
         return ResponseEntity.ok(savedXetNghiem);
     }
 
-    // 8. Tìm bệnh theo từ khóa
     @GetMapping("/benh/search")
-    public ResponseEntity<?> searchBenh(@RequestParam("keyword") String keyword) {
-        List<Benh> benhList = benhRepository.findByTenBenh(keyword);
+    public ResponseEntity<?> searchBenh(@RequestParam("keyword") String keyword, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        List<Benh> benhList = benhService.findByTenBenh(keyword);
         return ResponseEntity.ok(benhList);
     }
 
-    // 9. Gán bệnh vào đơn khám
     @PostMapping("/donkham/{id}/benh/{benhId}")
-    public ResponseEntity<?> assignBenhToDonKham(@PathVariable("id") int donKhamId, @PathVariable("benhId") int benhId) {
-        Optional<DonKham> donKhamOpt = donKhamRepository.getDonKham(donKhamId);
-        Benh benhOpt = benhRepository.getBenhById(benhId);
+    public ResponseEntity<?> assignBenhToDonKham(@PathVariable("id") int donKhamId, @PathVariable("benhId") int benhId, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<DonKham> donKhamOpt = donKhamService.getDonKham(donKhamId);
+        Benh benhOpt = benhService.getBenhById(benhId);
 
         if (donKhamOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy đơn khám!");
@@ -169,15 +226,21 @@ public class ApiDoctorLichKhamController {
 
         DonKham donKham = donKhamOpt.get();
         donKham.setBenhId(benhOpt);
-        donKhamRepository.save(donKham);
+        donKhamService.save(donKham);
 
         return ResponseEntity.ok(donKham);
     }
 
-    // 10. Lấy bệnh theo đơn khám
     @GetMapping("/donkham/{donKhamId}/benh")
-    public ResponseEntity<?> getBenhByDonKham(@PathVariable("donKhamId") Long donKhamId) {
-        Optional<Benh> benhOpt = donKhamRepository.getBenhByDonKham(donKhamId);
+    public ResponseEntity<?> getBenhByDonKham(@PathVariable("donKhamId") Long donKhamId, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<Benh> benhOpt = donKhamService.getBenhByDonKham(donKhamId);
         if (benhOpt.isPresent()) {
             return ResponseEntity.ok(benhOpt.get());
         } else {
@@ -187,9 +250,16 @@ public class ApiDoctorLichKhamController {
     }
 
     @PostMapping("/lichkham/{id}/send-invite")
-    public ResponseEntity<?> sendTuvanInvite(@PathVariable("id") int id) {
-        Optional<LichKham> lichKham = lichkhamRepository.findById(id);
-        String email = lichKham.get().getBenhNhanId().getEmail();  
+    public ResponseEntity<?> sendTuvanInvite(@PathVariable("id") int id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        Optional<LichKham> lichKham = lichKhamService.getLichKhamById(id);
+        String email = lichKham.get().getBenhNhanId().getEmail();
 
         String roomId = "tu-van-" + id;
         String link = "https://meet.jit.si/" + roomId;

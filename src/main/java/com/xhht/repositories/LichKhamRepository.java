@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public interface LichKhamRepository {
 
-    List<LichKham> findByBacSiIdAndDaKhamFalse(Long bacSiId);
+    List<LichKham> findByBacSiIdAndDaKhamFalse(int bacSiId);
 
     long countByBacSiIdAndDaKhamTrue(int bacSiId);
 

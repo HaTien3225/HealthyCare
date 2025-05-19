@@ -1,13 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import {
-    Container, Card, Row, Col, Spinner, Alert, Form
-} from "react-bootstrap";
-import {
-    BarChart, Bar,
-    LineChart, Line,
-    PieChart, Pie, Cell,
-    XAxis, YAxis, Tooltip, Legend, ResponsiveContainer
-} from "recharts";
+import { Container, Card, Row, Col, Spinner, Alert, Form } from "react-bootstrap";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { MyUserContext } from "../configs/Contexts";
 import { authApis, endpoints } from "../configs/Apis";
 
@@ -26,10 +19,10 @@ const DoctorStatistics = () => {
     const [benhThang, setBenhThang] = useState([]);
     const [benhQuy, setBenhQuy] = useState([]);
 
-    const [viewMode, setViewMode] = useState("month"); // "month" hoặc "quarter"
-    const [chartType, setChartType] = useState("bar"); // "bar", "line", "pie"
+    const [viewMode, setViewMode] = useState("month"); 
+    const [chartType, setChartType] = useState("bar"); 
 
-    // Load tổng quan thống kê
+    
     useEffect(() => {
         const loadStatistics = async () => {
             try {
@@ -51,7 +44,7 @@ const DoctorStatistics = () => {
         }
     }, [user]);
 
-    // Load bệnh theo tháng khi month thay đổi
+    
     useEffect(() => {
         if (viewMode !== "month") return;
 
@@ -70,7 +63,7 @@ const DoctorStatistics = () => {
         }
     }, [month, viewMode]);
 
-    // Load bệnh theo quý khi quarter thay đổi
+    
     useEffect(() => {
         if (viewMode !== "quarter") return;
 
@@ -147,13 +140,13 @@ const DoctorStatistics = () => {
                 <Card.Body>
                     <Card.Title>Bệnh phổ biến</Card.Title>
 
-                    {/* Chọn chế độ xem: tháng hoặc quý */}
+                
                     <Form.Select value={viewMode} onChange={handleViewModeChange} className="mb-3" style={{ maxWidth: 200 }}>
                         <option value="month">Theo tháng</option>
                         <option value="quarter">Theo quý</option>
                     </Form.Select>
 
-                    {/* Dropdown chọn tháng/quý */}
+                    
                     {viewMode === "month" && (
                         <Form.Select value={month} onChange={handleMonthChange} className="mb-3" style={{ maxWidth: 200 }}>
                             {[...Array(12)].map((_, i) => (
@@ -170,14 +163,14 @@ const DoctorStatistics = () => {
                         </Form.Select>
                     )}
 
-                    {/* Chọn loại biểu đồ */}
+            
                     <Form.Select value={chartType} onChange={handleChartTypeChange} className="mb-3" style={{ maxWidth: 200 }}>
                         <option value="bar">Biểu đồ cột (Bar)</option>
                         <option value="line">Biểu đồ đường (Line)</option>
                         <option value="pie">Biểu đồ bánh (Pie)</option>
                     </Form.Select>
 
-                    {/* Hiển thị biểu đồ theo loại */}
+            
                     {data.length > 0 ? (
                         <ResponsiveContainer width="100%" height={300}>
                             {chartType === "bar" && (

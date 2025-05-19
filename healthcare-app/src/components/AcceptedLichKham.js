@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Table, Alert, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Apis, { endpoints, authApis } from "../configs/Apis";
+import { endpoints, authApis } from "../configs/Apis";
 import { MyUserContext } from "../configs/Contexts";
 import { toast } from "react-toastify";
 

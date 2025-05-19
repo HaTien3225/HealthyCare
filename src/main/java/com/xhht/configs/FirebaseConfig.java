@@ -6,8 +6,6 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import org.springframework.core.io.ClassPathResource;
 
@@ -16,12 +14,11 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-         var resource = new ClassPathResource("firebase/healthy-a110f-firebase-adminsdk-fbsvc-cf09301ba0.json");
+        var resource = new ClassPathResource("firebase/healthy-a110f-firebase-adminsdk-fbsvc-cf09301ba0.json");
         FirebaseOptions options = FirebaseOptions.builder()
-            .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
-            .build();
+                .setCredentials(GoogleCredentials.fromStream(resource.getInputStream()))
+                .build();
 
-        // Tránh khởi tạo lại nếu đã tồn tại
         if (FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.initializeApp(options);
         } else {

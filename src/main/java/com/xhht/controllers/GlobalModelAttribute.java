@@ -30,7 +30,7 @@ public class GlobalModelAttribute {
         if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
             String username = authentication.getName();
 
-            // Lấy User từ DB
+           
             User user = userService.getUserByUsername(username);
 
             if (user != null) {

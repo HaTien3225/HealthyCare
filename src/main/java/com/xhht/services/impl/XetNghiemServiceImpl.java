@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.xhht.services.impl;
 
 import com.xhht.pojo.XetNghiem;
@@ -11,17 +7,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author hatie
- */
 @Service
-public class XetNghiemServiceImpl implements XetNghiemService{
-    
+public class XetNghiemServiceImpl implements XetNghiemService {
+
     @Autowired
-    private XetNghiemRepository xetNghiemRepo;
+    private XetNghiemRepository xetNghiemRepository;
+
     @Override
-    public List<XetNghiem> getALlXetNghiem(int donKhamId) {
-        return this.xetNghiemRepo.getALlXetNghiem(donKhamId);
+    public XetNghiem save(XetNghiem xetNghiem) {
+        return xetNghiemRepository.save(xetNghiem);
+    }
+
+    @Override
+    public List<XetNghiem> getAllXetNghiem(int donKhamId) {
+        return xetNghiemRepository.getALlXetNghiem(donKhamId);
     }
 }

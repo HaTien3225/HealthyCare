@@ -7,7 +7,6 @@ package com.xhht.repositories.impl;
 import com.xhht.pojo.Benh;
 import com.xhht.pojo.ChiTietDonKham;
 import com.xhht.pojo.DonKham;
-import com.xhht.pojo.XetNghiem;
 import com.xhht.repositories.DonKhamRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;

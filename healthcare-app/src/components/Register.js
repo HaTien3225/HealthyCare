@@ -18,7 +18,7 @@ const Register = () => {
 
     const avatar = useRef();
    
-    const [user, setUser] = useState({ role: "ROLE_USER" }); // mặc định là bệnh nhân
+    const [user, setUser] = useState({ role: "ROLE_USER" }); 
     const [msg, setMsg] = useState();
     const [loading, setLoading] = useState(false);
     const nav = useNavigate();
@@ -28,7 +28,7 @@ const Register = () => {
             setMsg("Mật khẩu không khớp!");
             return false;
         }
-        // Add additional validation for required fields
+        
         for (let field of info) {
             if (!user[field.field]) {
                 setMsg(`${field.label} là bắt buộc!`);
@@ -49,12 +49,11 @@ const Register = () => {
         if (validate()) {
             let form = new FormData();
 
-            // Append user details to FormData
             for (let key in user) {
                 if (key !== "confirm") form.append(key, user[key]);
             }
 
-            // Append avatar if exists
+    
             if (avatar.current?.files[0]) {
                 form.append("avatar", avatar.current.files[0]);
             }
@@ -101,14 +100,13 @@ const Register = () => {
                     </Form.Group>
                 ))}
 
-                {/* Avatar Input */}
+                
                 <Form.Group className="mb-3">
                     <Form.Label>Ảnh đại diện</Form.Label>
                     <Form.Control ref={avatar} type="file" accept="image/*" required />
                 </Form.Group>
 
-    
-                {/* Submit Button */}
+
                 <Form.Group className="mb-3 text-center">
                     {loading ? <MySpinner /> : <Button type="submit" variant="danger">Đăng ký</Button>}
                 </Form.Group>

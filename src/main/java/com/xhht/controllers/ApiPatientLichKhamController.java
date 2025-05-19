@@ -8,12 +8,14 @@ import com.xhht.pojo.LichKham;
 import com.xhht.pojo.User;
 import com.xhht.repositories.LichKhamRepository;
 import com.xhht.services.KhungGioService;
+import com.xhht.services.LichKhamService;
 import com.xhht.services.MailSenderService;
 import com.xhht.services.UserService;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,14 +47,14 @@ public class ApiPatientLichKhamController {
     private KhungGioService khungGioService;
 
     @Autowired
-    private LichKhamRepository lichKhamRepository;
+    private LichKhamService lichKhamService;
     
     @Autowired
     private MailSenderService mailSenderService;
     
 
 
-    // Lấy danh sách lịch khám của bệnh nhân
+    
     @GetMapping("/api/lichkham")
     public ResponseEntity<?> getLichKhamForPatient(Principal principal, @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam (name = "isAccept",required = false) Boolean isAccept,
@@ -64,7 +66,7 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        List<LichKham> lichkhams = lichKhamRepository.findByBenhNhanId(u.getId().longValue(),isAccept,daKham,page);
+        List<LichKham> lichkhams = lichKhamService.getLichKhamByBenhNhan(u.getId().longValue(),isAccept,daKham,page);
         return ResponseEntity.ok(lichkhams);
     }
 
@@ -105,12 +107,12 @@ public class ApiPatientLichKhamController {
         lichKham.setDaKham(Boolean.FALSE);
         lichKham.setIsAccept(Boolean.FALSE);
 
-        if (!this.lichKhamRepository.checkLichKhamConflict(lichKham)) {
+        if (!this.lichKhamService.checkTrungLichKham(lichKham)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Lich kham bi trung");        
         }
         if(lichKham.getNgay().isBefore(LocalDate.now()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("NGAY QUA KHU");    
-        LichKham saved = lichKhamRepository.save(lichKham);
+        LichKham saved = lichKhamService.saveLichKham(lichKham);
         
         String mailBody = "Đã tạo yêu cầu đặt lịch khám với bác sĩ "+lichKham.getBacSiId().getHo() + " "+lichKham.getBacSiId().getTen()
                 +"vào ngày "+ lichKham.getNgay()+" khung giờ "+ lichKham.getKhungGio().getTenKg()+", "+"vui lòng đợi phản hồi của bác sĩ.";
@@ -129,16 +131,16 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        Optional<LichKham> optional = lichKhamRepository.findById(id);
+        Optional<LichKham> optional = lichKhamService.getLichKhamById(id);
         if (optional.isPresent()) {
             LichKham lichKham = optional.get();
-            if (lichKham.getBenhNhanId().getId() != u.getId()) {
+            if (!Objects.equals(lichKham.getBenhNhanId().getId(), u.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
             }
             if(ChronoUnit.DAYS.between(lichKham.getCreatedDate(),LocalDate.now()) > 1)
                 return ResponseEntity.status(400).body("Đã qua 24 hours");
             if (!lichKham.getDaKham()) {
-                lichKhamRepository.delete(lichKham);
+                lichKhamService.deleteLichKham(lichKham);
                 return ResponseEntity.ok("Đã hủy lịch khám.");
             } else {
                 return ResponseEntity.status(400).body("Không thể hủy vì lịch khám đã diễn ra.");
@@ -158,7 +160,7 @@ public class ApiPatientLichKhamController {
         if (!currentUser.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        Optional<LichKham> optional = this.lichKhamRepository.findById(id);
+        Optional<LichKham> optional = this.lichKhamService.getLichKhamById(id);
 
         if (optional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy lịch khám.");

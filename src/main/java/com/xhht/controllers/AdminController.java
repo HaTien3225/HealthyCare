@@ -20,12 +20,11 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    // Trang quản lý bác sĩ chưa được xác nhận
     @GetMapping("/admin/verify-doctors")
     public String viewDoctorsPendingVerification(Model model) {
         List<User> pendingDoctors = userService.getDoctorsPendingVerification();
         model.addAttribute("pendingDoctors", pendingDoctors);
-        return "/verify_doctors";  // Trang để hiển thị bác sĩ chưa được xác nhận
+        return "/verify_doctors";
     }
 
     @PostMapping("/admin/verify-doctor/{id}")

@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import { useContext, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { authApis, endpoints } from '../configs/Apis';
 import { MyUserContext } from '../configs/Contexts';
 
 const AddXetNghiem = () => {

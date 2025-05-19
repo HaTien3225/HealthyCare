@@ -3,17 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.xhht.services.impl;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.xhht.pojo.GiayPhepHanhNghe;
-import com.xhht.pojo.User;
-import com.xhht.repositories.GiayPhepHanhNgheRepository;
-import com.xhht.services.GiayPhepHanhNgheService;
-import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import com.xhht.repositories.GiayPhepHanhNgheRepository;
 import com.xhht.services.GiayPhepHanhNgheService;
 import org.springframework.beans.factory.annotation.Autowired;

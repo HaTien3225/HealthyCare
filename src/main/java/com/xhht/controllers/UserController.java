@@ -12,7 +12,6 @@ import com.xhht.services.DonKhamService;
 import com.xhht.services.EmailService;
 import com.xhht.services.GiayPhepHanhNgheService;
 import com.xhht.services.KhoaService;
-import com.xhht.services.MailSenderService;
 import com.xhht.services.RoleService;
 import com.xhht.services.UserService;
 import java.time.LocalDate;
@@ -70,7 +69,7 @@ public class UserController {
         user.setCreatedDate(LocalDate.now());
         user.setRole(this.roleService.getRoleById(roleId));
         if (khoaIdStr != null && !khoaIdStr.isEmpty()) {
-            Integer khoaId = Integer.parseInt(khoaIdStr);
+            Integer khoaId = Integer.valueOf(khoaIdStr);
             user.setKhoaId(this.khoaService.getKhoaByKhoaId(khoaId));
         }
         try {
@@ -145,7 +144,7 @@ public class UserController {
             }
             userService.updateUserStatus(userid, isActive);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật user thành công!");
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật user thất bại: " + e.getMessage());
         }
         return "redirect:/admin/users";

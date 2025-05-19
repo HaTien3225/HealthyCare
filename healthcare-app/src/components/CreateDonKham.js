@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import { authApis, endpoints } from '../configs/Apis';
 
 const CreateDonKham = () => {
   const { lichKhamId } = useParams();
@@ -15,7 +15,7 @@ const CreateDonKham = () => {
       });
       setMessage('Tạo đơn khám thành công!');
       const donKhamId = response.data.id;
-      // Chuyển sang trang thêm bệnh, truyền donKhamId
+    
       navigate(`/doctor/donkham/${donKhamId}/thembenh`);
     } catch (err) {
       setMessage(err.response?.data || 'Lỗi khi tạo đơn khám');

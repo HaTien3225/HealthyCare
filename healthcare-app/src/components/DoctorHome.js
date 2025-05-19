@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { MyUserContext } from "../configs/Contexts";
-import PendingLichKham from "./PendingLichKham";
-import AcceptedLichKham from "./AcceptedLichKham";
+
 
 const DoctorHome = () => {
   const user = useContext(MyUserContext);

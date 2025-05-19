@@ -103,7 +103,7 @@ const HoSoSucKhoeUser = () => {
                 <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
-                    className="form-control" // Kết hợp với Bootstrap
+                    className="form-control" 
                     dateFormat="dd/MM/yyyy"
                 />
             </Form.Group>

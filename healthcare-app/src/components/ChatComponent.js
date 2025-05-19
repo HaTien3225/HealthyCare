@@ -1,14 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import {
-    collection,
-    addDoc,
-    serverTimestamp,
-    query,
-    orderBy,
-    onSnapshot,
-    doc,
-    setDoc,
-} from "firebase/firestore";
+import { useEffect, useState, useRef, useContext } from "react";
+import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../configs/firebase";
 import { useParams } from "react-router-dom";
@@ -54,7 +45,7 @@ const ChatComponent = () => {
     }, [chatId, currentUserId]);
 
     const updateTypingStatus = async (isTyping) => {
-        if (!currentUserId) return; // đảm bảo currentUserId có giá trị
+        if (!currentUserId) return; 
 
         const typingRef = doc(db, "typingStatus", chatId);
         await setDoc(typingRef, {

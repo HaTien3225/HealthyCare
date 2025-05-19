@@ -7,7 +7,6 @@ package com.xhht.vnpay;
 import com.xhht.configs.VNPAYConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;

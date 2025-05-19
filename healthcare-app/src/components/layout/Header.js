@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Button, Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { MyDispatchContext, MyUserContext } from "../../configs/Contexts";
 
@@ -76,6 +76,7 @@ const Header = () => {
                     {user === null ? (
                         <>
                             <Link to="/register" className="nav-link text-success">Đăng ký</Link>
+                            
                             <Link to="/login" className="nav-link text-danger">Đăng nhập</Link>
                         </>
                     ) : (

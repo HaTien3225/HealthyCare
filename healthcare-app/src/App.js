@@ -66,20 +66,20 @@ const App = () => {
               <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
               <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
               <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoSucKhoeBacSi />} />
-              <Route path="/doctor/thongke" element={<DoctorStatistics/>} />
+              <Route path="/doctor/thongke" element={<DoctorStatistics />} />
               <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
               <Route path="/doctor/chat/:id" element={<ChatComponent />} />
 
 
               {/*user */}
-              <Route path="/hososuckhoe" element={<HoSoSucKhoeUser/>}/>
-              <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate/>}/>
-              <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />}/>
-              <Route path="/thanhtoan/:id" element={<ThanhToan />}/>
-              <Route path="/lichkhamuser" element={<LichKhamUser/>}/>
-              <Route path="/lichkhamuser/:id" element={<ChiTIetLichKhamUser/>}/>
-              <Route path="/cacdonchuathanhtoan" element={<ThanhToanDonKham/>}/>
-              
+              <Route path="/hososuckhoe" element={<HoSoSucKhoeUser />} />
+              <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate />} />
+              <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />} />
+              <Route path="/thanhtoan/:id" element={<ThanhToan />} />
+              <Route path="/lichkhamuser" element={<LichKhamUser />} />
+              <Route path="/lichkhamuser/:id" element={<ChiTIetLichKhamUser />} />
+              <Route path="/cacdonchuathanhtoan" element={<ThanhToanDonKham />} />
+
             </Routes>
           </Container>
 

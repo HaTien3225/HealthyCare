@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,7 +84,7 @@ public class ApiPatientDonKhamController {
         }
 
         Optional<DonKham> dk = this.donKhamService.getDonKham(id);
-        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         return ResponseEntity.ok(dk.get());
@@ -100,7 +101,7 @@ public class ApiPatientDonKhamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         List<ChiTietDonKham> chiTietList = this.donKhamService.getAllChiTietDonKham(donKhamId);
@@ -119,11 +120,11 @@ public class ApiPatientDonKhamController {
         }
         
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
 
-        List<XetNghiem> xetNghiemList = this.xetNghiemService.getALlXetNghiem(donKhamId);
+        List<XetNghiem> xetNghiemList = this.xetNghiemService.getAllXetNghiem(donKhamId);
         return ResponseEntity.ok(xetNghiemList);
     }
     
@@ -140,7 +141,7 @@ public class ApiPatientDonKhamController {
         }
         
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
-        if (dk.get().getHoSoSucKhoeId().getBenhNhanId().getId() != u.getId()) {
+        if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         if(dk.get().getIsPaid()){

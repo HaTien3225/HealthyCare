@@ -5,7 +5,7 @@ import { MyUserContext } from "../configs/Contexts";
 import { useContext } from "react";
 
 const DoctorTuvan = () => {
-  const { lichKhamId } = useParams(); // e.g., /tuvan/123
+  const { lichKhamId } = useParams();
   const user = useContext(MyUserContext);
 
   const roomName = `tuvan-${lichKhamId}`;

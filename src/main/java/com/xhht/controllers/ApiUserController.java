@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.xhht.dto.UserDTO;
 import com.xhht.pojo.User;
-import com.xhht.repositories.RoleRepository;
+import com.xhht.services.RoleService;
 import com.xhht.services.UserService;
 import com.xhht.utils.JwtUtils;
 import java.security.Principal;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -35,7 +34,7 @@ public class ApiUserController {
     private UserService userService;
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleService roleService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody(required = false) User u) {
@@ -88,7 +87,6 @@ public class ApiUserController {
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(new UserDTO(u));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Đã xảy ra lỗi khi đăng ký: " + e.getMessage());
         }

@@ -1,16 +1,12 @@
 package com.xhht.filters;
 
 import com.xhht.utils.JwtUtils;
-import com.xhht.utils.JwtUtils.JwtUser;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             try {
                 String username = JwtUtils.validateTokenAndGetUsername(token);
-                String role = JwtUtils.validateTokenAndGetRole(token); // Lấy role từ token
+                String role = JwtUtils.validateTokenAndGetRole(token);
 
                 if (username != null && role != null) {
                     List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));

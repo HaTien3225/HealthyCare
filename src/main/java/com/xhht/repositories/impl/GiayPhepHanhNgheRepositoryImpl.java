@@ -2,9 +2,7 @@
 package com.xhht.repositories.impl;
 
 import com.xhht.pojo.GiayPhepHanhNghe;
-import com.xhht.repositories.GiayPhepHanhNgheRepository;
 import java.util.Optional;
-import java.util.List;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

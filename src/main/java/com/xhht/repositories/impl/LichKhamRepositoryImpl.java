@@ -1,9 +1,7 @@
 package com.xhht.repositories.impl;
 
-import com.xhht.pojo.HoSoSucKhoe;
 import com.xhht.pojo.LichKham;
 import com.xhht.repositories.LichKhamRepository;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +22,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     private final int PAGE_SIZE = 10;
 
     @Override
-    public List<LichKham> findByBacSiIdAndDaKhamFalse(Long bacSiId) {
+    public List<LichKham> findByBacSiIdAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
         Query q = session.createQuery("FROM LichKham WHERE bacSiId.id = :bacSiId AND daKham = false", LichKham.class);
         q.setParameter("bacSiId", bacSiId);

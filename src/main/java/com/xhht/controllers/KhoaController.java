@@ -64,7 +64,7 @@ public class KhoaController {
     }
 
     @PostMapping("/admin/khoas/update")
-    public String updateKhoa(@ModelAttribute(value = "khoa") Khoa khoa, RedirectAttributes redirectAttributes,@RequestParam(name = "benhVienId", required = true) int benhVienId) {
+    public String updateKhoa(@ModelAttribute(value = "khoa") Khoa khoa, RedirectAttributes redirectAttributes, @RequestParam(name = "benhVienId", required = true) int benhVienId) {
         khoa.setCreatedDate(LocalDate.now());
 
         khoa.setBenhvien(bvService.getBenhVienById(benhVienId));
@@ -74,7 +74,7 @@ public class KhoaController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật khoan thất bại: " + e.getMessage());
         }
-        return "redirect:/admin/benhviens"+"/"+this.khoaService.getKhoaByKhoaId(khoa.getId()).getBenhvien().getId();
+        return "redirect:/admin/benhviens" + "/" + this.khoaService.getKhoaByKhoaId(khoa.getId()).getBenhvien().getId();
     }
 
 }

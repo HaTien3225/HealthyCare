@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Apis, { authApis, endpoints } from '../configs/Apis';
+import { authApis, endpoints } from '../configs/Apis';
 import { MyUserContext } from '../configs/Contexts';
 
 const AddBenh = () => {
@@ -13,7 +12,7 @@ const AddBenh = () => {
   const navigate = useNavigate();
   const user=useContext(MyUserContext);
 
-  // Load các bệnh đã được gán cho đơn khám
+  
   const loadAssignedBenhs = async () => {
     try {
       const res = await authApis().get(endpoints.get_benh(donKhamId));
@@ -23,7 +22,7 @@ const AddBenh = () => {
     }
   };
 
-  // Tìm bệnh theo từ khóa
+
   const searchBenh = async () => {
     try {
       const res = await authApis().get(endpoints.search_benh(keyword));
@@ -33,7 +32,6 @@ const AddBenh = () => {
     }
   };
 
-  // Gán bệnh đã chọn vào đơn khám
   const assignBenh = async (benhId) => {
     try {
       await authApis().post(endpoints.add_benh(donKhamId, benhId));
