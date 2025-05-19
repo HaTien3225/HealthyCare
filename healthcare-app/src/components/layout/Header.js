@@ -35,6 +35,7 @@ const Header = () => {
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item as={Link} to="/doctor/accepted">Lịch khám đã chấp nhận</NavDropdown.Item>
                                 </NavDropdown>
+                                <Link to="/doctor/benhmanage" className="nav-link">Bệnh trong khoa</Link>
                             </>
                         )}
 

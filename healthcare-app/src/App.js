@@ -29,6 +29,7 @@ import ChiTIetLichKhamUser from "./components/ChiTietLichKhamUser.js";
 import ThanhToanDonKham from "./components/ThanhToanDonKham.js";
 import HoSoSucKhoeBacSi from "./components/HoSoSucKhoeBacSi.js";
 import DatLichKhamUser from "./components/DatLichKhamUser.js";
+import BenhManageDoctor from "./components/BenhManageDoctor.js";
 
 
 const App = () => {
@@ -70,6 +71,7 @@ const App = () => {
               <Route path="/doctor/thongke" element={<DoctorStatistics />} />
               <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
               <Route path="/doctor/chat/:id" element={<ChatComponent />} />
+              <Route path="/doctor/benhmanage" element={<BenhManageDoctor/>}/>
 
 
               {/*user */}

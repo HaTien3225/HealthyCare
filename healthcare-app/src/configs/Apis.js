@@ -30,6 +30,7 @@ export const endpoints = {
     },
     'send_mail': (lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`,
     'google': '/firebase-login',
+    'benhdoctor':'/doctor/benh',
 
     //user api
     "hososuckhoe": "/hososuckhoe",
