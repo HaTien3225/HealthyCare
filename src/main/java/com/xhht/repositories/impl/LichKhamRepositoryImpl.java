@@ -2,6 +2,7 @@ package com.xhht.repositories.impl;
 
 import com.xhht.pojo.LichKham;
 import com.xhht.repositories.LichKhamRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -189,6 +190,14 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
         }
 
         return resultMap;
+    }
+
+    @Override
+    public List<LichKham> getLichKhamByDate(LocalDate tomorrow) {
+         Session session = sessionFactory.openSession();
+        Query q = session.createQuery("FROM LichKham WHERE ngay = :ngay", LichKham.class);
+        q.setParameter("ngay", tomorrow);
+        return q.getResultList();
     }
 
 }

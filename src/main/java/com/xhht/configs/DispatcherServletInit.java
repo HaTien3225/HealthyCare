@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  *
  * @author lehuy
  */
+
 public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherServletInitializer{
 
     @Override

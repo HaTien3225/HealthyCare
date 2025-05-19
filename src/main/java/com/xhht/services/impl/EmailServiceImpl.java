@@ -4,12 +4,17 @@
  */
 package com.xhht.services.impl;
 
+import com.xhht.pojo.LichKham;
 import com.xhht.repositories.LichKhamRepository;
 import com.xhht.services.EmailService;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -20,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private LichKhamRepository lichKhamRepository;
 
@@ -51,25 +56,41 @@ public class EmailServiceImpl implements EmailService {
     }
 
 //    // Gửi thông báo nhắc nhở vào 8h sáng mỗi ngày
-//    @Scheduled(cron = "0 0 8 * * ?")
+//    @Scheduled(cron = "0 42 10 * * ?")
 //    public void checkAppointmentsForTomorrow() {
 //        LocalDate tomorrow = LocalDate.now().plusDays(1);
 //        List<LichKham> appointments = lichKhamRepository.getLichKhamByDate(tomorrow);
 //
-//        for (Appointment appt : appointments) {
+//        for (LichKham appt : appointments) {
 //            sendAppointmentReminder(
-//                appt.getUser().getEmail(),
-//                appt.getUser().getFullName(),
+//                appt.getBenhNhanId().getEmail(),
+//                appt.getBenhNhanId().getUsername(),
 //                tomorrow
 //            );
 //        }
 //    }
+    @Transactional
+    @Scheduled(cron = "0 30 11 * * ?")
+    public void checkAppointmentsForTomorrow() {
+        System.out.println(">>> [SCHEDULED] Đang kiểm tra lịch khám của ngày mai...");
 
-//    private void sendAppointmentReminder(String toEmail, String patientName, LocalDate appointmentDate) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(toEmail);
-//        message.setSubject("Nhắc nhở lịch khám");
-//        message.setText("Chào " + patientName + ", bạn có lịch khám vào ngày " + appointmentDate + ". Vui lòng đến đúng giờ.");
-//        mailSender.send(message);
-//    }
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        List<LichKham> appointments = lichKhamRepository.getLichKhamByDate(tomorrow);
+
+        for (LichKham appt : appointments) {
+            sendAppointmentReminder(
+                    appt.getBenhNhanId().getEmail(),
+                    appt.getBenhNhanId().getUsername(),
+                    tomorrow
+            );
+        }
+    }
+
+    private void sendAppointmentReminder(String toEmail, String patientName, LocalDate appointmentDate) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Nhắc nhở lịch khám");
+        message.setText("Chào " + patientName + ", bạn có lịch khám vào ngày " + appointmentDate + ". Vui lòng đến đúng giờ.");
+        mailSender.send(message);
+    }
 }

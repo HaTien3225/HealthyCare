@@ -10,12 +10,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  *
  * @author hatie
  */
 @Configuration
+@EnableScheduling
 public class MailConfig {
 
     @Bean

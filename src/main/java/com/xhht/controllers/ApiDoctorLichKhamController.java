@@ -52,7 +52,7 @@ public class ApiDoctorLichKhamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
         User doctor = getCurrentDoctor(principal);
-        List<LichKham> lichkhams = lichKhamService.getLichKhamByBacSiChuaKham(doctor.getId());
+        List<LichKham> lichkhams = lichKhamService.getLichKhamChoDuyet(doctor.getId());
         return ResponseEntity.ok(lichkhams);
     }
 

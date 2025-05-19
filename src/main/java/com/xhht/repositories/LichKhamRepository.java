@@ -5,6 +5,7 @@
 package com.xhht.repositories;
 
 import com.xhht.pojo.LichKham;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,5 +39,7 @@ public interface LichKhamRepository {
     Map<String, Long> getBenhPhoBienTheoThang(int bacSiId, Integer month);
 
     Map<String, Long> getBenhPhoBienTheoQuy(int bacSiId, Integer quarter);
+
+    List<LichKham> getLichKhamByDate(LocalDate tomorrow);
 
 }

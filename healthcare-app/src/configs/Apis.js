@@ -30,7 +30,11 @@ export const endpoints = {
     },
     'send_mail': (lichKhamId) => `/doctor/lichkham/${lichKhamId}/send-invite`,
     'google': '/firebase-login',
+<<<<<<< HEAD
     'benhdoctor':'/doctor/benh',
+=======
+    'uploads': "/upload-image",
+>>>>>>> 1330f4d (nhac lich)
 
     //user api
     "hososuckhoe": "/hososuckhoe",

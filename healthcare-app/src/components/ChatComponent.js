@@ -1,23 +1,24 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../configs/firebase";
+import { auth, db } from "../configs/firebase";
 import { useParams } from "react-router-dom";
 import { MyUserContext } from "../configs/Contexts";
+import { authApis, endpoints } from "../configs/Apis";
 
 const ChatComponent = () => {
     const user = useContext(MyUserContext);
     const { id: otherUserId } = useParams();
-    const [messages, setMessages] = useState([]);
-    const [text, setText] = useState("");
-    const [file, setFile] = useState(null);
-    const [otherTyping, setOtherTyping] = useState(false);
-    const messagesEndRef = useRef(null);
 
     const currentUserId = user.id;
-
-   
     const chatId = [currentUserId, otherUserId].sort().join("_");
+
+    const [messages, setMessages] = useState([]);
+    const [text, setText] = useState("");
+    const [file, setFile] = useState("");
+    const [otherTyping, setOtherTyping] = useState(false);
+    const messagesEndRef = useRef(null);
+    const typingTimeoutRef = useRef(null);
+    const fileInputRef = useRef(null); // Ref để reset input file
 
     useEffect(() => {
         const q = query(
@@ -25,7 +26,7 @@ const ChatComponent = () => {
             orderBy("timestamp", "asc")
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+            setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
             scrollToBottom();
         });
         return unsubscribe;
@@ -45,8 +46,7 @@ const ChatComponent = () => {
     }, [chatId, currentUserId]);
 
     const updateTypingStatus = async (isTyping) => {
-        if (!currentUserId) return; 
-
+        if (!currentUserId) return;
         const typingRef = doc(db, "typingStatus", chatId);
         await setDoc(typingRef, {
             isTyping,
@@ -66,9 +66,23 @@ const ChatComponent = () => {
 
         if (file) {
             try {
-                const storageRef = ref(storage, `chat_uploads/${Date.now()}_${file.name}`);
-                const uploadResult = await uploadBytes(storageRef, file);
-                fileUrl = await getDownloadURL(uploadResult.ref);
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const response = await authApis().post(endpoints.uploads, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                const data = await response.data;
+
+                if (data.error) {
+                    alert("Không thể tải file lên Cloudinary. Vui lòng thử lại.");
+                    return;
+                }
+
+                fileUrl = data.secure_url;
             } catch (err) {
                 console.error("Lỗi upload file:", err);
                 alert("Không thể tải file lên. Vui lòng thử lại.");
@@ -85,40 +99,16 @@ const ChatComponent = () => {
 
         setText("");
         setFile(null);
+        if (fileInputRef.current) fileInputRef.current.value = null; // Reset input file
         updateTypingStatus(false);
     };
 
-    useEffect(() => {
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission();
-        }
-    }, []);
-
-    useEffect(() => {
-        if (document.hidden && messages.length > 0) {
-            const lastMsg = messages[messages.length - 1];
-            if (lastMsg.senderId !== currentUserId && Notification.permission === "granted") {
-                new Notification("Tin nhắn mới", {
-                    body: lastMsg.text || "📎 Tệp đính kèm",
-                });
-            }
-        }
-    }, [messages, currentUserId]);
-
-    let typingTimeout;
     const handleTyping = (e) => {
         setText(e.target.value);
         updateTypingStatus(true);
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => updateTypingStatus(false), 3000);
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = setTimeout(() => updateTypingStatus(false), 3000);
     };
-     if (!user) {
-        return <div>Đang tải người dùng...</div>;
-    }
-    if (!otherUserId) {
-        return <div>Không có người dùng để chat</div>;
-    }
-
 
     return (
         <div style={{ maxWidth: 600, margin: "auto" }}>
@@ -145,10 +135,12 @@ const ChatComponent = () => {
                         {msg.fileUrl && (
                             <div style={{ marginTop: 5 }}>
                                 {msg.fileUrl.match(/\.(jpeg|jpg|png|gif)$/i) ? (
-                                    <img src={msg.fileUrl} alt="Gửi ảnh" style={{ maxWidth: 200 }} />
+                                    <a href={msg.fileUrl} download target="_blank" rel="noopener noreferrer">
+                                        <img src={msg.fileUrl} alt="Gửi ảnh" style={{ maxWidth: 200 }} />
+                                    </a>
                                 ) : (
-                                    <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
-                                        📎 File đính kèm
+                                    <a href={msg.fileUrl} download target="_blank" rel="noopener noreferrer">
+                                        📎 Tải file đính kèm
                                     </a>
                                 )}
                             </div>
@@ -168,6 +160,7 @@ const ChatComponent = () => {
             />
             <input
                 type="file"
+                ref={fileInputRef}
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files[0])}
                 style={{ width: "20%" }}
