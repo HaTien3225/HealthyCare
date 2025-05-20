@@ -4,17 +4,13 @@
  */
 package com.xhht.repositories;
 
-import com.xhht.pojo.Benh;
+import com.xhht.pojo.ChiTietDonKham;
 import java.util.List;
 
 /**
  *
  * @author lehuy
  */
-public interface BenhRepository {
-    List<Benh> getAllBenhByKhoaId(int khoaId, int page, int pageSize, String kw);
-    Benh getBenhById(int id);
-    Benh save(Benh benh);
-    List<Benh> findByTenBenh(String keyword);
-
+public interface ChiTIetDonKhamRepository {
+    void saveAll(List<ChiTietDonKham> chiTietList);
 }

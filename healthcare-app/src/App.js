@@ -64,7 +64,7 @@ const App = () => {
               <Route path="/profile" element={<ProFileUser />} />
               <Route path="/doctor/pending" element={<PendingLichKham />} />
               <Route path="/doctor/accepted" element={<AcceptedLichKham />} />
-              <Route path="/doctor/lichkham/:lichKhamId/taodon" element={<CreateDonKham />} />
+              <Route path="/doctor/lichkham/:lichKhamId/taodon/:benhNhanId" element={<CreateDonKham />} />
               <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
               <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
               <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoSucKhoeBacSi />} />

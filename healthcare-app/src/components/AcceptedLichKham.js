@@ -89,7 +89,7 @@ const AcceptedLichKham = () => {
               <td>
                 <button
                   className="btn btn-primary"
-                  onClick={() => navigate(`/doctor/lichkham/${lk.id}/taodon`)}>
+                  onClick={() => navigate(`/doctor/lichkham/${lk.id}/taodon/${lk.benhNhanId.id}`)}>
                   Khám bệnh
                 </button>
               </td>

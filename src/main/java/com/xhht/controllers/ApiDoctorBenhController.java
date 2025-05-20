@@ -40,7 +40,8 @@ public class ApiDoctorBenhController {
     @GetMapping("/benh")
     public ResponseEntity<?> listBenh(Principal principal,
             @RequestParam(name = "page",required = false) Integer page,
-            @RequestParam(name = "pageSize",required = false) Integer pageSize){
+            @RequestParam(name = "pageSize",required = false) Integer pageSize,
+            @RequestParam (name = "kw",required = false) String kw){
          if (principal == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
         }
@@ -52,7 +53,8 @@ public class ApiDoctorBenhController {
             page = 1;
         if(pageSize == null)
             pageSize = 100;
-        return ResponseEntity.ok(this.benhService.getAllBenhByKhoaId(u.getKhoaId().getId(), page, pageSize));
+        
+        return ResponseEntity.ok(this.benhService.getAllBenhByKhoaId(u.getKhoaId().getId(), page, pageSize,kw));
     }
     @PostMapping("/benh")
     public ResponseEntity<?> createBenh(Principal principal, @RequestBody Benh benh){

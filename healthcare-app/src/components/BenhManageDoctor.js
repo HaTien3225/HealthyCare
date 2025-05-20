@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, ListGroup, Spinner, Alert, Pagination, Form, Button } from 'react-bootstrap';
 import { format } from 'date-fns';
 import { authApis, endpoints } from '../configs/Apis';
+import { MyUserContext } from '../configs/Contexts';
 
 const BenhManageDoctor = () => {
   const [benhList, setBenhList] = useState([]);
@@ -13,6 +14,8 @@ const BenhManageDoctor = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
   const [createSuccess, setCreateSuccess] = useState(false);
+
+  const user = useContext(MyUserContext);
 
   const fetchBenhList = async () => {
     try {
@@ -58,6 +61,7 @@ const BenhManageDoctor = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1) setCurrentPage(newPage);
   };
+  if(!user)return<h1>Vui lòng đăng nhập</h1>
 
   return (
     <Container className="mt-4">

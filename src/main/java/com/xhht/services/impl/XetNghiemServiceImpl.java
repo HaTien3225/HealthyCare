@@ -22,4 +22,10 @@ public class XetNghiemServiceImpl implements XetNghiemService {
     public List<XetNghiem> getAllXetNghiem(int donKhamId) {
         return xetNghiemRepository.getALlXetNghiem(donKhamId);
     }
+
+    @Override
+    public void saveAll(List<XetNghiem> xetNghiemList) {
+        this.xetNghiemRepository.saveAll(xetNghiemList);
+    }
+    
 }

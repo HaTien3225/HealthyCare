@@ -14,4 +14,5 @@ import java.util.List;
 public interface XetNghiemRepository {
     XetNghiem save(XetNghiem xetNghiem);
     List<XetNghiem> getALlXetNghiem(int donKhamId);
+    void saveAll(List<XetNghiem> xetNghiemList);
 }

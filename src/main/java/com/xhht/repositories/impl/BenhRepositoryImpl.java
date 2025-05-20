@@ -26,12 +26,23 @@ public class BenhRepositoryImpl implements BenhRepository {
     private LocalSessionFactoryBean factory;
 
     @Override
-    public List<Benh> getAllBenhByKhoaId(int khoaId, int page, int pageSize) {
+    public List<Benh> getAllBenhByKhoaId(int khoaId, int page, int pageSize, String kw) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query<Benh> query = s.createQuery("SELECT b  FROM Benh b WHERE b.khoaId.id = :khoaId", Benh.class);
+
+        String hql = "SELECT b FROM Benh b WHERE b.khoaId.id = :khoaId";
+
+        if (kw != null && !kw.trim().isEmpty()) {
+            hql += " AND b.tenBenh LIKE :kw";
+        }
+
+        Query<Benh> query = s.createQuery(hql, Benh.class);
         query.setParameter("khoaId", khoaId);
 
-        // Thêm phân trang
+        if (kw != null && !kw.trim().isEmpty()) {
+            query.setParameter("kw", "%" + kw.trim() + "%");
+        }
+
+        // Phân trang
         int start = (page - 1) * pageSize;
         query.setFirstResult(start);
         query.setMaxResults(pageSize);

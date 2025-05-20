@@ -14,8 +14,8 @@ public class BenhServiceImpl implements BenhService {
     private BenhRepository benhRepository;
 
     @Override
-    public List<Benh> getAllBenhByKhoaId(int khoaId, int page, int pageSize) {
-        return benhRepository.getAllBenhByKhoaId(khoaId, page, pageSize);
+    public List<Benh> getAllBenhByKhoaId(int khoaId, int page, int pageSize, String kw) {
+        return benhRepository.getAllBenhByKhoaId(khoaId, page, pageSize,kw);
     }
 
     @Override

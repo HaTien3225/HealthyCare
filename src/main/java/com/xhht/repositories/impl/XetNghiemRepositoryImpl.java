@@ -38,4 +38,13 @@ public class XetNghiemRepositoryImpl implements XetNghiemRepository {
         q.setParameter("donKhamId", donKhamId);
         return q.getResultList();
     }
+    
+
+    @Override
+    public void saveAll(List<XetNghiem> xetNghiemList) {
+        Session session = this.factory.getObject().getCurrentSession();
+        for (XetNghiem xn : xetNghiemList) {
+            session.save(xn); // hoặc saveOrUpdate nếu có id
+        }
+    }
 }
