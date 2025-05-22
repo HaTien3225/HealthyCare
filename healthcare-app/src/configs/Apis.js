@@ -1,8 +1,8 @@
 import axios from "axios";
 import cookie from 'react-cookies';
 
-// const BASE_URL = 'http://localhost:8080/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/api'; //thanh toán online xài cloudflare tunnel thì sẽ thế tên miền ra internet chứ ko localhost
-const BASE_URL = 'https://expensive-pending-french-span.trycloudflare.com/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/api';
+const BASE_URL = 'http://localhost:8080/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/api'; //thanh toán online xài cloudflare tunnel thì sẽ thế tên miền ra internet chứ ko localhost
+// const BASE_URL = 'https://expensive-pending-french-span.trycloudflare.com/ung_dung_dat_lich_kham_suc_khoe_truc_tuyen/api';
 export const endpoints = {
     'register': '/register',
     'login': '/login',

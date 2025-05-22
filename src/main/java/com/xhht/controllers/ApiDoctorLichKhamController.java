@@ -2,6 +2,7 @@ package com.xhht.controllers;
 
 import com.xhht.pojo.*;
 import com.xhht.services.BenhService;
+import com.xhht.services.DanhGiaService;
 import com.xhht.services.XetNghiemService;
 import com.xhht.services.DonKhamService;
 import com.xhht.services.EmailService;
@@ -37,6 +38,11 @@ public class ApiDoctorLichKhamController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private DanhGiaService danhGiaService;
+    
+    
 
     private User getCurrentDoctor(Principal principal) {
         return userService.getUserByUsername(principal.getName());
@@ -131,6 +137,14 @@ public class ApiDoctorLichKhamController {
         if (optional.isPresent()) {
             LichKham lichkham = optional.get();
             lichkham.setDaKham(lichkhamDetails.getDaKham());
+            
+            //tao danh gia
+            DanhGia danhGia = new DanhGia();
+            danhGia.setBenhNhanId(lichkham.getBenhNhanId());
+            danhGia.setBacSiId(u);
+            danhGia.setLichKhamId(lichkham);
+            this.danhGiaService.createOrUpdate(danhGia);
+            
             return ResponseEntity.ok(lichKhamService.saveLichKham(lichkham));
         }
         return ResponseEntity.status(404).body("Không tìm thấy lịch khám với ID = " + id);

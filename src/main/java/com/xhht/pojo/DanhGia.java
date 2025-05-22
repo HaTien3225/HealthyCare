@@ -27,7 +27,7 @@ public class DanhGia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "rating", nullable = false, precision = 1, scale = 0)
+    @Column(name = "rating", nullable = true, precision = 1, scale = 0)
     private BigDecimal rating;
 
     @Column(name = "binh_luan", length = 255)
@@ -129,5 +129,19 @@ public class DanhGia implements Serializable {
      */
     public void setBacSiId(User bacSiId) {
         this.bacSiId = bacSiId;
+    }
+
+    /**
+     * @return the lichKhamId
+     */
+    public LichKham getLichKhamId() {
+        return lichKhamId;
+    }
+
+    /**
+     * @param lichKhamId the lichKhamId to set
+     */
+    public void setLichKhamId(LichKham lichKhamId) {
+        this.lichKhamId = lichKhamId;
     }
 }
