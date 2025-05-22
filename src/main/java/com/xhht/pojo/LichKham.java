@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -57,6 +58,9 @@ public class LichKham implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "benh_nhan_id", referencedColumnName = "id")
     private User benhNhanId;
+    
+    @OneToOne(mappedBy = "lichKhamId", cascade = CascadeType.ALL)
+    private DanhGia danhGiaId;
     
     /**
      * @return the id

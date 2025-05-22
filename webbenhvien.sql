@@ -140,10 +140,12 @@ create table Xetnghiem(
 
 create table Danhgia(
 	id int not null auto_increment primary key,
-    rating decimal(1,0) not null,
+    rating decimal(1,0) ,
     binh_luan varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
     phan_hoi varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
     
+    lich_kham_id int not null ,
+    foreign key (lich_kham_id) references Lichkham(id) on delete restrict,
     benh_nhan_id int not null ,
     foreign key (benh_nhan_id) references User(id) on delete restrict,
     bac_si_id int not null,

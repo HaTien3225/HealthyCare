@@ -43,7 +43,10 @@ public class DanhGia implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "bac_si_id", referencedColumnName = "id")
     private User bacSiId;
-
+    
+    @OneToOne(optional = false)
+    @JoinColumn(name = "lich_kham_id", referencedColumnName = "id", nullable = false, unique = true)
+    private LichKham lichKhamId;
     /**
      * @return the id
      */
