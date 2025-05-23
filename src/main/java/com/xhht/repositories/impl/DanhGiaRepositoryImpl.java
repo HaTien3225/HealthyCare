@@ -53,6 +53,9 @@ public class DanhGiaRepositoryImpl implements DanhGiaRepository {
             }
         }
 
+        // Thêm sắp xếp theo id giảm dần
+        hql.append(" ORDER BY d.id DESC");
+
         Query<DanhGia> query = session.createQuery(hql.toString(), DanhGia.class);
 
         if (benhNhanId != null) {
