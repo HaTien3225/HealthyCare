@@ -59,7 +59,7 @@ const Login = () => {
       else {
         nav("/doctor");
       }
-      if (role === "ROLE_USER") {
+      if (role === "ROLE_USER" && u.data.isActive === true) {
          nav("/user");
     }
   } catch (err) {

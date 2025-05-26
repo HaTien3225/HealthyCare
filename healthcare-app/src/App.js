@@ -31,12 +31,9 @@ import HoSoSucKhoeBacSi from "./components/HoSoSucKhoeBacSi.js";
 import DatLichKhamUser from "./components/DatLichKhamUser.js";
 import BenhManageDoctor from "./components/BenhManageDoctor.js";
 import DanhGiaUser from "./components/DanhGiaUser.js";
-<<<<<<< HEAD
 import UploadLicense from "./components/UploadLicense.js";
-=======
 import DanhGiaCreate from "./components/DanhGiaCreate.js";
 import DanhGiaView from "./components/DanhGiaView.js";
->>>>>>> 8bd5a905619e63903640714d37af5aab903cfea6
 
 
 const App = () => {
