@@ -159,8 +159,8 @@ public class UserController {
             String donKhamId = params.get("vnp_OrderInfo");
             this.donKhamService.updateIsPaid(Integer.parseInt(donKhamId), true);
             Optional<DonKham> dk = donKhamService.getDonKham(Integer.parseInt(donKhamId));
-            String mailBody = "Quý khách đã thanh toán thành công đơn khám: id "+String.valueOf(donKhamId)+", với tổng tiền : "+
-                    Integer.parseInt(params.get("vnp_Amount"))/100 + " VND, vào ngày : "+LocalDate.now();
+            String mailBody = "Quý khách đã thanh toán thành công đơn khám: id " + String.valueOf(donKhamId) + ", với tổng tiền : "
+                    + Integer.parseInt(params.get("vnp_Amount")) / 100 + " VND, vào ngày : " + LocalDate.now();
 
             mailSenderService.sendSimpleEmail(dk.get().getHoSoSucKhoeId().getBenhNhanId().getEmail(), "Thông Báo Đã Thanh Toán Đơn Khám", mailBody);
             model.addAttribute("nofi", "THANH TOAN THANH CONG");
@@ -170,4 +170,32 @@ public class UserController {
         }
         return "vnpay_return";
     }
+
+    @GetMapping("/admin/notify-promotion")
+    public String notifyPromotionForm() {
+        return "notify_promotion_form";
+    }
+
+    @PostMapping("/admin/notify-promotion")
+    public String sendPromotionEmail(@RequestParam("subject") String subject,
+            @RequestParam("content") String content,
+            RedirectAttributes redirectAttributes) {
+        List<User> users = userService.getAllUser(Map.of()); // lấy tất cả user
+        int count = 0;
+
+        for (User u : users) {
+            if (u.getRole().getRole().equals("ROLE_USER") && u.getEmail() != null) {
+                try {
+                    mailSenderService.sendSimpleEmail(u.getEmail(), subject, content);
+                    count++;
+                } catch (Exception e) {
+                    
+                }
+            }
+        }
+
+        redirectAttributes.addFlashAttribute("successMessage", "Đã gửi ưu đãi đến " + count + " người dùng.");
+        return "redirect:/admin/notify-promotion";
+    }
+
 }
