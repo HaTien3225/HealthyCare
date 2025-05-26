@@ -8,7 +8,7 @@ const Header = () => {
     const [kw, setKw] = useState("");
     const user = useContext(MyUserContext);
     const dispatch = useContext(MyDispatchContext);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const search = (e) => {
         e.preventDefault();
@@ -27,7 +27,7 @@ const Header = () => {
                     <Nav className="me-auto align-items-center">
                         <Link to="/" className="nav-link">Trang chủ</Link>
 
-                        {user?.role === "ROLE_DOCTOR"&&user.isActive===true && (
+                        {user?.role === "ROLE_DOCTOR" && user.isActive === true && (
                             <>
 
                                 <Link to="/doctor/thongke" className="nav-link">Thống kê</Link>
@@ -37,6 +37,16 @@ const Header = () => {
                                     <NavDropdown.Item as={Link} to="/doctor/accepted">Lịch khám đã chấp nhận</NavDropdown.Item>
                                 </NavDropdown>
                                 <Link to="/doctor/benhmanage" className="nav-link">Bệnh trong khoa</Link>
+                                <NavDropdown title="Đánh giá" menuVariant="dark">
+                                    <NavDropdown.Item as={Link} to="/danhgiadoctor">
+                                        Đánh giá của bệnh nhân
+                                    </NavDropdown.Item>
+                                    {/* <NavDropdown.Divider />
+                                    <NavDropdown.Item as={Link} to="/xemdanhgia">
+                                        Xem tất cả đánh giá
+                                    </NavDropdown.Item> */}
+                                </NavDropdown>
+
                             </>
                         )}
 
@@ -78,7 +88,7 @@ const Header = () => {
                     {user === null ? (
                         <>
                             <Link to="/register" className="nav-link text-success">Đăng ký</Link>
-                            
+
                             <Link to="/login" className="nav-link text-danger">Đăng nhập</Link>
                         </>
                     ) : (
@@ -86,7 +96,7 @@ const Header = () => {
                             title={
                                 <span>
                                     <Image
-                                        src={user.avatar||"/default-avatar.png"}
+                                        src={user.avatar || "/default-avatar.png"}
                                         roundedCircle
                                         width="30"
                                         height="30"
@@ -101,7 +111,7 @@ const Header = () => {
                         >
                             <NavDropdown.Item as={Link} to="/profile">Thông tin cá nhân</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item as="button" className="text-danger" onClick={() => {dispatch({ type: "logout" }); navigate("/login");}}>
+                            <NavDropdown.Item as="button" className="text-danger" onClick={() => { dispatch({ type: "logout" }); navigate("/login"); }}>
                                 Đăng xuất
                             </NavDropdown.Item>
                         </NavDropdown>

@@ -34,6 +34,8 @@ import DanhGiaUser from "./components/DanhGiaUser.js";
 import UploadLicense from "./components/UploadLicense.js";
 import DanhGiaCreate from "./components/DanhGiaCreate.js";
 import DanhGiaView from "./components/DanhGiaView.js";
+import DanhGiaDoctor from "./components/DanhGiaDoctor.js";
+import DanhGiaReply from "./components/DanhGiaReply.js";
 
 
 const App = () => {
@@ -77,6 +79,8 @@ const App = () => {
               <Route path="/doctor/chat/:id" element={<ChatComponent />} />
               <Route path="/doctor/benhmanage" element={<BenhManageDoctor />} />
               <Route path="/upload-license" element={<UploadLicense />} />
+              <Route path="/danhgiadoctor" element={<DanhGiaDoctor />} />
+              <Route path="/danhgiareply/:id" element={<DanhGiaReply />} />
 
 
               {/*user */}

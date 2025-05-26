@@ -36,6 +36,9 @@ export const endpoints = {
     'chitietdonkhamdoctor': '/doctor/chitietdonkham',
     'xetnghiemdoctor': '/doctor/xetnghiem',
     'upload': "/doctor/upload-license",
+    "danhgiadoctor":"/doctor/danhgia",
+     "danhgiareply": (id) => `/doctor/danhgia/${id}/reply`,
+    
 
     //user api
     "hososuckhoe": "/hososuckhoe",
