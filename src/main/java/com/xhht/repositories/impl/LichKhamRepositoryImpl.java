@@ -25,7 +25,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public List<LichKham> findByBacSiIdAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
-        Query q = session.createQuery("FROM LichKham WHERE bacSiId.id = :bacSiId AND daKham = false", LichKham.class);
+        Query q = session.createQuery("FROM LichKham WHERE bacSiId.id = :bacSiId AND daKham = false AND l.bacSiId.giayPhepHanhNgheId.isValid=true", LichKham.class);
         q.setParameter("bacSiId", bacSiId);
         return q.getResultList();
     }
@@ -33,7 +33,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public long countByBacSiIdAndDaKhamTrue(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
-        Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = true");
+        Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = true AND l.bacSiId.giayPhepHanhNgheId.isValid=true");
         q.setParameter("bacSiId", bacSiId);
         return (Long) q.getSingleResult();
     }
@@ -41,7 +41,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public long countByBacSiIdAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
-        Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = false");
+        Query q = session.createQuery("SELECT COUNT(l) FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.daKham = false AND l.bacSiId.giayPhepHanhNgheId.isValid=true");
         q.setParameter("bacSiId", bacSiId);
         return (Long) q.getSingleResult();
     }
@@ -66,7 +66,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
 
         String hql = "FROM LichKham WHERE benhNhanId.id = :benhNhanId "
                 + "AND (:isAccept IS NULL OR isAccept = :isAccept) "
-                + "AND (:daKham IS NULL OR daKham = :daKham)"
+                + "AND (:daKham IS NULL OR daKham = :daKham) AND l.bacSiId.giayPhepHanhNgheId.isValid=true"
                 + "ORDER BY ngay DESC";
 
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
@@ -101,7 +101,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
                 + "WHERE l.ngay = :ngay "
                 + "AND l.khungGioId = :khungGioId "
                 + "AND l.bacSiId = :bacSiId "
-                + "AND l.isAccept = true "
+                + "AND l.isAccept = true AND l.bacSiId.giayPhepHanhNgheId.isValid=true"
                 + // Chỉ kiểm tra các lịch đã xác nhận
                 "AND l.daKham = false";    // Lịch chưa khám
 
@@ -119,7 +119,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public List<LichKham> findByBacSiIdAndIsAcceptFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = false";
+        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = false AND l.bacSiId.giayPhepHanhNgheId.isValid=true";
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
         query.setParameter("bacSiId", bacSiId);
         return query.getResultList();
@@ -128,7 +128,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public List<LichKham> findByBacSiIdAndIsAcceptTrueAndDaKhamFalse(int bacSiId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = true AND l.daKham=false";
+        String hql = "FROM LichKham l WHERE l.bacSiId.id = :bacSiId AND l.isAccept = true AND l.daKham=false AND l.bacSiId.giayPhepHanhNgheId.isValid=true";
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
         query.setParameter("bacSiId", bacSiId);
         return query.getResultList();
@@ -141,7 +141,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
         String hql = "SELECT d.benhId.tenBenh, COUNT(d.id) "
                 + "FROM DonKham d "
                 + "JOIN d.lichKhamId lk "
-                + "WHERE MONTH(lk.ngay) = :month AND lk.bacSiId.id = :bacSiId AND lk.daKham = true "
+                + "WHERE MONTH(lk.ngay) = :month AND lk.bacSiId.id = :bacSiId AND lk.daKham = true AND lk.bacSiId.giayPhepHanhNgheId.isValid=true "
                 + "GROUP BY d.benhId.tenBenh";
 
         Query<Object[]> query = session.createQuery(hql, Object[].class);
@@ -172,7 +172,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
                 + "FROM DonKham d "
                 + "JOIN d.lichKhamId lk "
                 + "WHERE MONTH(lk.ngay) BETWEEN :startMonth AND :endMonth "
-                + "AND lk.bacSiId.id = :bacSiId AND lk.daKham = true "
+                + "AND lk.bacSiId.id = :bacSiId AND lk.daKham = true AND lk.bacSiId.giayPhepHanhNgheId.isValid=true "
                 + "GROUP BY d.benhId.tenBenh";
 
         Query<Object[]> query = session.createQuery(hql, Object[].class);
@@ -195,7 +195,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
     @Override
     public List<LichKham> getLichKhamByDate(LocalDate tomorrow) {
          Session session = sessionFactory.openSession();
-        Query q = session.createQuery("FROM LichKham WHERE ngay = :ngay", LichKham.class);
+        Query q = session.createQuery("FROM LichKham l WHERE l.ngay = :ngay AND l.bacSiId.giayPhepHanhNgheId.isValid=true", LichKham.class);
         q.setParameter("ngay", tomorrow);
         return q.getResultList();
     }
