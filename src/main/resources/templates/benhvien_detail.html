@@ -19,7 +19,7 @@
         <span th:text="${errorMessage}"></span>
     </div>
     <div class="container mf" >   
-        <form th:action="@{/admin/benhvien/update}" th:object="${benhvien}" method="post">           
+        <form th:action="@{/admin/benhviens/update}" th:object="${benhvien}" method="post">           
             <input  class="form-control" id="id" placeholder="id" name="id"   th:field="*{id}" type="hidden" >        
             <p class="h2">Bệnh viện</p>
             <div class="mb-3 mt-3">
