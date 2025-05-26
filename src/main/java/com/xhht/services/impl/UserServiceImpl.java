@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public void verifyDoctor(int doctorId) {
         User doctor = userRepo.getUserById(doctorId);
         if (doctor != null && doctor.getRole().getId() == 3) {
-            doctor.setIsActive(true);
+//            doctor.setIsActive(true);
             if (doctor.getGiayPhepHanhNgheId() != null) {
                 doctor.getGiayPhepHanhNgheId().setIsValid(true);
             }
