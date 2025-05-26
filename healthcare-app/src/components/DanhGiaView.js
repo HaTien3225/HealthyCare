@@ -5,7 +5,7 @@ import { MyUserContext } from "../configs/Contexts";
 import MySpinner from "./layout/MySpinner";
 import { useNavigate } from "react-router-dom";
 
-const DanhGiaUser = () => {
+const DanhGiaView = () => {
 
     const [danhGias, setDanhGias] = useState([]);
     const user = useContext(MyUserContext);
@@ -15,7 +15,7 @@ const DanhGiaUser = () => {
     const loadDanhGias = async () => {
 
         try {
-            let url = `${endpoints.danhgiauser}?isBinhLuan=false&isPhanHoi=false`;
+            let url = `${endpoints.danhgiauser}?isBinhLuan=true`;
             const res = await authApis().get(url);
             setDanhGias(res.data);
             console.log(res.data);
@@ -40,18 +40,21 @@ const DanhGiaUser = () => {
             {isLoading && <MySpinner/>}
             {!isLoading && <Container style={{ height: "70vh", overflow: "scroll", backgroundColor: "#d6f3ff", boxShadow: "0px 0px 40px 1px black", marginTop: "30px", padding: "20px" }}>
                 {danhGias.map(d =>
-                    <Container key={d.id} style={{ backgroundColor: "#b0e9ff", padding: "10px", marginTop: "20px" }}>
+                    <Container key={d.id} style={{ backgroundColor: "#b0e9ff", padding: "10px", marginTop: "20px", overflowY: "scroll",maxHeight:"300px"}}>
                         <p><strong>Lịch khám ID : </strong> {d.id}</p>
                         <p><strong>Ngày : </strong>{d.lichKhamId.ngay[2].toString().padStart(2, '0')}/
                             {d.lichKhamId.ngay[1].toString().padStart(2, '0')}/
                             {d.lichKhamId.ngay[0]}</p>
                         <p><strong>Bác sĩ : </strong>{d.bacSiId.ho} {d.bacSiId.ten}</p>
-                        <Button variant="info" onClick={() => navigate("/danhgiacreate/"+d.id)} >Đánh giá</Button>
+                        <p><strong>Bình luận của tôi : </strong> {d.binhLuan}</p>
+                        <p><strong>Đánh giá của tôi : </strong> {d.rating}⭐</p>
+                        {d.phanHoi && <p style={{color:"green"}}><strong>Phản hồi của bác sĩ : </strong> {d.phanHoi}</p>}
+                        {!d.phanHoi && <p style={{color:"red"}}><strong>Bác sĩ chưa phản hồi </strong></p>}
                     </Container>)}
-                {danhGias.length === 0 && <p>Không có lịch khám chưa đánh giá</p>}
+                {danhGias.length === 0 && <p>Không có lịch khám đã đánh giá</p>}
             </Container>}
         </>
     );
 };
 
-export default DanhGiaUser;
+export default DanhGiaView;

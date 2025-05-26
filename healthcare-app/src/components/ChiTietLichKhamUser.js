@@ -70,7 +70,7 @@ const ChiTIetLichKhamUser = () => {
                     {lichKham.daKham && <><strong style={st}>Đã khám</strong> <br /></>}
                     {!lichKham.daKham && <><strong style={st}>Chưa khám</strong><br /> </>}
                     <strong >-----------------------------------------</strong><br />
-                    <p style={st}><strong >Khung giờ chi tiết: </strong>{lichKham.khungGio.gioBatDau[0] + ":" + lichKham.khungGio.gioBatDau[1]}h đến {lichKham.khungGio.gioKetThuc[0] + ":" + lichKham.khungGio.gioKetThuc[1]}h</p>
+                    <p style={st}><strong >Khung giờ chi tiết: </strong>{lichKham.khungGio.gioBatDau[0] + ":" + lichKham.khungGio.gioBatDau[1]}0h đến {lichKham.khungGio.gioKetThuc[0] + ":" + lichKham.khungGio.gioKetThuc[1]}0h</p>
                     <p style={st}><strong >Địa chỉ bệnh viện : </strong>{lichKham.bacSiId.khoaId.benhvien.diaChi}</p>
                     {!lichKham.daKham && <Button variant="danger" onClick={deleteLichKham}>Hủy lịch khám</Button>}
                     {isDeleting && <MySpinner />}
