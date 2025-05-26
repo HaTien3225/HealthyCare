@@ -8,6 +8,7 @@ const Header = () => {
     const [kw, setKw] = useState("");
     const user = useContext(MyUserContext);
     const dispatch = useContext(MyDispatchContext);
+    const navigate=useNavigate();
 
     const search = (e) => {
         e.preventDefault();
@@ -26,7 +27,7 @@ const Header = () => {
                     <Nav className="me-auto align-items-center">
                         <Link to="/" className="nav-link">Trang chủ</Link>
 
-                        {user?.role === "ROLE_DOCTOR" && (
+                        {user?.role === "ROLE_DOCTOR"&&user.isActive===true && (
                             <>
 
                                 <Link to="/doctor/thongke" className="nav-link">Thống kê</Link>
@@ -100,7 +101,7 @@ const Header = () => {
                         >
                             <NavDropdown.Item as={Link} to="/profile">Thông tin cá nhân</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item as="button" className="text-danger" onClick={() => dispatch({ type: "logout" })}>
+                            <NavDropdown.Item as="button" className="text-danger" onClick={() => {dispatch({ type: "logout" }); navigate("/login");}}>
                                 Đăng xuất
                             </NavDropdown.Item>
                         </NavDropdown>

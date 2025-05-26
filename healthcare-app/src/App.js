@@ -31,6 +31,7 @@ import HoSoSucKhoeBacSi from "./components/HoSoSucKhoeBacSi.js";
 import DatLichKhamUser from "./components/DatLichKhamUser.js";
 import BenhManageDoctor from "./components/BenhManageDoctor.js";
 import DanhGiaUser from "./components/DanhGiaUser.js";
+import UploadLicense from "./components/UploadLicense.js";
 
 
 const App = () => {
@@ -73,6 +74,7 @@ const App = () => {
               <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
               <Route path="/doctor/chat/:id" element={<ChatComponent />} />
               <Route path="/doctor/benhmanage" element={<BenhManageDoctor />} />
+              <Route path="/upload-license" element={<UploadLicense />} />
 
 
               {/*user */}

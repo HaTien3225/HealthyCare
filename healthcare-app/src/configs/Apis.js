@@ -35,6 +35,7 @@ export const endpoints = {
     'khambenh':"/doctor/donkham",
     'chitietdonkhamdoctor': '/doctor/chitietdonkham',
     'xetnghiemdoctor': '/doctor/xetnghiem',
+    'upload': "/doctor/upload-license",
 
     //user api
     "hososuckhoe": "/hososuckhoe",
