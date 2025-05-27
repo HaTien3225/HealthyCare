@@ -44,6 +44,8 @@ public class ApiPatientDanhGiaController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         return ResponseEntity.ok(this.danhGiaService.getAllDanhGia(u.getId(), null, isBinhLuan, isPhanHoi));
         
         
@@ -58,6 +60,8 @@ public class ApiPatientDanhGiaController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         return ResponseEntity.ok(this.danhGiaService.getDanhGiaById(danhGiaId));
     }
     @PutMapping("/danhgia/{danhGiaId}")
@@ -69,6 +73,8 @@ public class ApiPatientDanhGiaController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         DanhGia dg = this.danhGiaService.getDanhGiaById(danhGiaId);
         danhGia.setId(danhGiaId);
         danhGia.setBacSiId(dg.getBacSiId());

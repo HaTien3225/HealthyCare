@@ -62,6 +62,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         if (page == null) {
             page = 1;
         }
@@ -82,6 +84,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
 
         Optional<DonKham> dk = this.donKhamService.getDonKham(id);
         if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
@@ -100,6 +104,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
         if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
@@ -118,6 +124,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
         if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {
@@ -139,6 +147,8 @@ public class ApiPatientDonKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         
         Optional<DonKham> dk = this.donKhamService.getDonKham(donKhamId);
         if (!Objects.equals(dk.get().getHoSoSucKhoeId().getBenhNhanId().getId(), u.getId())) {

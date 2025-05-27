@@ -66,7 +66,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
 
         String hql = "FROM LichKham WHERE benhNhanId.id = :benhNhanId "
                 + "AND (:isAccept IS NULL OR isAccept = :isAccept) "
-                + "AND (:daKham IS NULL OR daKham = :daKham) AND l.bacSiId.giayPhepHanhNgheId.isValid=true"
+                + "AND (:daKham IS NULL OR daKham = :daKham) "
                 + "ORDER BY ngay DESC";
 
         Query<LichKham> query = session.createQuery(hql, LichKham.class);
@@ -101,7 +101,7 @@ public class LichKhamRepositoryImpl implements LichKhamRepository {
                 + "WHERE l.ngay = :ngay "
                 + "AND l.khungGioId = :khungGioId "
                 + "AND l.bacSiId = :bacSiId "
-                + "AND l.isAccept = true AND l.bacSiId.giayPhepHanhNgheId.isValid=true"
+                + "AND l.isAccept = true "
                 + // Chỉ kiểm tra các lịch đã xác nhận
                 "AND l.daKham = false";    // Lịch chưa khám
 

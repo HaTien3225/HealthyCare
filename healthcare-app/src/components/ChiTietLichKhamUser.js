@@ -74,27 +74,31 @@ const ChiTIetLichKhamUser = () => {
                     <p style={st}><strong >Địa chỉ bệnh viện : </strong>{lichKham.bacSiId.khoaId.benhvien.diaChi}</p>
                     {!lichKham.daKham && <Button variant="danger" onClick={deleteLichKham}>Hủy lịch khám</Button>}
                     {isDeleting && <MySpinner />}
-                    <div className="mt-3">
-                        <Button
-                            variant="success"
-                            href={`/tuvan/${lichKham.id}`}
-                            target="_blank"
-                        >
-                            Video Call
-                        </Button>
-                    </div>
+                    {lichKham.isAccept&& !lichKham.daKham &&
+                        <>
+                            <div className="mt-3">
+                                <Button
+                                    variant="success"
+                                    href={`/tuvan/${lichKham.id}`}
+                                    target="_blank"
+                                >
+                                    Video Call
+                                </Button>
+                            </div>
 
-                    <div className="mt-3">
-                        <button
-                            className="btn btn-info"
-                            onClick={() => {
-                                const otherUserId = user.role === "ROLE_DOCTOR" ? lichKham.benhNhanId.id : lichKham.bacSiId.id;
-                                navigator(`/doctor/chat/${otherUserId}`);
-                            }}
-                        >
-                            Chat
-                        </button>
-                    </div>
+                            <div className="mt-3">
+                                <button
+                                    className="btn btn-info"
+                                    onClick={() => {
+                                        const otherUserId = user.role === "ROLE_DOCTOR" ? lichKham.benhNhanId.id : lichKham.bacSiId.id;
+                                        navigator(`/doctor/chat/${otherUserId}`);
+                                    }}
+                                >
+                                    Chat
+                                </button>
+                            </div>
+                        </>
+                    }
                 </Container>
             }
         </>

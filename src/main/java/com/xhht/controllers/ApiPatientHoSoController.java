@@ -47,6 +47,8 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if(optionalHoSo.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>());
@@ -65,6 +67,8 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<HoSoSucKhoe> optionalHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if (optionalHoSo.isPresent()) {
             HoSoSucKhoe hoSo = optionalHoSo.get();
@@ -97,6 +101,8 @@ public class ApiPatientHoSoController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<HoSoSucKhoe> existingHoSo = hoSoSucKhoeService.getHoSoByBenhNhanId(u.getId());
         if (existingHoSo.isPresent()) {
             return ResponseEntity.status(400).body("Hồ sơ bệnh nhân đã tồn tại.");

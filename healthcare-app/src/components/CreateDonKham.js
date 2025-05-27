@@ -6,7 +6,7 @@ import { Form, Button, Alert, ListGroup, Spinner, InputGroup } from 'react-boots
 const CreateDonKham = () => {
   const { lichKhamId, benhNhanId } = useParams();
   const navigate = useNavigate();
-  
+
   // States
   const [ghiChu, setGhiChu] = useState('');
   const [selectedBenhId, setSelectedBenhId] = useState(null);
@@ -21,7 +21,7 @@ const CreateDonKham = () => {
   useEffect(() => {
     const searchBenh = async () => {
       try {
-        setLoading(prev => ({...prev, search: true}));
+        setLoading(prev => ({ ...prev, search: true }));
         const res = await authApis().get(endpoints.benhdoctor, {
           params: { kw: searchKeyword }
         });
@@ -29,7 +29,7 @@ const CreateDonKham = () => {
       } catch (err) {
         console.error("Lỗi tải danh sách bệnh:", err);
       } finally {
-        setLoading(prev => ({...prev, search: false}));
+        setLoading(prev => ({ ...prev, search: false }));
       }
     };
 
@@ -46,10 +46,10 @@ const CreateDonKham = () => {
 
   // Thêm trường dynamic
   const addField = (type) => {
-    const newField = type === 'dichVu' 
-      ? { dichVu: '', giaTien: '' } 
+    const newField = type === 'dichVu'
+      ? { dichVu: '', giaTien: '' }
       : { moTa: '' };
-    
+
     if (type === 'dichVu') {
       setChiTietDonKhamList(prev => [...prev, newField]);
     } else {
@@ -60,13 +60,13 @@ const CreateDonKham = () => {
   // Cập nhật dynamic fields
   const handleFieldChange = (type, index, field, value) => {
     if (type === 'dichVu') {
-      const updated = chiTietDonKhamList.map((item, i) => 
-        i === index ? {...item, [field]: value} : item
+      const updated = chiTietDonKhamList.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
       );
       setChiTietDonKhamList(updated);
     } else {
-      const updated = xetNghiemList.map((item, i) => 
-        i === index ? {...item, [field]: value} : item
+      const updated = xetNghiemList.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
       );
       setXetNghiemList(updated);
     }
@@ -90,7 +90,7 @@ const CreateDonKham = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setLoading(prev => ({...prev, submit: true}));
+    setLoading(prev => ({ ...prev, submit: true }));
 
     try {
       // Step 1: Tạo đơn khám với params trong URL
@@ -127,7 +127,14 @@ const CreateDonKham = () => {
         main: err.response?.data?.message || err.message || 'Lỗi hệ thống'
       }));
     } finally {
-      setLoading(prev => ({...prev, submit: false}));
+      setLoading(prev => ({ ...prev, submit: false }));
+    }
+  };
+  const removeField = (type, index) => {
+    if (type === 'dichVu') {
+      setChiTietDonKhamList(prev => prev.filter((_, i) => i !== index));
+    } else {
+      setXetNghiemList(prev => prev.filter((_, i) => i !== index));
     }
   };
 
@@ -146,7 +153,7 @@ const CreateDonKham = () => {
             placeholder="Nhập tên bệnh để tìm kiếm..."
             isInvalid={!!errors.benh}
           />
-          
+
           {errors.benh && <Form.Control.Feedback type="invalid">{errors.benh}</Form.Control.Feedback>}
 
           <ListGroup className="mt-2 shadow-sm" style={{ maxHeight: '200px', overflowY: 'auto' }}>
@@ -190,8 +197,8 @@ const CreateDonKham = () => {
         <div className="mb-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="fw-bold">Dịch Vụ Khám</h5>
-            <Button 
-              variant="outline-primary" 
+            <Button
+              variant="outline-primary"
               size="sm"
               onClick={() => addField('dichVu')}
             >
@@ -214,6 +221,13 @@ const CreateDonKham = () => {
                 onChange={(e) => handleFieldChange('dichVu', index, 'giaTien', e.target.value)}
                 isInvalid={errors.dichVu}
               />
+              <Button
+                variant="outline-danger"
+                onClick={() => removeField('dichVu', index)}
+                disabled={chiTietDonKhamList.length === 1}
+              >
+                <i className="bi bi-x-lg"></i>
+              </Button>
             </InputGroup>
           ))}
           {errors.dichVu && <Alert variant="danger" className="mt-2">Vui lòng điền đủ thông tin dịch vụ</Alert>}
@@ -223,8 +237,8 @@ const CreateDonKham = () => {
         <div className="mb-4">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="fw-bold">Xét Nghiệm</h5>
-            <Button 
-              variant="outline-primary" 
+            <Button
+              variant="outline-primary"
               size="sm"
               onClick={() => addField('xetNghiem')}
             >
@@ -233,14 +247,21 @@ const CreateDonKham = () => {
           </div>
 
           {xetNghiemList.map((item, index) => (
-            <Form.Group key={index} className="mb-2">
+            <InputGroup key={index} className="mb-2">
               <Form.Control
                 placeholder="Mô tả xét nghiệm"
                 value={item.moTa}
                 onChange={(e) => handleFieldChange('xetNghiem', index, 'moTa', e.target.value)}
                 isInvalid={errors.xetNghiem}
               />
-            </Form.Group>
+              <Button
+                variant="outline-danger"
+                onClick={() => removeField('xetNghiem', index)}
+                disabled={xetNghiemList.length === 1}
+              >
+                <i className="bi bi-x-lg"></i>
+              </Button>
+            </InputGroup>
           ))}
           {errors.xetNghiem && <Alert variant="danger" className="mt-2">Vui lòng nhập mô tả xét nghiệm</Alert>}
         </div>
@@ -250,8 +271,8 @@ const CreateDonKham = () => {
 
         {/* Nút submit */}
         <div className="d-grid gap-2 mt-4">
-          <Button 
-            variant="primary" 
+          <Button
+            variant="primary"
             size="lg"
             type="submit"
             disabled={loading.submit}

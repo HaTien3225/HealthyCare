@@ -36,7 +36,7 @@ const LichKhamUser = () => {
 
             const res = await authApis().get(url);
             if (res.status != 200)
-                console.log(res);
+                alert(res.response.data);
 
             if(res.data.length === 0)
                 setPage(1);

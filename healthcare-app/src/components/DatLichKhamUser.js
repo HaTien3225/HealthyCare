@@ -108,7 +108,7 @@ const DatLichKhamUser = () => {
 
     useEffect(() => {
         loadLichBacSi();
-    }, [date])
+    }, [date,bacSiId])
 
 
 

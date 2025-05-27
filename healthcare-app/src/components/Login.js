@@ -64,7 +64,7 @@ const Login = () => {
     }
   } catch (err) {
   console.error(err);
-  setMsg("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!");
+  setMsg("Đăng nhập thất bại." + err.response.data);
 } finally {
   setLoading(false);
 }

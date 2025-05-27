@@ -55,6 +55,8 @@ public class ApiUserController {
         if (userService.authenticate(u.getUsername(), u.getPassword())) {
             try {
                 User existingUser = userService.getUserByUsername(u.getUsername());
+                if(!existingUser.isIsActive())
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("This account has been disabled !");
                 String role = existingUser.getRole().getRole();
                 String token = JwtUtils.generateToken(u.getUsername(), role);
 

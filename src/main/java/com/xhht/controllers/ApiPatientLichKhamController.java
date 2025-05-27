@@ -66,6 +66,8 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         List<LichKham> lichkhams = lichKhamService.getLichKhamByBenhNhan(u.getId().longValue(),isAccept,daKham,page);
         return ResponseEntity.ok(lichkhams);
     }
@@ -99,7 +101,8 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         lichKham.setBacSiId(this.userService.getUserById(bacSiId));
         lichKham.setBenhNhanId(u);
         lichKham.setCreatedDate(LocalDate.now());
@@ -131,6 +134,8 @@ public class ApiPatientLichKhamController {
         if (!u.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!u.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<LichKham> optional = lichKhamService.getLichKhamById(id);
         if (optional.isPresent()) {
             LichKham lichKham = optional.get();
@@ -160,6 +165,8 @@ public class ApiPatientLichKhamController {
         if (!currentUser.getRole().getRole().equals("ROLE_USER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
+        if(!currentUser.isIsActive())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This account has been disabled!");
         Optional<LichKham> optional = this.lichKhamService.getLichKhamById(id);
 
         if (optional.isEmpty()) {
