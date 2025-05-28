@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { MyDispatchContext, MyUserContext } from "../../configs/Contexts";
-
+import cookie from "react-cookies";
 const Header = () => {
     const nav = useNavigate();
     const [kw, setKw] = useState("");
@@ -14,6 +14,8 @@ const Header = () => {
         e.preventDefault();
         if (kw.trim() !== "") nav(`/?kw=${kw}`);
     };
+
+    
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary shadow-sm">
@@ -111,7 +113,7 @@ const Header = () => {
                         >
                             <NavDropdown.Item as={Link} to="/profile">Thông tin cá nhân</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item as="button" className="text-danger" onClick={() => { dispatch({ type: "logout" }); navigate("/login"); }}>
+                            <NavDropdown.Item as="button" className="text-danger" onClick={() => { dispatch({ type: "logout" }); cookie.remove("token") ; navigate("/login");  }}>
                                 Đăng xuất
                             </NavDropdown.Item>
                         </NavDropdown>

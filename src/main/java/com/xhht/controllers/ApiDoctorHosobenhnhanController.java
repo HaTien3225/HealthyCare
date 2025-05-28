@@ -5,6 +5,7 @@ import com.xhht.pojo.User;
 import com.xhht.services.DonKhamService;
 import com.xhht.services.HoSoSucKhoeService;
 import com.xhht.services.UserService;
+import com.xhht.services.XetNghiemService;
 import java.security.Principal;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ApiDoctorHosobenhnhanController {
 
     @Autowired
     private DonKhamService donKhamService;
+
+    @Autowired
+    private XetNghiemService xetNghiemService;
 
     @GetMapping("/hosobenhnhan/{benhNhanId}")
     public ResponseEntity<?> getHoSoSucKhoe(@PathVariable("benhNhanId") int benhNhanId, Principal principal) {
@@ -94,6 +98,30 @@ public class ApiDoctorHosobenhnhanController {
         return ResponseEntity.ok(this.donKhamService.getAllDonKham(benhNhanId, true, page, pageSize, kw, ngay, null));
     }
 
+    @GetMapping("/viewchitietdonkham/{donKhamId}")
+    public ResponseEntity<?> chiTietDonKham(Principal principal, @PathVariable(name = "donKhamId", required = true) Integer donKhamId) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        return ResponseEntity.ok(this.donKhamService.getAllChiTietDonKham(donKhamId));
+    }
+
+    @GetMapping("/viewxetnghiem/{donKhamId}")
+    public ResponseEntity<?> listXetNGhiem(Principal principal, @PathVariable(name = "donKhamId", required = true) Integer donKhamId) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        }
+        User u = this.userService.getUserByUsername(principal.getName());
+        if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
+        }
+        return ResponseEntity.ok(this.xetNghiemService.getAllXetNghiem(donKhamId));
+    }
+
     @GetMapping("/viewdonkham/{donKhamId}")
     public ResponseEntity<?> detailDonKham(Principal principal, @PathVariable(name = "donKhamId", required = true) Integer donKhamId) {
         if (principal == null) {
@@ -103,6 +131,6 @@ public class ApiDoctorHosobenhnhanController {
         if (!u.getRole().getRole().equals("ROLE_DOCTOR")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("FORBIDDEN");
         }
-        return ResponseEntity.ok(this.donKhamService.getAllChiTietDonKham(donKhamId));
+        return ResponseEntity.ok(this.donKhamService.getDonKham(donKhamId).get());
     }
 }

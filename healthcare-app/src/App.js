@@ -36,6 +36,7 @@ import DanhGiaCreate from "./components/DanhGiaCreate.js";
 import DanhGiaView from "./components/DanhGiaView.js";
 import DanhGiaDoctor from "./components/DanhGiaDoctor.js";
 import DanhGiaReply from "./components/DanhGiaReply.js";
+import ChiTietDonKhamBacSi from "./components/ChiTietDonKhamBacSi.js";
 
 
 const App = () => {
@@ -81,6 +82,7 @@ const App = () => {
               <Route path="/upload-license" element={<UploadLicense />} />
               <Route path="/danhgiadoctor" element={<DanhGiaDoctor />} />
               <Route path="/danhgiareply/:id" element={<DanhGiaReply />} />
+              <Route path="/chitietdonkhamview/:benhNhanId" element={<ChiTietDonKhamBacSi />} />
 
 
               {/*user */}
