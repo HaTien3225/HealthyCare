@@ -15,7 +15,7 @@ const ThanhToan = () => {
     const [isLoad,setIsLoad] = useState(true);
 
     const loadThanhToan = async () => {
-        if(user != null){
+        // if(user != null){
             try{
                 const res = await authApis().get(endpoints.thanhtoan +`?donKhamId=${id}`);
                 setThanhToanInfo(res.data);
@@ -27,7 +27,7 @@ const ThanhToan = () => {
             finally{
                 setIsLoad(false);
             }
-        }
+        // }
     }
 
     useEffect(() =>{

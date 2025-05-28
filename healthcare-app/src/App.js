@@ -37,6 +37,9 @@ import DanhGiaView from "./components/DanhGiaView.js";
 import DanhGiaDoctor from "./components/DanhGiaDoctor.js";
 import DanhGiaReply from "./components/DanhGiaReply.js";
 import ChiTietDonKhamBacSi from "./components/ChiTietDonKhamBacSi.js";
+import ProtectedRoute from "./configs/ProtectedRoute.js";
+
+
 
 
 const App = () => {
@@ -66,38 +69,150 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/doctor" element={<DoctorHome />} />
-              <Route path="/user" element={<UserHome />} />
+
+              {/* Doctor Routes */}
+              <Route path="/doctor" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <DoctorHome />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/pending" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <PendingLichKham />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/accepted" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <AcceptedLichKham />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/lichkham/:lichKhamId/taodon/:benhNhanId" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <CreateDonKham />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/donkham/:donKhamId/thembenh" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <AddBenh />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <AddXetNghiem />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/hosobenhnhan/:benhNhanId" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <HoSoSucKhoeBacSi />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/thongke" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <DoctorStatistics />
+                </ProtectedRoute>
+              } />
+              <Route path="/tuvan/:lichKhamId" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <DoctorTuvan />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/chat/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <ChatComponent />
+                </ProtectedRoute>
+              } />
+              <Route path="/doctor/benhmanage" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <BenhManageDoctor />
+                </ProtectedRoute>
+              } />
+              <Route path="/upload-license" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <UploadLicense />
+                </ProtectedRoute>
+              } />
+              <Route path="/danhgiadoctor" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <DanhGiaDoctor />
+                </ProtectedRoute>
+              } />
+              <Route path="/danhgiareply/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <DanhGiaReply />
+                </ProtectedRoute>
+              } />
+              <Route path="/chitietdonkhamview/:benhNhanId" element={
+                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
+                  <ChiTietDonKhamBacSi />
+                </ProtectedRoute>
+              } />
+
+              {/* User Routes */}
+              <Route path="/user" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <UserHome />
+                </ProtectedRoute>
+              } />
+              <Route path="/hososuckhoe" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <HoSoSucKhoeUser />
+                </ProtectedRoute>
+              } />
+              <Route path="/hososuckhoe-create" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <HoSoSucKhoeCreate />
+                </ProtectedRoute>
+              } />
+              <Route path="/chitietdonkham/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <ChiTietDonKham />
+                </ProtectedRoute>
+              } />
+              <Route path="/thanhtoan/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <ThanhToan />
+                </ProtectedRoute>
+              } />
+              <Route path="/lichkhamuser" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <LichKhamUser />
+                </ProtectedRoute>
+              } />
+              <Route path="/lichkhamuser/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <ChiTIetLichKhamUser />
+                </ProtectedRoute>
+              } />
+              <Route path="/cacdonchuathanhtoan" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <ThanhToanDonKham />
+                </ProtectedRoute>
+              } />
+              <Route path="/datlichkham" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <DatLichKhamUser />
+                </ProtectedRoute>
+              } />
+              <Route path="/danhgia" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <DanhGiaUser />
+                </ProtectedRoute>
+              } />
+              <Route path="/danhgiacreate/:id" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <DanhGiaCreate />
+                </ProtectedRoute>
+              } />
+              <Route path="/xemdanhgia" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <DanhGiaView />
+                </ProtectedRoute>
+              } />
+
+              {/* Common */}
               <Route path="/profile" element={<ProFileUser />} />
-              <Route path="/doctor/pending" element={<PendingLichKham />} />
-              <Route path="/doctor/accepted" element={<AcceptedLichKham />} />
-              <Route path="/doctor/lichkham/:lichKhamId/taodon/:benhNhanId" element={<CreateDonKham />} />
-              <Route path="/doctor/donkham/:donKhamId/thembenh" element={<AddBenh />} />
-              <Route path="/doctor/donkham/:donKhamId/themxetnghiem" element={<AddXetNghiem />} />
-              <Route path="/doctor/hosobenhnhan/:benhNhanId" element={<HoSoSucKhoeBacSi />} />
-              <Route path="/doctor/thongke" element={<DoctorStatistics />} />
-              <Route path="/tuvan/:lichKhamId" element={<DoctorTuvan />} />
-              <Route path="/doctor/chat/:id" element={<ChatComponent />} />
-              <Route path="/doctor/benhmanage" element={<BenhManageDoctor />} />
-              <Route path="/upload-license" element={<UploadLicense />} />
-              <Route path="/danhgiadoctor" element={<DanhGiaDoctor />} />
-              <Route path="/danhgiareply/:id" element={<DanhGiaReply />} />
-              <Route path="/chitietdonkhamview/:benhNhanId" element={<ChiTietDonKhamBacSi />} />
-
-
-              {/*user */}
-              <Route path="/hososuckhoe" element={<HoSoSucKhoeUser />} />
-              <Route path="/hososuckhoe-create" element={<HoSoSucKhoeCreate />} />
-              <Route path="/chitietdonkham/:id" element={<ChiTietDonKham />} />
-              <Route path="/thanhtoan/:id" element={<ThanhToan />} />
-              <Route path="/lichkhamuser" element={<LichKhamUser />} />
-              <Route path="/lichkhamuser/:id" element={<ChiTIetLichKhamUser />} />
-              <Route path="/cacdonchuathanhtoan" element={<ThanhToanDonKham />} />
-              <Route path="/datlichkham" element={<DatLichKhamUser />} />
-              <Route path="/danhgia" element={<DanhGiaUser />} />
-              <Route path="/danhgiacreate/:id" element={<DanhGiaCreate />} />
-              <Route path="/xemdanhgia" element={<DanhGiaView />} />
             </Routes>
+
           </Container>
 
           <Footer />

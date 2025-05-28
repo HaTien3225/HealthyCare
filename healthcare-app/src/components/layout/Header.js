@@ -15,7 +15,7 @@ const Header = () => {
         if (kw.trim() !== "") nav(`/?kw=${kw}`);
     };
 
-    
+
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary shadow-sm">
@@ -113,7 +113,14 @@ const Header = () => {
                         >
                             <NavDropdown.Item as={Link} to="/profile">Thông tin cá nhân</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item as="button" className="text-danger" onClick={() => { dispatch({ type: "logout" }); cookie.remove("token") ; navigate("/login");  }}>
+                            <NavDropdown.Item as="button" className="text-danger" onClick={() => {
+                                dispatch({ type: "logout" });
+                                cookie.remove("token");
+                                localStorage.removeItem("token");
+                                localStorage.removeItem("user");
+                                localStorage.removeItem("googleUser");
+                                navigate("/login");
+                            }}>
                                 Đăng xuất
                             </NavDropdown.Item>
                         </NavDropdown>

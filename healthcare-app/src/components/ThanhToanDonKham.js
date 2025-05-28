@@ -17,7 +17,7 @@ const ThanhToanDonKham = () => {
 
     const loadDonKham = async (page) => {
         setLoading(true);
-        if (user != null) {
+        // if (user != null) {
             try {
                 if (page <= 0) {
                     page = 1;
@@ -36,7 +36,7 @@ const ThanhToanDonKham = () => {
             }finally{
                 setLoading(false);
             }
-        }
+        // }
     }
 
     useEffect(() => {

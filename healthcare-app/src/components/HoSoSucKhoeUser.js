@@ -17,8 +17,9 @@ const HoSoSucKhoeUser = () => {
     const [kw,setKw] = useState();
     const navigate = useNavigate();
     const loadHoSo = async () => {
-        setLoading(true);
+        
         if (user != null)
+            setLoading(true);
             try {
                 const res = await authApis().get(endpoints["hososuckhoe"]);
                 console.info("res data", res.data);
@@ -30,9 +31,10 @@ const HoSoSucKhoeUser = () => {
             finally {
                 setLoading(false);
             }
+         setLoading(false);
     }
     const loadDonKham = async (page,kw,date) => {
-        if (user != null) {            
+        // if (user != null) {            
             try {
                 if(page <= 0){
                     page=1;
@@ -54,7 +56,7 @@ const HoSoSucKhoeUser = () => {
             catch (e) {
                 console.log(e);
             }
-        }
+        // }
     }
     
 
