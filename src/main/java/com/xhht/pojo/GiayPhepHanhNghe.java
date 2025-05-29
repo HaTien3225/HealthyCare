@@ -4,6 +4,8 @@
  */
 package com.xhht.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +37,7 @@ public class GiayPhepHanhNghe implements Serializable{
     private String image;
     @Column(name = "is_valid")
     private boolean isValid;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne
     @JoinColumn(name = "bac_si_id",unique = true,referencedColumnName = "id")
     private User bacSiId;

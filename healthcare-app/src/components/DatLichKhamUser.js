@@ -74,12 +74,12 @@ const DatLichKhamUser = () => {
             setIsLoading(true);
             try {
                 const Data = {
-                    'ngay' :  `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+                    'ngay': `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
                     'isAccept': 'false',
-                    'daKham':'false',
+                    'daKham': 'false',
                 }
-                const res = await authApis().post(`${endpoints.lichkhamuser}?bacSiId=${bacSiId}&khungGioId=${khungGioId}`,Data);
-                if (res.status === 200){
+                const res = await authApis().post(`${endpoints.lichkhamuser}?bacSiId=${bacSiId}&khungGioId=${khungGioId}`, Data);
+                if (res.status === 200) {
                     alert("Tạo lịch thành công");
                     navigate("/lichkhamuser");
                 }
@@ -87,7 +87,7 @@ const DatLichKhamUser = () => {
                 if (e.response) {
                     alert(e.response.data);
                 }
-            }finally{
+            } finally {
                 setIsLoading(false);
             }
         }
@@ -108,7 +108,7 @@ const DatLichKhamUser = () => {
 
     useEffect(() => {
         loadLichBacSi();
-    }, [date,bacSiId])
+    }, [date, bacSiId])
 
 
 
@@ -138,22 +138,27 @@ const DatLichKhamUser = () => {
             <Container style={{ backgroundColor: "#d6eaff", marginTop: "20px", padding: "20px", maxHeight: "100vh", overflowY: "scroll" }}>
 
                 <Row>
-                    {bacSis.map(bs =>
-                        <Col md={4} sm={6} xs={12} className="mb-4" >
-                            <Card key={bs.id} style={{ width: '18rem' }}>
-                                {!bs.avatar && <Card.Img variant="top" src="/default-avatar.png" />}
-                                {bs.avatar && <Card.Img variant="top" src={bs.avatar} />}
-                                <Card.Body>
-                                    <Card.Title>{bs.ho} {bs.ten}</Card.Title>
-                                    <Card.Text>
-                                        {bs.khoaId.moTa}
-                                    </Card.Text>
-                                    <Button variant="primary" onClick={() => handleOnClickChooseBacSi(bs.id, bs.ho, bs.ten)}>Chọn bác sĩ</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    )}
+                    {bacSis
+                        .filter(bs => bs.giayPhepHanhNgheId && bs.giayPhepHanhNgheId.isValid)
+                        .map(bs => (
+                            <Col key={bs.id} md={4} sm={6} xs={12} className="mb-4">
+                                <Card style={{ width: '18rem' }}>
+                                    {!bs.avatar && <Card.Img variant="top" src="/default-avatar.png" />}
+                                    {bs.avatar && <Card.Img variant="top" src={bs.avatar} />}
+                                    <Card.Body>
+                                        <Card.Title>{bs.ho} {bs.ten}</Card.Title>
+                                        <Card.Text>
+                                            {bs.khoaId.moTa}
+                                        </Card.Text>
+                                        <Button variant="primary" onClick={() => handleOnClickChooseBacSi(bs.id, bs.ho, bs.ten)}>
+                                            Chọn bác sĩ
+                                        </Button>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
                 </Row>
+
             </Container>
             <Container style={{ backgroundColor: "#d6eaff", padding: "20px" }}>
                 <h3>Bác sĩ đã chọn : {bacSiHT}  </h3>
@@ -185,8 +190,8 @@ const DatLichKhamUser = () => {
                 </Form.Select>
             </Container>
             {isLoading && <Button variant="warning" disabled>Tạo lịch</Button>}
-            {!isLoading && <Button variant="warning" onClick={createLichKham}>Tạo lịch</Button>} 
-            {isLoading && <MySpinner/>}
+            {!isLoading && <Button variant="warning" onClick={createLichKham}>Tạo lịch</Button>}
+            {isLoading && <MySpinner />}
         </>
     );
 };

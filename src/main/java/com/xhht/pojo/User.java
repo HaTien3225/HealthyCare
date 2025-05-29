@@ -72,7 +72,7 @@ public class User {
     private Khoa khoaId;
 
     // Quan hệ 1-1 với GiayPhepHanhNghe
-    @JsonIgnore
+    
     @OneToOne(mappedBy = "bacSiId", cascade = CascadeType.ALL)
     private GiayPhepHanhNghe giayPhepHanhNgheId;
     // Quan hệ với Role (nhiều User cùng 1 Role)
