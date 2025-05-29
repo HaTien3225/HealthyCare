@@ -9,6 +9,9 @@ import com.xhht.repositories.LichKhamRepository;
 import com.xhht.services.EmailService;
 import java.time.LocalDate;
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,6 +32,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private LichKhamRepository lichKhamRepository;
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     /**
      * Gửi email đơn giản (text).
      *
@@ -42,7 +48,6 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
-        // message.setFrom("your_email@gmail.com"); // Có thể set nếu cần
 
         mailSender.send(message);
     }
@@ -70,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
 //        }
 //    }
     @Transactional
-    @Scheduled(cron = "0 30 11 * * ?")
+    @Scheduled(cron = "0 0 7 * * ?")
     public void checkAppointmentsForTomorrow() {
         System.out.println(">>> [SCHEDULED] Đang kiểm tra lịch khám của ngày mai...");
 
@@ -93,4 +98,49 @@ public class EmailServiceImpl implements EmailService {
         message.setText("Chào " + patientName + ", bạn có lịch khám vào ngày " + appointmentDate + ". Vui lòng đến đúng giờ.");
         mailSender.send(message);
     }
+
+    private void sendExpiredAppointmentEmail(String toEmail, String patientName, LocalDate appointmentDate) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Thông báo lịch khám đã hết hạn");
+        message.setText("Chào " + patientName + ",\n\n"
+                + "Lịch khám của bạn vào ngày " + appointmentDate + " đã hết hạn và được hệ thống tự động hủy.\n"
+                + "Nếu bạn vẫn cần khám, vui lòng đặt lịch mới.\n\n"
+                + "Trân trọng,\nHệ thống tư vấn sức khỏe.");
+        mailSender.send(message);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void cleanExpiredLichKham() {
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            LocalDate today = LocalDate.now();
+            List<LichKham> expiredList = session
+                    .createQuery("FROM LichKham l WHERE l.ngay < :today", LichKham.class)
+                    .setParameter("today", today)
+                    .getResultList();
+
+            for (LichKham lk : expiredList) {
+                String toEmail = lk.getBenhNhanId().getEmail();
+                String patientName = lk.getBenhNhanId().getUsername();
+                LocalDate appointmentDate = lk.getNgay();
+
+                sendExpiredAppointmentEmail(toEmail, patientName, appointmentDate);
+
+                session.delete(lk); // XÓA bằng chính session đang dùng
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+
+
 }

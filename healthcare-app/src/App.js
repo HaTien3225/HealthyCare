@@ -43,7 +43,11 @@ import ProtectedRoute from "./configs/ProtectedRoute.js";
 
 
 const App = () => {
-  const [user, dispatch] = useReducer(MyUserReducer, null);
+  const storedUser = localStorage.getItem("user");
+  const initialUser = storedUser ? JSON.parse(storedUser) : null;
+
+  const [user, dispatch] = useReducer(MyUserReducer, initialUser);
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");

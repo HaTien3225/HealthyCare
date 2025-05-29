@@ -29,7 +29,7 @@ const Header = () => {
                     <Nav className="me-auto align-items-center">
                         <Link to="/" className="nav-link">Trang chủ</Link>
 
-                        {user?.role === "ROLE_DOCTOR" && user.isActive === true && (
+                        {user?.role === "ROLE_DOCTOR" && user.isActive === true && user?.giayPhepHanhNgheId?.isValid === true && (
                             <>
 
                                 <Link to="/doctor/thongke" className="nav-link">Thống kê</Link>
