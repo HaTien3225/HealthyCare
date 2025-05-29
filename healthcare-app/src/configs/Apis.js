@@ -56,6 +56,7 @@ export const endpoints = {
     "khunggio":"/khunggio",
     "khunggiotrong":"/khunggiotrong",
     "danhgiauser":"/danhgia",
+    "assitant":"/ai/assitant",
 }
 
 export const authApis = () => {

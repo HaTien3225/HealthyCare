@@ -38,6 +38,7 @@ import DanhGiaDoctor from "./components/DanhGiaDoctor.js";
 import DanhGiaReply from "./components/DanhGiaReply.js";
 import ChiTietDonKhamBacSi from "./components/ChiTietDonKhamBacSi.js";
 import ProtectedRoute from "./configs/ProtectedRoute.js";
+import Assitant from "./components/Assitant.js";
 
 
 
@@ -212,7 +213,11 @@ const App = () => {
                   <DanhGiaView />
                 </ProtectedRoute>
               } />
-
+              <Route path="/assitant" element={
+                <ProtectedRoute allowedRoles={["ROLE_USER"]}>
+                  <Assitant />
+                </ProtectedRoute>
+              } />
               {/* Common */}
               <Route path="/profile" element={<ProFileUser />} />
             </Routes>
