@@ -55,7 +55,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify({ ...u.data, role }));
       localStorage.setItem("token", token);
 
-      if (role === "ROLE_DOCTOR"&&u.data.giayPhepHanhNgheId.isValid=== false) {
+      if (role === "ROLE_DOCTOR"&& u.data.giayPhepHanhNgheId != null &&u.data.giayPhepHanhNgheId.isValid=== false) {
         nav("/upload-license");
       }
       else {

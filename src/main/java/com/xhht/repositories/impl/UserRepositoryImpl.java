@@ -177,9 +177,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     public List<User> findByRoleAndIsVerified(Role role, boolean isVerified) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query<User> q = s.createQuery("FROM User u WHERE u.roleId = :role_id AND u.isActive = :is_active", User.class);
+        Query<User> q = s.createQuery("FROM User u WHERE u.roleId = :role_id AND u.giayPhepHanhNgheId.isValid = :isValid", User.class);
         q.setParameter("role_id", role);
-        q.setParameter("is_active", isVerified);
+        q.setParameter("isValid", isVerified);
         return q.getResultList();
     }
 
