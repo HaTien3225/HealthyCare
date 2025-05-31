@@ -118,7 +118,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             LocalDate today = LocalDate.now();
             List<LichKham> expiredList = session
-                    .createQuery("FROM LichKham l WHERE l.ngay < :today", LichKham.class)
+                    .createQuery("FROM LichKham l WHERE l.ngay < :today AND l.daKham=false", LichKham.class)
                     .setParameter("today", today)
                     .getResultList();
 
