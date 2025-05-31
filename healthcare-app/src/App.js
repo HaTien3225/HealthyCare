@@ -116,16 +116,7 @@ const App = () => {
                   <DoctorStatistics />
                 </ProtectedRoute>
               } />
-              <Route path="/tuvan/:lichKhamId" element={
-                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
-                  <DoctorTuvan />
-                </ProtectedRoute>
-              } />
-              <Route path="/doctor/chat/:id" element={
-                <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
-                  <ChatComponent />
-                </ProtectedRoute>
-              } />
+            
               <Route path="/doctor/benhmanage" element={
                 <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]}>
                   <BenhManageDoctor />
@@ -220,6 +211,8 @@ const App = () => {
               } />
               {/* Common */}
               <Route path="/profile" element={<ProFileUser />} />
+              <Route path="/tuvan/:lichkham" element={<DoctorTuvan />} />
+              <Route path="/doctor/chat/:id" element={<ChatComponent  />} />
             </Routes>
 
           </Container>
